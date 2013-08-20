@@ -8,8 +8,8 @@ tags: [intro, beginner]
 {% include JB/setup %}
 ##Hello World
 ###这是我在GitHub上的第一篇博文
-```php
+{% highlight php %}
 <?php
     echo 'Hello World!';
 ?>
-```
+{% endhighlight %}
