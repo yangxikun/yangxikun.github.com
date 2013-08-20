@@ -2,12 +2,10 @@
 layout: post
 title: "Hello World"
 description: "GitHub上的第一篇博文"
-category: lessons
-tags: [intro, beginner]
+tags: [beginner]
 ---
 {% include JB/setup %}
-##Hello World
-###这是我在GitHub上的第一篇博文
+###这是我在GitHub上的第一篇博文,向世界说声:你好!
 {% highlight php %}
 <?php
     echo 'Hello World!';
