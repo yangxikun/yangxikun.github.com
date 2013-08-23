@@ -73,23 +73,22 @@ _小部分内容有修改，关键字使用粗体标出，斜体字为自己添�
 
 >这里介绍一下其中一些主要函数
 
->>
-* startup：php被调用时初始化操作
-* 比如cgi模式，在startup的时候会加载所有的extension并执行模块初始化工作。
-* shutdown：php关闭时收尾工作
-* activate：请求初始化
-* dectivate：请求结束时收尾工作
-* ub_write：指定数据输出方式,比如apache2handler方式，由于php作为apache的一个so存在，因此其输出也就是调用apache的ap_write函数，而在cgi模式下，会系统调用write。
-* sapi_error：错误处理函数
-* read_post：读取post数据
-* register_server_variables：往$_SERVER中注册环境变量
-这个一般根据不同协议标准注册注册的变量。
+>>* startup：php被调用时初始化操作
+>>* 比如cgi模式，在startup的时候会加载所有的extension并执行模块初始化工作。
+>>* shutdown：php关闭时收尾工作
+>>* activate：请求初始化
+>>* dectivate：请求结束时收尾工作
+>>* ub_write：指定数据输出方式,比如apache2handler方式，由于php作为apache的一个so存在，因此其输出也就是调用apache的ap_write函数，而在cgi模式下，会系统调用write。
+>>* sapi_error：错误处理函数
+>>* read_post：读取post数据
+>>* register_server_variables：往$_SERVER中注册环境变量,这个一般根据不同协议标准注册注册的变量。
 
 ###6.Php的执行流程&opcode
 
 >我们先来看看php代码的执行所经过的流程。
 
 ![OPCODE](/assets/img/201308210103.jpg)
+
 >从图上可以看到，php实现了一个典型的动态语言执行过程：拿到一段代码后，经过词法解析、语法解析等阶段后，源程序会被翻译成一个个指令(opcodes)，然后ZEND虚拟机顺次执行这些指令完成操作。Php本身是用c实现的，因此最终调用的也都是c的函数，实际上，我们可以把php看做是一个c开发的软件。
 
 >通过上面描述不难看出，php的执行的核心是翻译出来的一条一条指令，也即**opcode**
@@ -98,13 +97,12 @@ _小部分内容有修改，关键字使用粗体标出，斜体字为自己添�
 
 >常见的几个处理函数
 
->>
-* ZEND_ASSIGN_SPEC_CV_CV_HANDLER : 变量分配 （$a=$b）
-* ZEND_DO_FCALL_BY_NAME_SPEC_HANDLER：函数调用
-* ZEND_CONCAT_SPEC_CV_CV_HANDLER：字符串拼接 $a.$b
-* ZEND_ADD_SPEC_CV_CONST_HANDLER: 加法运算 $a+2
-* ZEND_IS_EQUAL_SPEC_CV_CONST：判断相等 $a==1
-* ZEND_IS_IDENTICAL_SPEC_CV_CONST：判断相等 $a===1
+>>* ZEND_ASSIGN_SPEC_CV_CV_HANDLER : 变量分配 （$a=$b）
+>>* ZEND_DO_FCALL_BY_NAME_SPEC_HANDLER：函数调用
+>>* ZEND_CONCAT_SPEC_CV_CV_HANDLER：字符串拼接 $a.$b
+>>* ZEND_ADD_SPEC_CV_CONST_HANDLER: 加法运算 $a+2
+>>* ZEND_IS_EQUAL_SPEC_CV_CONST：判断相等 $a==1
+>>* ZEND_IS_IDENTICAL_SPEC_CV_CONST：判断相等 $a===1
 
 ###7.HashTable （核心数据结构）
 
@@ -112,13 +110,12 @@ _小部分内容有修改，关键字使用粗体标出，斜体字为自己添�
 
 >php的hash table具有如下特点：
 
->>
-* 支持典型的key->value查询
-* 可以当做数组使用
-* 添加、删除节点是O（1）复杂度
-* key支持混合类型：同时存在关联数组合索引数组
-* Value支持混合类型：array (“string”,2332)
-* 支持线性遍历：如foreach
+>>* 支持典型的key->value查询
+>>* 可以当做数组使用
+>>* 添加、删除节点是O（1）复杂度
+>>* key支持混合类型：同时存在关联数组合索引数组
+>>* Value支持混合类型：array (“string”,2332)
+>>* 支持线性遍历：如foreach
 
 >Zend hash table实现了典型的hash表散列结构，同时通过附加一个双向链表，提供了正向、反向遍历数组的功能。其结构如下图
 
@@ -126,12 +123,11 @@ _小部分内容有修改，关键字使用粗体标出，斜体字为自己添�
 
 >zend hash table数据结构：
 
->>
-* 可以看到，在hash table中既有key->value形式的散列结构，也有双向链表模式，使得它能够非常方便的支持快速查找和线性遍历。
-* Zend的散列结构是典型的hash表模型，通过链表的方式来解决冲突。需要注意的是zend的hash table是一个自增长的数据结构，当hash表数目满了之后，其本身会动态以2倍的方式扩容并重置元素位置。初始大小均为8。
-* 另外，在进行key->value快速查找时候，zend本身还做了一些优化，通过空间换时间的方式加快速度。比如在每个元素中都会用一个变量nKeyLength标识key的长度以作快速判定。
-* Zend hash table通过一个链表结构，实现了元素的线性遍历。理论上，做遍历使用单向链表就够了，之所以使用双向链表，主要目的是为了快速删除，避免遍历。
-* Zend hash table是一种复合型的结构，作为数组使用时，即支持常见的关联数组也能够作为顺序索引数字来使用，甚至允许2者的混合。
+>>* 可以看到，在hash table中既有key->value形式的散列结构，也有双向链表模式，使得它能够非常方便的支持快速查找和线性遍历。
+>>* Zend的散列结构是典型的hash表模型，通过链表的方式来解决冲突。需要注意的是zend的hash table是一个自增长的数据结构，当hash表数目满了之后，其本身会动态以2倍的方式扩容并重置元素位置。初始大小均为8。
+>>* 另外，在进行key->value快速查找时候，zend本身还做了一些优化，通过空间换时间的方式加快速度。比如在每个元素中都会用一个变量nKeyLength标识key的长度以作快速判定。
+>>* Zend hash table通过一个链表结构，实现了元素的线性遍历。理论上，做遍历使用单向链表就够了，之所以使用双向链表，主要目的是为了快速删除，避免遍历。
+>>* Zend hash table是一种复合型的结构，作为数组使用时，即支持常见的关联数组也能够作为顺序索引数字来使用，甚至允许2者的混合。
 
 >PHP关联数组
 
@@ -166,12 +162,11 @@ RETURN FALTURE;
 
 >概述
 
->>
-* Php是一门弱类型语言，本身不严格区分变量的类型。
-* Php在变量申明的时候不需要指定类型。
-* Php在程序运行期间可能进行变量类型的隐示转换。
-* 和其他强类型语言一样，程序中也可以进行显示的类型转换。
-* Php变量可以分为简单类型(int、string、bool)、集合类型(array resource object)和常量(const)
+>>* Php是一门弱类型语言，本身不严格区分变量的类型。
+>>* Php在变量申明的时候不需要指定类型。
+>>* Php在程序运行期间可能进行变量类型的隐示转换。
+>>* 和其他强类型语言一样，程序中也可以进行显示的类型转换。
+>>* Php变量可以分为简单类型(int、string、bool)、集合类型(array resource object)和常量(const)
 
 >以上所有的变量在底层都是同一种结构 zval.
 
@@ -181,25 +176,23 @@ RETURN FALTURE;
 
 >Zval主要由三部分组成：
 
->>
-<ol>
-    <li>type：指定了变量所述的类型（整数、字符串、数组等）</li>
-    <li>refcount_gc,is_ref_gc：用来实现引用计数(后面具体介绍)</li>
-    <li>value：核心部分，存储了变量的实际数据</li>
-</ol>
+>><ol>
+>><li>type：指定了变量所述的类型（整数、字符串、数组等）</li>
+>><li>refcount_gc,is_ref_gc：用来实现引用计数(后面具体介绍)</li>
+>><li>value：核心部分，存储了变量的实际数据</li>
+>></ol>
 
 >**Zvalue**是用来保存一个变量的实际数据。因为要存储多种类型，所以zvalue是一个union，也由此实现了弱类型。
 
 >Php变量类型和其实际存储对应关系如下
 
->>
-<ul>
-    <li>IS_LONG   -> lvalue</li>
-    <li>IS_DOUBLE -> dvalue</li>
-    <li>IS_ARRAY  -> ht</li>
-    <li>IS_STRING -> str</li>
-    <li>IS_RESOURCE -> lvalue</li>
-</ul>
+>><ul>
+>><li>IS_LONG   -> lvalue</li>
+>><li>IS_DOUBLE -> dvalue</li>
+>><li>IS_ARRAY  -> ht</li>
+>><li>IS_STRING -> str</li>
+>><li>IS_RESOURCE -> lvalue</li>
+>></ul>
 
 >**引用计数**在内存回收、字符串操作等地方使用非常广泛，PHP中的变量就是引用计数的典型应用。
 
