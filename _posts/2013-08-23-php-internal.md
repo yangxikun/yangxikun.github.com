@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "PHP Internal"
+title: "PHP 底层机制"
 description: ""
 category: PHP
 tags: [PHP底层]
