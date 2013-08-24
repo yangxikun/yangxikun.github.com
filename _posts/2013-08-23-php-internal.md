@@ -298,4 +298,4 @@ RETURN FALTURE;
 
 >>获取变量值：php的符号表是通过hash_table实现的，对于每个变量都分配唯一标识，获取的时候根据标识从表中找到相应zval返回。
 
->>函数中使用全局变量：在函数中，我们可以通过显式申明global来使用全局变量。在active_symbol_table中创建symbol_table中同名变量的引用，如果symbol_table中没有同名变量则会先创建。**我的理解：变量是存在symbol_table中的(如果存在的话,不存在则自动创建)，如果使用global声明,则会在active_symbol_table创建这个变量的引用)**
+>>函数中使用全局变量：在函数中，我们可以通过显式申明global来使用全局变量。在active_symbol_table中创建symbol_table中同名变量的引用，如果symbol_table中没有同名变量则会先创建。*我的理解：变量是存在symbol_table中的(如果存在的话,不存在则自动创建)，如果使用global声明,则会在active_symbol_table创建这个变量的引用)*
