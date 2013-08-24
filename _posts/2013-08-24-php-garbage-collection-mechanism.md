@@ -19,43 +19,43 @@ tags: [PHP底层]
 
 >>示例:当我们添加一个数组本身作为这个数组的元素时,代码如下:
 
->>{% highlight php %}
+{% highlight php %}
 <?php
 $a = array( 'one' );
 $a[] =& $a;
 xdebug_debug_zval( 'a' );
 ?>
->>{% endhighlight %}
+{% endhighlight %}
 
 >>代码输出:
 
->>{% highlight php %}
+{% highlight php %}
 <?php
 a: (refcount=2, is_ref=1)=array (
    0 => (refcount=1, is_ref=0)='one',
   1 => (refcount=2, is_ref=1)=...
 )
 ?>
->>{% endhighlight %}
+{% endhighlight %}
 
 >>引用手册中的图解:
-![PHPGC](/assets/img/2013082401)
+![PHPGC](/assets/img/201308240101.png)
 
 >能看到数组变量 (a) 同时也是这个数组的第二个元素(1) 指向的变量容器中“refcount”为 2。上面的输出结果中的"..."说明发生了递归操作, 显然在这种情况下意味着"..."指向原始数组。 
 
 >对一个变量调用unset，将删除这个符号，且它指向的变量容器中的引用次数也减1。所以，如果我们在执行完上面的代码后，对变量$a调用unset, 那么变量 $a 和数组元素 "1" 所指向的变量容器的引用次数减1, 从"2"变成"1". 下例可以说明: 
 
->>{% highlight php %}
+{% highlight php %}
 <?php
 (refcount=1, is_ref=1)=array (
    0 => (refcount=1, is_ref=0)='one',
   1 => (refcount=1, is_ref=1)=...
 )
 ?>
->>{% endhighlight %}
+{% endhighlight %}
 
 >>引用手册中的图解:
-![PHPCG](/assets/img/2013082402)
+![PHPCG](/assets/img/201308240102.png)
 
 >所以新的垃圾回收机制要处理的就是类似以上示例的顽固垃圾.
 
@@ -76,7 +76,7 @@ a: (refcount=2, is_ref=1)=array (
 >>简单的说，就是对此zval中的每个元素进行一次refcount减1操作，操作完成之后，如果zval的refcount=0，那么这个zval就是一个垃圾。
 
 >引用手册中的图解:
-![PHPCG](/assets/img/2013082403)
+![PHPCG](/assets/img/201308240103.jpeg)
 
 >A：为了避免每次变量的refcount_gc减少的时候都调用GC的算法进行垃圾判断，此算法会先把所有前面准则3情况下的zval节点放入一个节点(root)缓冲区(root buffer)，并且将这些zval节点标记成紫色，同时算法必须确保每一个zval节点在缓冲区中之出现一次。当缓冲区被节点塞满的时候，GC才开始开始对缓冲区中的zval节点进行垃圾判断。
 
