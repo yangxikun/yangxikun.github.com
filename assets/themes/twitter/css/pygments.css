@@ -4,13 +4,13 @@
 .g { color: #d0d0d0 } /* Generic */
 .k { color: #6ab825; font-weight: bold } /* Keyword */
 .l { color: #d0d0d0 } /* Literal */
-.n { color: #d0d0d0 } /* Name */
+.n { color: #7ADDC1 } /* Name */
 .o { color: #FFE000 } /* Operator */
 .x { color: #d0d0d0 } /* Other */
 .p { color: #FF0000 } /* Punctuation */
-.cm { color: #999999; font-style: italic } /* Comment.Multiline */
+.cm { color: #99FF00; font-style: italic } /* Comment.Multiline */
 .cp { color: #cd2828; font-weight: bold } /* Comment.Preproc */
-.c1 { color: #999999; font-style: italic } /* Comment.Single */
+.c1 { color: #A300FF; font-style: italic } /* Comment.Single */
 .cs { color: #e50808; font-weight: bold; background-color: #520000 } /* Comment.Special */
 .gd { color: #d22323 } /* Generic.Deleted */
 .ge { color: #d0d0d0; font-style: italic } /* Generic.Emph */
