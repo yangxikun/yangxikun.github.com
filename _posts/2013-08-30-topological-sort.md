@@ -44,7 +44,7 @@ tags: [数据结构]
 
 >>(3)设一栈暂存所有入度为零的顶点.
 
-{% highlight cpp %}
+{% highlight cpp linenos %}
 Status TopologicalSort(ALGraph G){
     //有向图G采用邻接表存储结构
     //若G无回路,则输出G的顶点的一个拓扑序列并返回OK,否则ERROR.

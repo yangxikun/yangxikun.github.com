@@ -35,7 +35,7 @@ tags: [PHP应用]
 
 >前台代码:
 
-{% highlight html %}
+{% highlight html linenos %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
@@ -75,7 +75,7 @@ tags: [PHP应用]
 
 >ACode代码:
 
-{% highlight php %}
+{% highlight php linenos %}
 <?php 
     $memcached = new memcached( 'fetch' );
     $memcached->addServer( '127.0.0.1', 11211 );
@@ -91,7 +91,7 @@ tags: [PHP应用]
 
 >BCode代码:
 
-{% highlight php %}
+{% highlight php linenos %}
 <?php
     $memcached = new memcached( 'fetch' );
     $memcached->addServer( '127.0.0.1', 11211 );

@@ -19,7 +19,7 @@ tags: [PHP底层]
 
 >>示例:当我们添加一个数组本身作为这个数组的元素时,代码如下:
 
-{% highlight php %}
+{% highlight php linenos %}
 <?php
 $a = array( 'one' );
 $a[] =& $a;
@@ -29,7 +29,7 @@ xdebug_debug_zval( 'a' );
 
 >>代码输出:
 
-{% highlight php %}
+{% highlight php linenos %}
 <?php
 a: (refcount=2, is_ref=1)=array (
    0 => (refcount=1, is_ref=0)='one',
@@ -45,7 +45,7 @@ a: (refcount=2, is_ref=1)=array (
 
 >对一个变量调用unset，将删除这个符号，且它指向的变量容器中的引用次数也减1。所以，如果我们在执行完上面的代码后，对变量$a调用unset, 那么变量 $a 和数组元素 "1" 所指向的变量容器的引用次数减1, 从"2"变成"1". 下例可以说明: 
 
-{% highlight php %}
+{% highlight php linenos %}
 <?php
 (refcount=1, is_ref=1)=array (
    0 => (refcount=1, is_ref=0)='one',

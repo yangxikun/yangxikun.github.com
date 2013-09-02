@@ -133,7 +133,7 @@ _小部分内容有修改，关键字使用粗体标出，斜体字为自己添�
 
 >>关联数组是典型的hash_table应用。一次查询过程经过如下几步
 
-{% highlight cpp %}
+{% highlight cpp linenos %}
 getKeyHashValue h;
 index = n & nTableMask;
 Bucket *p = arBucket[index];
