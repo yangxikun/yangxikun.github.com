@@ -99,16 +99,15 @@ typedef union _zend_function {
 >>compiled vars:  none
 >>line     # *  op                           fetch          ext  return  operands
 >>---------------------------------------------------------------------------------
->>   2     0  >   EXT_STMT                                                 
+>>   2     0  \>   EXT_STMT                                                 
 >>         1      NOP                                                      
 >>   5     2      EXT_STMT                                                 
 >>         3      EXT_FCALL_BEGIN                                          
->         4      DO_FCALL                                      0          'test'
->         5      EXT_FCALL_END                                            
->   7     6      EXT_STMT                                                 
->         7    > RETURN                                                   1
->
->branch: #  0; line:     2-    7; sop:     0; eop:     7
+>>         4      DO_FCALL                                      0          'test'
+>>         5      EXT_FCALL_END                                            
+>>   7     6      EXT_STMT                                                 
+>>         7    \> RETURN                                                   1
+>>branch: #  0; line:     2-    7; sop:     0; eop:     7
 >>path #1: 0, 
 >>Function test:
 >>Finding entry points
