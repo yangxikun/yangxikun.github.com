@@ -27,20 +27,33 @@ tags: [PHP底层]
 
 >输出的opcode如下( php -dvld.active=1 -dvld.execute=1 vld.php )
 
-   2     0  \>   EXT_STMT                                                 
-         1      INIT_ARRAY                                       ~0      'c', 'b'
-         2      ASSIGN                                                   !0, ~0
-   3     3      EXT_STMT                                                 
-         4      ZEND_ISSET_ISEMPTY_DIM_OBJ                  2000000  ~2      !0, 'b'
-         5      FREE                                                     ~2
-   4     6      EXT_STMT                                                 
-         7      EXT_FCALL_BEGIN                                          
-         8      SEND_VAL                                                 'b'
-         9      SEND_VAR                                                 !0
-        10      DO_FCALL                                      2          'array_key_exists'
-        11      EXT_FCALL_END                                            
-   6    12      EXT_STMT                                                 
-        13    \> RETURN                                                   1
+>>  2     0  \>   EXT_STMT           
+
+>>         1      INIT_ARRAY                                       ~0      'c', 'b'
+
+>>         2      ASSIGN                                                   !0, ~0
+
+>>  3     3      EXT_STMT                              
+
+>>         4      ZEND_ISSET_ISEMPTY_DIM_OBJ                  2000000  ~2      !0, 'b'
+
+>>         5      FREE                                                     ~2
+
+>>  4     6      EXT_STMT                                                 
+
+>>         7      EXT_FCALL_BEGIN                                          
+
+>>         8      SEND_VAL                                                 'b'
+
+>>         9      SEND_VAR                                                 !0
+
+>>        10      DO_FCALL                                      2          'array_key_exists'
+
+>>        11      EXT_FCALL_END               
+
+>>   6    12      EXT_STMT            
+
+>>        13    \> RETURN                                                   1
 
 >从opcode中,可以看出调用array_key_exists函数是需要经过函数调用开始,传递参数,函数执行,函数结束这些步骤,而isset被翻译为ZEND_ISSET_ISEMPTY_DIM_OBJ 指令,isset和array_key_exists可以实现同样的功能,但isset要比array_key_exists快很多,因为少了函数调用所带来的开销.
 
