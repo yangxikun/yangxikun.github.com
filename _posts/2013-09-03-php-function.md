@@ -97,7 +97,7 @@ typedef union _zend_function {
 >>function name:  (null)
 >>number of ops:  8
 >>compiled vars:  none
->>line     # *  op                           fetch          ext  return  operands
+>>line     \# *  op                           fetch          ext  return  operands
 >>---------------------------------------------------------------------------------
 >>   2     0  \>   EXT_STMT                                                 
 >>         1      NOP                                                      
@@ -107,8 +107,8 @@ typedef union _zend_function {
 >>         5      EXT_FCALL_END                                            
 >>   7     6      EXT_STMT                                                 
 >>         7    \> RETURN                                                   1
->>branch: #  0; line:     2-    7; sop:     0; eop:     7
->>path #1: 0, 
+>>branch: \#  0; line:     2-    7; sop:     0; eop:     7
+>>path \#1: 0, 
 >>Function test:
 >>Finding entry points
 >>Branch analysis from position: 0
@@ -117,7 +117,7 @@ typedef union _zend_function {
 >>function name:  test
 >>number of ops:  5
 >>compiled vars:  none
->>line     # *  op                           fetch          ext  return  operands
+>>line     \# *  op                           fetch          ext  return  operands
 >>---------------------------------------------------------------------------------
 >>   2     0  >   EXT_NOP                                                  
 >>   3     1      EXT_STMT                                                 
@@ -125,8 +125,8 @@ typedef union _zend_function {
 >>   4     3      EXT_STMT                                                 
 >>         4    > RETURN                                                   null
 >>
->>branch: #  0; line:     2-    4; sop:     0; eop:     4
->>path #1: 0, 
+>>branch: \#  0; line:     2-    4; sop:     0; eop:     4
+>>path \#1: 0, 
 >>End of function test.
 
 >注意上面出现两段,第一段的function name为NULL,第二段的function name为test.
