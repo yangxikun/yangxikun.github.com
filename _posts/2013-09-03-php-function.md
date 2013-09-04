@@ -17,11 +17,11 @@ tags: [PHP底层]
 
 >内部函数
 
->>标准函数:count、strpos、implode等
+>>* 标准函数:count、strpos、implode等
 
->>语言结构:isset、empty、eval等
+>>* 语言结构:isset、empty、eval等
 
->>扩展模块中的函数
+>>* 扩展模块中的函数
 
 >匿名函数
 
@@ -97,7 +97,7 @@ typedef union _zend_function {
 >>function name:  (null)
 >>number of ops:  8
 >>compiled vars:  none
->>line     \# *  op                           fetch          ext  return  operands
+>>line     \# \*  op                           fetch          ext  return  operands
 >>---------------------------------------------------------------------------------
 >>   2     0  \>   EXT_STMT                                                 
 >>         1      NOP                                                      
@@ -117,7 +117,7 @@ typedef union _zend_function {
 >>function name:  test
 >>number of ops:  5
 >>compiled vars:  none
->>line     \# *  op                           fetch          ext  return  operands
+>>line     \# \*  op                           fetch          ext  return  operands
 >>---------------------------------------------------------------------------------
 >>   2     0  >   EXT_NOP                                                  
 >>   3     1      EXT_STMT                                                 
