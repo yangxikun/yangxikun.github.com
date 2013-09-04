@@ -8,7 +8,7 @@
 .o { color: #FFE000 } /* Operator */
 .x { color: #d0d0d0 } /* Other */
 .p { color: #FF0000 } /* Punctuation */
-.cm { color: #99FF00; font-style: italic } /* Comment.Multiline */
+.cm { color: #FF00EB; font-style: italic } /* Comment.Multiline */
 .cp { color: #cd2828; font-weight: bold } /* Comment.Preproc */
 .c1 { color: #A300FF; font-style: italic } /* Comment.Single */
 .cs { color: #e50808; font-weight: bold; background-color: #520000 } /* Comment.Special */
