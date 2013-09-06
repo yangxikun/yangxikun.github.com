@@ -16,7 +16,7 @@ tags: [数据结构]
 
 ###辅助
 
-1. closedge[]数组记录了相应顶点到V的最短距离`struct{ VertexType adjvex; VRType lowcost;}closedge[MAX]`.
+1. closedge\[\]数组记录了相应顶点到V的最短距离`struct{ VertexType adjvex; VRType lowcost;}closedge[MAX]`.
 
 2. 图的存储结构为邻接矩阵.
 
