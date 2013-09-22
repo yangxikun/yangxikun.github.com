@@ -44,7 +44,7 @@
 .nx { color: #AC1841 } /* Name.Other */
 .py { color: #d0d0d0 } /* Name.Property */
 .nt { color: #6ab825; font-weight: bold } /* Name.Tag */
-.nv { color: #000AFF } /* Name.Variable */
+.nv { color: #0099FF } /* Name.Variable */
 .ow { color: #6ab825; font-weight: bold } /* Operator.Word */
 .w { color: #666666 } /* Text.Whitespace */
 .mf { color: #3677a9 } /* Literal.Number.Float */
