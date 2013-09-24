@@ -3,7 +3,7 @@ layout: post
 title: "单例模式"
 description: ""
 category: PHP
-tags: [设计模式]
+tags: [PHP设计模式]
 ---
 {% include JB/setup %}
 
