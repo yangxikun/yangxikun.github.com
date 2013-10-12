@@ -51,55 +51,21 @@ int MaxSum(int n, int *a){
 
 >定义数据结构:设子矩阵的左上角和右下角行列坐标分别为(i1,j1)和(i2,j2),则此子矩阵的和为
 
-<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-  <mi>s</mi>
-  <mo stretchy="false">(</mo>
-  <mi>i</mi>
-  <mn>1</mn>
-  <mo>,</mo>
-  <mi>i</mi>
-  <mn>2</mn>
-  <mo>,</mo>
-  <mi>j</mi>
-  <mn>1</mn>
-  <mo>,</mo>
-  <mi>j</mi>
-  <mn>2</mn>
-  <mo stretchy="false">)</mo>
-  <mo>=</mo>
-  <munderover>
-    <mo>&#x2211;<!-- ∑ --></mo>
-    <mrow class="MJX-TeXAtom-ORD">
-      <mi>i</mi>
-      <mn>1</mn>
-    </mrow>
-    <mrow class="MJX-TeXAtom-ORD">
-      <mi>i</mi>
-      <mn>2</mn>
-    </mrow>
-  </munderover>
-  <mi>a</mi>
-  <mo stretchy="false">[</mo>
-  <mi>i</mi>
-  <mo stretchy="false">]</mo>
-  <mo stretchy="false">[</mo>
-  <mi>j</mi>
-  <mo stretchy="false">]</mo>
-</math>
+![dynamic3](/assets/img/2013100601.gif)
 
 >最大子矩阵和问题的最优解为
 
-<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"> <munder> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>m</mi> </mrow> </munder> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>m</mi> </mrow> </munder> <mi>s</mi> <mo stretchy="false">(</mo> <mi>i</mi> <mn>1</mn> <mo>,</mo> <mi>i</mi> <mn>2</mn> <mo>,</mo> <mi>j</mi> <mn>1</mn> <mo>,</mo> <mi>j</mi> <mn>2</mn> <mo stretchy="false">)</mo> </math>
+![dynamic3](/assets/img/2013100602.gif)
 
->如果直接穷举的话,需要<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"> <mi>O</mi> <mo stretchy="false">(</mo> <msup> <mi>m</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msup> <msup> <mi>n</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msup> <mo stretchy="false">)</mo> </math>时间.
+>如果直接穷举的话,需要![dynamic3](/assets/img/2013100607.gif)时间.
 
 >对最优值公式进行变换:
 
-<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"> <munder> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>m</mi> </mrow> </munder> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>n</mi> </mrow> </munder> <mi>s</mi> <mo stretchy="false">(</mo> <mi>i</mi> <mn>1</mn> <mo>,</mo> <mi>i</mi> <mn>2</mn> <mo>,</mo> <mi>j</mi> <mn>1</mn> <mo>,</mo> <mi>j</mi> <mn>2</mn> <mo stretchy="false">)</mo> <mo>=</mo> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>m</mi> </mrow> </munder> <mo fence="false" stretchy="false">{</mo> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>n</mi> </mrow> </munder> <mi>s</mi> <mo stretchy="false">(</mo> <mo stretchy="false">(</mo> <mi>i</mi> <mn>1</mn> <mo>,</mo> <mi>i</mi> <mn>2</mn> <mo>,</mo> <mi>j</mi> <mn>1</mn> <mo>,</mo> <mi>j</mi> <mn>2</mn> <mo stretchy="false">)</mo> <mo fence="false" stretchy="false">}</mo> <mo>=</mo> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>i</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>m</mi> </mrow> </munder> <mi>t</mi> <mo stretchy="false">(</mo> <mi>i</mi> <mn>1</mn> <mo>,</mo> <mi>i</mi> <mn>2</mn> <mo stretchy="false">)</mo> </math>
+![dynamic3](/assets/img/2013100603.gif)
 
->式中,<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"> <mi>t</mi> <mo stretchy="false">(</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> <mo>,</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> <mo stretchy="false">)</mo> <mo>=</mo> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> <mo>&lt;=</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> <mo>&lt;=</mo> <mi>n</mi> </mrow> </munder> <mi>s</mi> <mo stretchy="false">(</mo> <mo stretchy="false">(</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> <mo>,</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> <mo>,</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> <mo>,</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> <mo stretchy="false">)</mo> <mo>=</mo> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>1</mn> <mo>&lt;=</mo> <mi>j</mi> <mn>2</mn> <mo>&lt;=</mo> <mi>n</mi> </mrow> </munder> <munderover> <mo>&#x2211;<!-- ∑ --></mo> <mrow class="MJX-TeXAtom-ORD"> <mi>j</mi> <mo>=</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> </mrow> <mrow class="MJX-TeXAtom-ORD"> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> </mrow> </munderover> <munderover> <mo>&#x2211;<!-- ∑ --></mo> <mrow class="MJX-TeXAtom-ORD"> <mi>i</mi> <mo>=</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> </mrow> <mrow class="MJX-TeXAtom-ORD"> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> </mrow> </munderover> <mi>a</mi> <mo stretchy="false">[</mo> <mi>i</mi> <mo stretchy="false">]</mo> <mo stretchy="false">[</mo> <mi>j</mi> <mo stretchy="false">]</mo> </math>
+>式中,![dynamic3](/assets/img/2013100604.gif)
 
->设<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"> <mi>b</mi> <mo stretchy="false">[</mo> <mi>j</mi> <mo stretchy="false">]</mo> <mo>=</mo> <munderover> <mo>&#x2211;<!-- ∑ --></mo> <mrow class="MJX-TeXAtom-ORD"> <mi>i</mi> <mo>=</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> </mrow> <mrow class="MJX-TeXAtom-ORD"> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> </mrow> </munderover> <mi>a</mi> <mo stretchy="false">[</mo> <mi>i</mi> <mo stretchy="false">]</mo> <mo stretchy="false">[</mo> <mi>j</mi> <mo stretchy="false">]</mo> </math>,则<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"> <mi>t</mi> <mo stretchy="false">(</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> <mo>,</mo> <msub> <mi>i</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> <mo stretchy="false">)</mo> <mo>=</mo> <munder> <mo movablelimits="true">max</mo> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> <mo>&lt;=</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> <mo>&lt;=</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> <mo>&lt;=</mo> <mi>n</mi> </mrow> </munder> <munderover> <mo>&#x2211;<!-- ∑ --></mo> <mrow class="MJX-TeXAtom-ORD"> <mi>j</mi> <mo>=</mo> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>1</mn> </mrow> </msub> </mrow> <mrow class="MJX-TeXAtom-ORD"> <msub> <mi>j</mi> <mrow class="MJX-TeXAtom-ORD"> <mn>2</mn> </mrow> </msub> </mrow> </munderover> <mi>b</mi> <mo stretchy="false">[</mo> <mi>j</mi> <mo stretchy="false">]</mo> </math>.
+>设![dynamic3](/assets/img/2013100605.gif),则![dynamic3](/assets/img/2013100606.gif)
 
 >可以看出,这是一维情形的最大子段和问题*\(想到这步,没有解题经验谈何容易...\)*,由此,借助于最大子段和问题的动态规划算法MaxSum,可设计出解最大子矩阵和问题的动态规划算法MaxSum2如下:
 
