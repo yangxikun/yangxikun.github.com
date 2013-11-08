@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>PHP中比较少用但很有用的几个函数</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>PHP中比较少用但很有用的几个函数 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>23 September 2013</span>
+    </div>
+    <div class="content">
+      <p><em>转载自<a href='http://www.admin10000.com/document/2610.html'>8个开发必备的PHP 功能</a></em></p>
+
+<h3 id='id56'>函数接收任意数量的参数</h3>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 2</span> <span class='k'>function</span> <span class='nf'>funtest</span><span class='p'>()</span> <span class='p'>{</span>
+<span class='lineno'> 3</span>     <span class='nv'>$args</span> <span class='o'>=</span> <span class='nb'>func_get_args</span><span class='p'>();</span>
+<span class='lineno'> 4</span>     <span class='k'>foreach</span> <span class='p'>(</span> <span class='nv'>$args</span> <span class='k'>as</span> <span class='nv'>$k</span> <span class='o'>=&gt;</span> <span class='nv'>$v</span> <span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'> 5</span>         <span class='k'>echo</span> <span class='s1'>&#39;arg&#39;</span><span class='o'>.</span><span class='p'>(</span><span class='nv'>$k</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>)</span><span class='o'>.</span><span class='s1'>&#39;: &#39;</span><span class='o'>.</span><span class='nv'>$v</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'> 6</span>     <span class='p'>}</span>
+<span class='lineno'> 7</span> <span class='p'>}</span>
+<span class='lineno'> 8</span> <span class='nx'>funtest</span><span class='p'>();</span>
+<span class='lineno'> 9</span> <span class='nx'>funtest</span><span class='p'>(</span> <span class='s1'>&#39;hello&#39;</span> <span class='p'>);</span>
+<span class='lineno'>10</span> <span class='nx'>funtest</span><span class='p'>(</span> <span class='s1'>&#39;hello&#39;</span><span class='p'>,</span> <span class='s1'>&#39;world&#39;</span><span class='p'>,</span> <span class='s1'>&#39;next&#39;</span> <span class='p'>);</span>
+<span class='lineno'>11</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<h3 id='glob'>使用glob()查找文件</h3>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 2</span> <span class='c1'>//取得当前目录下后缀名为.php的文件</span>
+<span class='lineno'> 3</span> <span class='nv'>$files</span> <span class='o'>=</span> <span class='nb'>glob</span><span class='p'>(</span> <span class='s1'>&#39;*.php&#39;</span> <span class='p'>);</span>
+<span class='lineno'> 4</span> <span class='k'>echo</span> <span class='s1'>&#39;&lt;pre&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'> 5</span> <span class='nb'>print_r</span><span class='p'>(</span> <span class='nv'>$files</span> <span class='p'>);</span>
+<span class='lineno'> 6</span> 
+<span class='lineno'> 7</span> <span class='c1'>//当前目录下后缀名为.php和.html的文件</span>
+<span class='lineno'> 8</span> <span class='nv'>$files</span> <span class='o'>=</span> <span class='nb'>glob</span><span class='p'>(</span> <span class='s1'>&#39;*.{php,html}&#39;</span><span class='p'>,</span> <span class='nx'>GLOB_BRACE</span> <span class='p'>);</span>
+<span class='lineno'> 9</span> <span class='nb'>print_r</span><span class='p'>(</span> <span class='nv'>$files</span> <span class='p'>);</span>
+<span class='lineno'>10</span> 
+<span class='lineno'>11</span> <span class='c1'>//还可以添加路径</span>
+<span class='lineno'>12</span> <span class='nv'>$files</span> <span class='o'>=</span> <span class='nb'>glob</span><span class='p'>(</span> <span class='s1'>&#39;./testdrive/i*.php&#39;</span> <span class='p'>);</span>
+<span class='lineno'>13</span> <span class='nb'>print_r</span><span class='p'>(</span> <span class='nv'>$files</span> <span class='p'>);</span>
+<span class='lineno'>14</span> 
+<span class='lineno'>15</span> <span class='c1'>//如果你想得到绝对路径,你可以调用realpath()函数</span>
+<span class='lineno'>16</span> <span class='nv'>$files</span> <span class='o'>=</span> <span class='nb'>glob</span><span class='p'>(</span> <span class='s1'>&#39;./testdrive/i*.php&#39;</span> <span class='p'>);</span>
+<span class='lineno'>17</span> <span class='nv'>$files</span> <span class='o'>=</span> <span class='nb'>array_map</span><span class='p'>(</span> <span class='s1'>&#39;realpath&#39;</span><span class='p'>,</span> <span class='nv'>$files</span> <span class='p'>);</span>
+<span class='lineno'>18</span> <span class='nb'>print_r</span><span class='p'>(</span> <span class='nv'>$files</span> <span class='p'>);</span>
+<span class='lineno'>19</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<h3 id='id'>生成唯一的id</h3>
+
+<blockquote>
+<p>很多朋友都利用md5()来生成唯一的编号，但是md5()有几个缺点：1.无序，导致数据库中排序性能下降。2.太长，需要更多的存储空间。其实PHP中自带一个函数来生成唯一的id，这个函数就是uniqid() 。下面是用法：</p>
+</blockquote>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 2</span> <span class='c1'>// generate unique string</span>
+<span class='lineno'> 3</span> <span class='k'>echo</span> <span class='nb'>uniqid</span><span class='p'>()</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'> 4</span> 
+<span class='lineno'> 5</span> <span class='c1'>// generate another unique string</span>
+<span class='lineno'> 6</span> <span class='k'>echo</span> <span class='nb'>uniqid</span><span class='p'>()</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'> 7</span> 
+<span class='lineno'> 8</span> <span class='c1'>//该算法是根据CPU时间戳来生成的，所以在相近的时间段内，id前几位是一样的，这也方便id的排序，如果你想更好的避免重复，可以在id前加上前缀，如：</span>
+<span class='lineno'> 9</span> 
+<span class='lineno'>10</span> <span class='c1'>// 前缀</span>
+<span class='lineno'>11</span> <span class='k'>echo</span> <span class='nb'>uniqid</span><span class='p'>(</span><span class='s1'>&#39;foo_&#39;</span><span class='p'>)</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>12</span> 
+<span class='lineno'>13</span> <span class='c1'>// 有更多的熵</span>
+<span class='lineno'>14</span> <span class='k'>echo</span> <span class='nb'>uniqid</span><span class='p'>(</span><span class='s1'>&#39;&#39;</span><span class='p'>,</span><span class='k'>true</span><span class='p'>)</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>15</span> 
+<span class='lineno'>16</span> <span class='c1'>// 都有</span>
+<span class='lineno'>17</span> <span class='k'>echo</span> <span class='nb'>uniqid</span><span class='p'>(</span><span class='s1'>&#39;bar_&#39;</span><span class='p'>,</span><span class='k'>true</span><span class='p'>)</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>18</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<h3 id='id57'>字符串压缩</h3>
+
+<blockquote>
+<p>当我们说到压缩，我们可能会想到文件压缩，其实，字符串也是可以压缩的。PHP提供了gzcompress() 和 gzuncompress() 函数：</p>
+</blockquote>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='x'>&lt;meta charset=&quot;utf-8&quot;&gt;</span>
+<span class='lineno'> 2</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 3</span> <span class='nv'>$string</span> <span class='o'>=</span>
+<span class='lineno'> 4</span> <span class='s1'>&#39;Lorem ipsum dolor sit amet, consectetur</span>
+<span class='lineno'> 5</span> <span class='s1'>adipiscing elit. Nunc ut elit id mi ultricies</span>
+<span class='lineno'> 6</span> <span class='s1'>adipiscing. Nulla facilisi. Praesent pulvinar,</span>
+<span class='lineno'> 7</span> <span class='s1'>sapien vel feugiat vestibulum, nulla dui pretium orci,</span>
+<span class='lineno'> 8</span> <span class='s1'>non ultricies elit lacus quis ante. Lorem ipsum dolor</span>
+<span class='lineno'> 9</span> <span class='s1'>sit amet, consectetur adipiscing elit. Aliquam</span>
+<span class='lineno'>10</span> <span class='s1'>pretium ullamcorper urna quis iaculis. Etiam ac massa</span>
+<span class='lineno'>11</span> <span class='s1'>sed turpis tempor luctus. Curabitur sed nibh eu elit</span>
+<span class='lineno'>12</span> <span class='s1'>mollis congue. Praesent ipsum diam, consectetur vitae</span>
+<span class='lineno'>13</span> <span class='s1'>ornare a, aliquam a nunc. In id magna pellentesque</span>
+<span class='lineno'>14</span> <span class='s1'>tellus posuere adipiscing. Sed non mi metus, at lacinia</span>
+<span class='lineno'>15</span> <span class='s1'>augue. Sed magna nisi, ornare in mollis in, mollis</span>
+<span class='lineno'>16</span> <span class='s1'>sed nunc. Etiam at justo in leo congue mollis.</span>
+<span class='lineno'>17</span> <span class='s1'>Nullam in neque eget metus hendrerit scelerisque</span>
+<span class='lineno'>18</span> <span class='s1'>eu non enim. Ut malesuada lacus eu nulla bibendum</span>
+<span class='lineno'>19</span> <span class='s1'>id euismod urna sodales. &#39;</span><span class='p'>;</span>
+<span class='lineno'>20</span> <span class='nv'>$compressed</span> <span class='o'>=</span> <span class='nb'>gzcompress</span><span class='p'>(</span> <span class='nv'>$string</span> <span class='p'>);</span>
+<span class='lineno'>21</span> <span class='k'>echo</span> <span class='s1'>&#39;Original size: &#39;</span><span class='o'>.</span> <span class='nb'>strlen</span><span class='p'>(</span> <span class='nv'>$string</span> <span class='p'>)</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>22</span> 
+<span class='lineno'>23</span> <span class='k'>echo</span> <span class='s1'>&#39;Compressed size: &#39;</span><span class='o'>.</span> <span class='nb'>strlen</span><span class='p'>(</span> <span class='nv'>$compressed</span> <span class='p'>)</span><span class='o'>.</span><span class='s1'>&#39;&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>24</span> 
+<span class='lineno'>25</span> <span class='k'>echo</span> <span class='s1'>&#39;Compressed string:&lt;br /&gt;&#39;</span><span class='o'>.</span><span class='nv'>$compressed</span><span class='p'>;</span>
+<span class='lineno'>26</span> <span class='c1'>// 解压缩</span>
+<span class='lineno'>27</span> <span class='nv'>$original</span> <span class='o'>=</span> <span class='nb'>gzuncompress</span><span class='p'>(</span> <span class='nv'>$compressed</span> <span class='p'>);</span>
+<span class='lineno'>28</span> <span class='k'>echo</span> <span class='s1'>&#39;&lt;br /&gt;&lt;br /&gt;Uncompressed string:&lt;br /&gt;&#39;</span><span class='o'>.</span><span class='nv'>$original</span><span class='p'>;</span>
+<span class='lineno'>29</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<blockquote>
+<p>几乎有50% 压缩比率。同时，你还可以使用gzencode()和gzdecode()函数来压缩，只不过其用了不同的压缩算法。</p>
+</blockquote>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#PHP-ref">
+    		PHP <span>22</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#PHP练手-ref">PHP练手 <span>6</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/09/22/recursive-traverse-dir" title="递归遍历目录">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/算法/2013/09/24/recursive-divide-1" title="递归与分治--全排列">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+
