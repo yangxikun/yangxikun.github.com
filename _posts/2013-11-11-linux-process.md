@@ -7,6 +7,8 @@ tags: [系统]
 ---
 {% include JB/setup %}
 
+*参考自[Linux守护进程的编程实现](http://blog.csdn.net/hairetz/article/details/4195036)*
+
 ### 进程
 
 > 为使程序能并发执行，且为了对并发（并发指两个或多个事件在同一时间间隔内发生）执行的程序加以描述和控制，于是引入了“进程”的概念。
