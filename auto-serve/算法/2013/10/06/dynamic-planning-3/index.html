@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>动态规划--最大子段和问题与最大子矩阵和问题</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>动态规划--最大子段和问题与最大子矩阵和问题 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>06 October 2013</span>
+    </div>
+    <div class="content">
+      <blockquote>
+<p>最大子段和:给定由n个整数组成的序列a1,a2,&#8230;,an,求该序列形如ai+&#8230;+aj的子段和的最大值.</p>
+</blockquote>
+
+<blockquote>
+<p>算法是基于数据结构的,定义了好的数据结构才能更好的求解问题.所以先定义数据结构:<code>b[j]=max{ai+...+aj}</code>其中<code>1&lt;=i&lt;=j&lt;=n</code>,表示b<span>j</span>是以a<span>j</span>为结尾的子段所能达到的最大值.在求解出b<span>1</span>,b<span>2</span>,&#8230;,b<span>n</span>之后,从b<span>1&#8230;n</span>中求出一个最大的值就可以得到原问题的最优解.</p>
+</blockquote>
+
+<h3 id='id83'>分析最优子结构</h3>
+
+<blockquote>
+<p>上面已经定义了数据结构,接着就要证明其是否具有最优子结构性质,这里我们所证明的最优子结构是指以a<span>k</span>为结尾的子段所能达到的最大值,虽然与原问题的最优解不一样,但我们却可以从这个最优子结构中得出原问题的解,所以在动态规划算法中,最优子结构并不是依据原问题的最优解而设定,应该是根据定义的数据结构,但又得确保最后能归纳出原问题的最优解.反证法:</p>
+</blockquote>
+
+<blockquote>
+<p>当<code>b[j-1]&gt;0</code>时,设X为b<span>j</span>的值,则X-a<span>j</span>是b<span>j-1</span>的值,即以a<span>j-1</span>为结尾的子段所能达到的最大值,否则b<span>j</span>的值将大于X.</p>
+</blockquote>
+
+<blockquote>
+<p>当<code>b[j-1]&lt;=0</code>时,b<span>j</span> = a<span>j</span>.</p>
+</blockquote>
+
+<blockquote>
+<p>b<span>j</span>的子问题就是a<span>1&#8230;j</span>的所有子段,显然由上面两种情况,可以得出b<span>j</span>确实包含了它的子问题的最优解.</p>
+</blockquote>
+
+<h3 id='id84'>建立递归关系</h3>
+
+<blockquote>
+<p>由最优子结构的分析可得:</p>
+</blockquote>
+
+<blockquote>
+<p><code>b[j] = max{ai+...+aj} = max{b[j-1]+a[j], a[j]}</code>,进一步分析可得</p>
+</blockquote>
+
+<blockquote>
+<p>当<code>b[j-1]&gt;0</code>时,<code>b[j] = a[j] + b[j-1]</code>;</p>
+</blockquote>
+
+<blockquote>
+<p>当<code>b[j-1]&lt;=0</code>时,<code>b[j]=a[j]</code>.</p>
+</blockquote>
+
+<h3 id='id85'>算法代码</h3>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'>1</span> <span class='kt'>int</span> <span class='nf'>MaxSum</span><span class='p'>(</span><span class='kt'>int</span> <span class='n'>n</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>*</span><span class='n'>a</span><span class='p'>){</span>
+<span class='lineno'>2</span>     <span class='kt'>int</span> <span class='n'>sum</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>,</span> <span class='n'>b</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'>3</span>     <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;=</span> <span class='n'>n</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>4</span>         <span class='k'>if</span> <span class='p'>(</span><span class='n'>b</span> <span class='o'>&gt;</span> <span class='mi'>0</span><span class='p'>)</span> <span class='n'>b</span> <span class='o'>+=</span> <span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>];</span><span class='c1'>//这段判断语句相当于</span>
+<span class='lineno'>5</span>         <span class='k'>else</span> <span class='n'>b</span> <span class='o'>=</span> <span class='n'>a</span><span class='p'>[</span><span class='n'>i</span><span class='p'>];</span><span class='c1'>//max{b[j-1]+a[j], a[j]}</span>
+<span class='lineno'>6</span>         <span class='k'>if</span> <span class='p'>(</span><span class='n'>b</span> <span class='o'>&gt;</span> <span class='n'>sum</span><span class='p'>)</span> <span class='n'>sum</span> <span class='o'>=</span> <span class='n'>b</span><span class='p'>;</span>
+<span class='lineno'>7</span>     <span class='p'>}</span>
+<span class='lineno'>8</span>     <span class='k'>return</span> <span class='n'>sum</span><span class='p'>;</span>
+<span class='lineno'>9</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<blockquote>
+<p>最大子矩阵和问题是最大子段和问题推广到高维的情形<em>(对我来说真的有点难度&#8230;)</em></p>
+</blockquote>
+
+<blockquote>
+<p>给定一个m行n列的整数矩阵A,试求A的一个子矩阵,使其各元素之和为最大.</p>
+</blockquote>
+
+<blockquote>
+<p>定义数据结构:设子矩阵的左上角和右下角行列坐标分别为(i1,j1)和(i2,j2),则此子矩阵的和为</p>
+</blockquote>
+
+<p><img alt='dynamic3' src='/assets/img/2013100601.gif' /></p>
+
+<blockquote>
+<p>最大子矩阵和问题的最优解为</p>
+</blockquote>
+
+<p><img alt='dynamic3' src='/assets/img/2013100602.gif' /></p>
+
+<blockquote>
+<p>如果直接穷举的话,需要<img alt='dynamic3' src='/assets/img/2013100607.gif' />时间.</p>
+</blockquote>
+
+<blockquote>
+<p>对最优值公式进行变换:</p>
+</blockquote>
+
+<p><img alt='dynamic3' src='/assets/img/2013100603.gif' /></p>
+
+<blockquote>
+<p>式中,<img alt='dynamic3' src='/assets/img/2013100604.gif' /></p>
+</blockquote>
+
+<blockquote>
+<p>设<img alt='dynamic3' src='/assets/img/2013100605.gif' />,则<img alt='dynamic3' src='/assets/img/2013100606.gif' /></p>
+</blockquote>
+
+<blockquote>
+<p>可以看出,这是一维情形的最大子段和问题<em>(想到这步,没有解题经验谈何容易&#8230;)</em>,由此,借助于最大子段和问题的动态规划算法MaxSum,可设计出解最大子矩阵和问题的动态规划算法MaxSum2如下:</p>
+</blockquote>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>int</span> <span class='nf'>MaxSum2</span><span class='p'>(</span><span class='kt'>int</span> <span class='n'>m</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>n</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>a</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'> 2</span>     <span class='kt'>int</span> <span class='n'>sum</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'> 3</span>     <span class='kt'>int</span> <span class='o'>*</span><span class='n'>b</span> <span class='o'>=</span> <span class='k'>new</span> <span class='kt'>int</span><span class='p'>[</span><span class='n'>n</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>];</span>
+<span class='lineno'> 4</span>     <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;=</span> <span class='n'>m</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span><span class='c1'>//相当于i1</span>
+<span class='lineno'> 5</span>         <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>k</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>k</span> <span class='o'>&lt;=</span> <span class='n'>n</span><span class='p'>;</span> <span class='n'>k</span><span class='o'>++</span><span class='p'>)</span> <span class='n'>b</span><span class='p'>[</span><span class='n'>k</span><span class='p'>]</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'> 6</span>         <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>j</span> <span class='o'>=</span> <span class='n'>i</span><span class='p'>;</span> <span class='n'>j</span> <span class='o'>&lt;=</span> <span class='n'>m</span><span class='p'>;</span> <span class='n'>j</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span><span class='c1'>//相当于i2</span>
+<span class='lineno'> 7</span>             <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>k</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>k</span> <span class='o'>&lt;=</span> <span class='n'>n</span><span class='p'>;</span> <span class='n'>k</span><span class='o'>++</span><span class='p'>)</span> <span class='n'>b</span><span class='p'>[</span><span class='n'>k</span><span class='p'>]</span> <span class='o'>+=</span> <span class='n'>a</span><span class='p'>[</span><span class='n'>j</span><span class='p'>][</span><span class='n'>k</span><span class='p'>];</span><span class='c1'>//注意这里是累加,相当于公式b[j] = a[i1][j]+...+a[i2][j]</span>
+<span class='lineno'> 8</span>             <span class='kt'>int</span> <span class='n'>max</span> <span class='o'>=</span> <span class='n'>MaxSum</span><span class='p'>(</span><span class='n'>n</span><span class='p'>,</span> <span class='n'>b</span><span class='p'>);</span><span class='c1'>//max相当于得到一个t(i1,i2)的值</span>
+<span class='lineno'> 9</span>             <span class='k'>if</span> <span class='p'>(</span><span class='n'>max</span> <span class='o'>&gt;</span> <span class='n'>sum</span><span class='p'>)</span> <span class='n'>sum</span> <span class='o'>=</span><span class='n'>max</span><span class='p'>;</span><span class='c1'>//这一步相当于max t(i1, i2) 1&lt;=i1&lt;=i2&lt;=m</span>
+<span class='lineno'>10</span>         <span class='p'>}</span>
+<span class='lineno'>11</span>     <span class='p'>}</span>
+<span class='lineno'>12</span>     <span class='k'>return</span> <span class='n'>sum</span><span class='p'>;</span>
+<span class='lineno'>13</span> <span class='p'>}</span>
+</code></pre>
+</div>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#算法-ref">
+    		算法 <span>17</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#算法-ref">算法 <span>10</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/算法/2013/10/04/dynamic-planning-2" title="动态规划--最长公共子序列">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/算法/2013/10/19/dynamic-plannig-4" title="动态规划--0-1背包问题">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+

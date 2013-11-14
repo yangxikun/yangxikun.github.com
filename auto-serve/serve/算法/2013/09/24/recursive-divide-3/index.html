@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>递归与分治--格雷码</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>递归与分治--格雷码 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>24 September 2013</span>
+    </div>
+    <div class="content">
+      <h3 id='id62'>格雷码</h3>
+
+<blockquote>
+<p>Gray码是一个长度为2^n的序列.序列中无相同元素,每个元素都是长度为n位的(0,1)串,相邻元素恰好只有一位不同.</p>
+</blockquote>
+
+<blockquote>
+<p>题目中要求相邻元素恰好只有一位不同,那就不能通过简单的全排列来解,在递归的过程应该需要做一些选择判断之类的.</p>
+</blockquote>
+
+<blockquote>
+<p>将排列画成如下图:</p>
+</blockquote>
+
+<p><img alt='gray1' src='/assets/img/201309230301.png' /></p>
+
+<blockquote>
+<p>由树从左到右可得000,001,010,011,可见这并不符合要求.如果将排列画成下图:</p>
+</blockquote>
+
+<p><img alt='gray2' src='/assets/img/201309230302.png' /></p>
+
+<blockquote>
+<p>由树从左到右可得000,001,011,010,可见符合要求,再仔细分析可得,当从根结点到叶子结点的父结点路径上,如果有偶数个0,则它的左右孩子为01,如果有奇数个0,则它的左右孩子为10,这样就能保证每个相邻元素之间只有一位不同.</p>
+</blockquote>
+
+<blockquote>
+<p>所以在递归函数中,最关键的一点就是,判断当前序列0的个数时偶数还是奇数,然后采用不同的递归顺序调用.核心代码如下:</p>
+</blockquote>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>gray</span><span class='p'>(</span> <span class='kt'>char</span> <span class='n'>t</span> <span class='cm'>/*...省略部分参数*/</span> <span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'> 2</span>     <span class='k'>if</span> <span class='p'>(</span> <span class='n'>level</span> <span class='o'>==</span> <span class='n'>n</span> <span class='p'>)</span> <span class='p'>{</span><span class='c1'>//递归出口</span>
+<span class='lineno'> 3</span>         <span class='c1'>//输出元素</span>
+<span class='lineno'> 4</span>     <span class='p'>}</span>
+<span class='lineno'> 5</span>     <span class='cm'>/*...省略部分代码*/</span>
+<span class='lineno'> 6</span>     <span class='k'>if</span> <span class='p'>(</span> <span class='n'>is_even</span><span class='p'>(</span> <span class='n'>c</span> <span class='p'>)</span> <span class='p'>)</span> <span class='p'>{</span><span class='c1'>//如果时偶数个0</span>
+<span class='lineno'> 7</span>         <span class='n'>gray</span><span class='p'>(</span> <span class='sc'>&#39;0&#39;</span> <span class='p'>);</span>
+<span class='lineno'> 8</span>         <span class='n'>gray</span><span class='p'>(</span> <span class='sc'>&#39;1&#39;</span> <span class='p'>);</span>
+<span class='lineno'> 9</span>     <span class='p'>}</span><span class='k'>else</span><span class='p'>{</span>
+<span class='lineno'>10</span>         <span class='n'>gray</span><span class='p'>(</span> <span class='sc'>&#39;1&#39;</span> <span class='p'>);</span>
+<span class='lineno'>11</span>         <span class='n'>gray</span><span class='p'>(</span> <span class='sc'>&#39;0&#39;</span> <span class='p'>);</span>
+<span class='lineno'>12</span>     <span class='p'>}</span>
+<span class='lineno'>13</span> <span class='p'>}</span>
+</code></pre>
+</div>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#算法-ref">
+    		算法 <span>17</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#算法-ref">算法 <span>10</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/算法/2013/09/24/recursive-divide-2" title="递归与分治--汉诺塔">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/09/25/multiple-file-upload" title="多个文件上传">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+

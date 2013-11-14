@@ -1,0 +1,839 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>PHP 底层机制</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>PHP 底层机制 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>23 August 2013</span>
+    </div>
+    <div class="content">
+      <p><em>注：本博文转载自<a href='http://stblog.baidu-tech.com/?p=763'>百度搜索研发部官方博客</a></em> <em>小部分内容有修改，关键字使用粗体标出，斜体字为自己添加的内容，改善了原博文的排版</em></p>
+
+<h3 id='1php'>1.什么是PHP？</h3>
+
+<blockquote>
+<p>一种适用于web开发的动态语言。具体点说：就是一个用c语言实现包含大量组件的软件框架。更狭义点看，可以把它认为是一个强大的ui框架.</p>
+</blockquote>
+
+<h3 id='2php'>2.为何要了解PHP的底层？</h3>
+
+<blockquote>
+<p>了解一门语言的实现将有助于我们更好的使用这门语言，优化我们的程序性能，可以了解到在什么地方该用它，什么地方不该使用。</p>
+</blockquote>
+
+<h3 id='3php_'>3.PHP 的设计理念及特点</h3>
+
+<ul>
+<li>多进程模型：由于php是多进程模型，不同请求间互不干涉，这样保证了一个请求挂掉不会对全盘服务造成影响.</li>
+
+<li>弱类型语言：和c/c++、java、c#等语言不同，PHP是一门<strong>弱类型语言</strong>：一个变量的类型并不是一开始就确定不变，运行中才会确定并可能发生隐式或显式的类型转换，这种机制的灵活性在web开发中非常方便、高效，具体会在后面php变量中详述.</li>
+
+<li>引擎(Zend)+组件(ext)的模式<strong>降低内部耦合</strong><em>(软件工程中的东西)</em></li>
+
+<li>中间层(sapi)隔绝web server和PHP * 语法简单灵活，没有太多规范</li>
+</ul>
+
+<h3 id='4php'>4.PHP四层系统结构</h3>
+
+<p><img alt='PHP四层系统结构' src='/assets/img/201308210101.jpg' /></p>
+
+<h5 id='zend'>Zend引擎</h5>
+
+<blockquote>
+<p>Zend整体用纯c实现，是php的内核部分，它将php代码翻译(词法、语法解析等一系列编译过程)为可执行opcode的处理并实现相应的处理方法、实现了基本的数据结构(如hashtable、oo)、内存分配及管理、提供了相应的api方法供外部调用，是一切的核心，所有的外围功能均围绕zend实现。</p>
+</blockquote>
+
+<h5 id='extensions'>Extensions</h5>
+
+<blockquote>
+<p>围绕着zend引擎，extensions通过组件式的方式提供各种基础服务，我们常见的各种<strong>内置函数</strong>（如array系列）、标准库等都是通过extension来实现，用户也可以根据需要实现自己的extension以达到功能扩展、性能优化等目的（如贴吧正在使用的php中间层、富文本解析就是extension的典型应用）。</p>
+</blockquote>
+
+<h5 id='sapi'>SAPI</h5>
+
+<blockquote>
+<p>全称是Server Application Programming Interface，也就是服务端应用编程接口，sapi通过一系列<strong>钩子函数</strong>（如Apache的hook机制），使得php可以和外围交互数据，这是php非常优雅和成功的一个设计，通过sapi成功的将php本身和上层应用解耦隔离，php可以不再考虑如何针对不同应用进行兼容，而应用本身也可以针对自己的特点实现不同的处理方式，后面将在sapi章节中介绍。</p>
+</blockquote>
+
+<h5 id='id1'>上层应用</h5>
+
+<blockquote>
+<p>这就我们平时编写的php程序，通过不同的sapi方式得到各种各样的应用模式，如通过webserver实现web应用、在命令行下以脚本方式运行（CLI模式）等等。</p>
+</blockquote>
+
+<blockquote>
+<p><em>这个比方很贴切~</em></p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>如果php是一辆车，那么车的框架就是php本身，Zend是车的引擎（发动机），Ext下面的各种组件就是车的轮子，Sapi可以看做是公路，车可以跑在不同类型的公路上，而一次php程序的执行就是汽车跑在公路上。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>因此，我们需要：性能优异的引擎+合适的车轮+正确的跑道</p>
+</blockquote>
+</blockquote>
+
+<h3 id='5sapi'>5.Sapi</h3>
+
+<blockquote>
+<p>如前所述，sapi通过通过一系列的接口，使得外部应用可以和php交换数据并可以根据不同应用特点实现特定的处理方法，我们常见的一些sapi有：</p>
+</blockquote>
+
+<blockquote>
+<p>apache2handler</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>这是以apache作为webserver，采用mod_php模式运行时候的处理方式，也是现在应用最广泛的一种</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>cgi</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>webserver和php直接的另一种交互方式，也就是大名鼎鼎的fastcgi协议，在最近今年<strong>fastcgi+php</strong>（nginx+fastcgi+php）得到越来越多的应用，也是异步webserver所唯一支持的方式。关于fastcgi和mod_php，可以参见另外一篇文章<a href='http://wenku.it168.com/d_000436406.shtml'>《php性能调研-mod_php vs fastcgi》</a></p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>cli</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>命令行调用的应用模式</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>Sapi的定义及主要接口函数如下图</p>
+</blockquote>
+
+<p><img alt='Sapi' src='/assets/img/201308210102.jpg' /></p>
+
+<blockquote>
+<p>这里介绍一下其中一些主要函数</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<ul>
+<li>startup：php被调用时初始化操作</li>
+
+<li>比如cgi模式，在startup的时候会加载所有的extension并执行模块初始化工作。</li>
+
+<li>shutdown：php关闭时收尾工作</li>
+
+<li>activate：请求初始化</li>
+
+<li>dectivate：请求结束时收尾工作</li>
+
+<li>ub_write：指定数据输出方式,比如apache2handler方式，由于php作为apache的一个so存在，因此其输出也就是调用apache的ap_write函数，而在cgi模式下，会系统调用write。</li>
+
+<li>sapi_error：错误处理函数</li>
+
+<li>read_post：读取post数据</li>
+
+<li>register_server_variables：往$_SERVER中注册环境变量,这个一般根据不同协议标准注册注册的变量。</li>
+</ul>
+</blockquote>
+</blockquote>
+
+<h3 id='6phpopcode'>6.Php的执行流程&amp;opcode</h3>
+
+<blockquote>
+<p>我们先来看看php代码的执行所经过的流程。</p>
+</blockquote>
+
+<p><img alt='OPCODE' src='/assets/img/201308210103.jpg' /></p>
+
+<blockquote>
+<p>从图上可以看到，php实现了一个典型的动态语言执行过程：拿到一段代码后，经过词法解析、语法解析等阶段后，源程序会被翻译成一个个指令(opcodes)，然后ZEND虚拟机顺次执行这些指令完成操作。Php本身是用c实现的，因此最终调用的也都是c的函数，实际上，我们可以把php看做是一个c开发的软件。</p>
+</blockquote>
+
+<blockquote>
+<p>通过上面描述不难看出，php的执行的核心是翻译出来的一条一条指令，也即<strong>opcode</strong></p>
+</blockquote>
+
+<blockquote>
+<p>Opcode是php程序执行的最基本单位。一个opcode由两个参数(op1,op2)、返回值和处理函数组成。Php程序最终被翻译为一组opcode处理函数的顺序执行</p>
+</blockquote>
+
+<blockquote>
+<p>常见的几个处理函数</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<ul>
+<li>ZEND_ASSIGN_SPEC_CV_CV_HANDLER : 变量分配 （$a=$b）</li>
+
+<li>ZEND_DO_FCALL_BY_NAME_SPEC_HANDLER：函数调用</li>
+
+<li>ZEND_CONCAT_SPEC_CV_CV_HANDLER：字符串拼接 $a.$b</li>
+
+<li>ZEND_ADD_SPEC_CV_CONST_HANDLER: 加法运算 $a+2</li>
+
+<li>ZEND_IS_EQUAL_SPEC_CV_CONST：判断相等 $a==1</li>
+
+<li>ZEND_IS_IDENTICAL_SPEC_CV_CONST：判断相等 $a===1</li>
+</ul>
+</blockquote>
+</blockquote>
+
+<h3 id='7hashtable_'>7.HashTable （核心数据结构）</h3>
+
+<blockquote>
+<p>zend的核心数据结构<strong>HashTable</strong>，在php里面几乎并用来实现所有常见功能，我们知道的php数组即是其典型应用，此外，在zend内部，如函数符号表、全局变量等也都是基于hash table来实现。</p>
+</blockquote>
+
+<blockquote>
+<p>php的hash table具有如下特点：</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<ul>
+<li>支持典型的key-&gt;value查询 * 可以当做数组使用</li>
+
+<li>添加、删除节点是O（1）复杂度</li>
+
+<li>key支持混合类型：同时存在关联数组合索引数组</li>
+
+<li>Value支持混合类型：array(“string”,2332)</li>
+
+<li>支持线性遍历：如foreach</li>
+</ul>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>Zend hash table实现了典型的hash表散列结构，同时通过附加一个双向链表，提供了正向、反向遍历数组的功能。其结构如下图</p>
+</blockquote>
+
+<p><img alt='HASHTABLE' src='/assets/img/201308210104.jpg' /></p>
+
+<blockquote>
+<p>zend hash table数据结构：</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<ul>
+<li>可以看到，在hash table中既有key-&gt;value形式的散列结构，也有双向链表模式，使得它能够非常方便的支持快速查找和线性遍历。</li>
+
+<li>Zend的散列结构是典型的hash表模型，通过链表的方式来解决冲突。需要注意的是zend的hash table是一个自增长的数据结构，当hash表数目满了之后，其本身会动态以2倍的方式扩容并重置元素位置。初始大小均为8。</li>
+
+<li>另外，在进行key-&gt;value快速查找时候，zend本身还做了一些优化，通过空间换时间的方式加快速度。比如在每个元素中都会用一个变量nKeyLength标识key的长度以作快速判定。</li>
+
+<li>Zend hash table通过一个链表结构，实现了元素的线性遍历。理论上，做遍历使用单向链表就够了，之所以使用双向链表，主要目的是为了快速删除，避免遍历。</li>
+
+<li>Zend hash table是一种复合型的结构，作为数组使用时，即支持常见的关联数组也能够作为顺序索引数字来使用，甚至允许2者的混合。</li>
+</ul>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>PHP关联数组</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>关联数组是典型的hash_table应用。一次查询过程经过如下几步</p>
+</blockquote>
+</blockquote>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='n'>getKeyHashValue</span> <span class='n'>h</span><span class='p'>;</span>
+<span class='lineno'> 2</span> <span class='n'>index</span> <span class='o'>=</span> <span class='n'>n</span> <span class='o'>&amp;</span> <span class='n'>nTableMask</span><span class='p'>;</span>
+<span class='lineno'> 3</span> <span class='n'>Bucket</span> <span class='o'>*</span><span class='n'>p</span> <span class='o'>=</span> <span class='n'>arBucket</span><span class='p'>[</span><span class='n'>index</span><span class='p'>];</span>
+<span class='lineno'> 4</span> <span class='k'>while</span> <span class='p'>(</span><span class='n'>p</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'> 5</span>     <span class='k'>if</span> <span class='p'>((</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>h</span> <span class='o'>==</span> <span class='n'>h</span><span class='p'>)</span> <span class='o'>&amp;&amp;</span> <span class='p'>(</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>nKeyLength</span> <span class='o'>==</span> <span class='n'>nKeyLength</span><span class='p'>))</span> <span class='p'>{</span>
+<span class='lineno'> 6</span>        <span class='n'>RETURN</span> <span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>data</span><span class='p'>;</span>  
+<span class='lineno'> 7</span>     <span class='p'>}</span>
+<span class='lineno'> 8</span>     <span class='n'>p</span><span class='o'>=</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>next</span><span class='p'>;</span>
+<span class='lineno'> 9</span> <span class='p'>}</span>
+<span class='lineno'>10</span> <span class='n'>RETURN</span> <span class='n'>FALTURE</span><span class='p'>;</span>
+</code></pre>
+</div>
+<blockquote>
+<blockquote>
+<p>从代码可以看出，这是一个常见的hash查询过程并增加一些快速判定加速查找。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>PHP索引数组</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>索引数组就是我们常见的数组，通过下标访问。例如 $arr[0]</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>Zend HashTable内部进行了归一化处理，对于index类型key同样分配了hash值和nKeyLength(为0)。内部成员变量nNextFreeElement就是当前分配到的最大id，每次push后自动加一。正是这种归一化处理，php才能够实现关联和非关联的混合。由于push操作的特殊性，索引key在php数组中先后顺序并不是通过下标大小来决定，而是由push的先后决定。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>例如 $arr[1] = 2; $arr[2] = 3;</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>对于double类型的key，Zend HashTable会将他当做索引key处理。</p>
+</blockquote>
+</blockquote>
+
+<h3 id='8php'>8.PHP变量</h3>
+
+<blockquote>
+<p>概述</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<ul>
+<li>Php是一门弱类型语言，本身不严格区分变量的类型。</li>
+
+<li>Php在变量申明的时候不需要指定类型。</li>
+
+<li>Php在程序运行期间可能进行变量类型的隐示转换。 * 和其他强类型语言一样，程序中也可以进行显示的类型转换。</li>
+
+<li>Php变量可以分为简单类型(int、string、bool)、集合类型(array resource object)和常量(const)</li>
+</ul>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>以上所有的变量在底层都是同一种结构 zval.</p>
+</blockquote>
+
+<blockquote>
+<p>Zval是zend中另一个非常重要的数据结构，用来标识并实现php变量，其数据结构如下</p>
+</blockquote>
+
+<p><img alt='ZVAL' src='/assets/img/201308210105.jpg' /></p>
+
+<blockquote>
+<p>Zval主要由三部分组成：</p>
+</blockquote>
+
+<blockquote>
+<blockquote><ol>
+<li>type：指定了变量所述的类型（整数、字符串、数组等）</li>
+<li>refcount_gc,is_ref_gc：用来实现引用计数(后面具体介绍)</li>
+<li>value：核心部分，存储了变量的实际数据</li>
+</ol></blockquote>
+</blockquote>
+
+<blockquote>
+<p><strong>Zvalue</strong>是用来保存一个变量的实际数据。因为要存储多种类型，所以zvalue是一个union，也由此实现了弱类型。</p>
+</blockquote>
+
+<blockquote>
+<p>Php变量类型和其实际存储对应关系如下</p>
+</blockquote>
+
+<blockquote>
+<blockquote><ul>
+<li>IS_LONG   -> lvalue</li>
+<li>IS_DOUBLE -> dvalue</li>
+<li>IS_ARRAY  -> ht</li>
+<li>IS_STRING -> str</li>
+<li>IS_RESOURCE -> lvalue</li>
+</ul></blockquote>
+</blockquote>
+
+<blockquote>
+<p><strong>引用计数</strong>在内存回收、字符串操作等地方使用非常广泛，PHP中的变量就是引用计数的典型应用。</p>
+</blockquote>
+
+<blockquote>
+<p>Zval的引用计数通过成员变量is_ref和ref_count实现，通过引用计数，多个变量可以共享同一份数据。避免频繁拷贝带来的大量消耗。</p>
+</blockquote>
+
+<blockquote>
+<p>在进行赋值操作时，zend将变量指向相同的zval同时ref_count_gc++，在unset操作时，对应的ref_count_gc-1。只有ref_count_gc减为0时才会真正执行销毁操作。</p>
+</blockquote>
+
+<blockquote>
+<p>如果是引用赋值，则zend会修改is_ref_gc为1（如$a=&amp;$b）。</p>
+</blockquote>
+
+<blockquote>
+<p><strong>写时拷贝</strong>PHP变量通过引用计数实现变量共享数据，那如果改变其中一个变量值呢？</p>
+</blockquote>
+
+<blockquote>
+<p>当试图写入一个变量时，Zend若发现该变量指向的zval被多个变量共享，则为其复制一份refcount_gc为1的zval，并递减原zval的refcount_gc，这个过程称为“zval分离”。可见，只有在有写操作发生时zend才进行拷贝操作，因此也叫copy-on-write(写时拷贝)</p>
+</blockquote>
+
+<blockquote>
+<p>对于引用型变量，其要求和非引用型相反，引用赋值的变量间必须是捆绑的，修改一个变量就修改了所有捆绑变量。</p>
+</blockquote>
+
+<blockquote>
+<p>整数、浮点数类型变量：</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>整数、浮点数是php中的基础类型之一，也是一个简单型变量。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>对于整数和浮点数，在zvalue中直接存储对应的值。其类型分别是long和double。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>从zvalue结构中可以看出，对于整数类型，和c等强类型语言不同，php是不区分int、unsigned int、long、long long等类型的，对它来说，整数只有一种类型也就是long。由此，可以看出，在php里面，整数的取值范围是由编译器位数来决定而不是固定不变的。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>对于浮点数，类似整数，它也不区分float和double而是统一只有double一种类型。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>在php中，如果整数范围越界了怎么办？</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>这种情况下会自动转换为double类型，这个一定要小心，很多trick都是由此产生。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>字符串变量：</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>和整数一样，字符变量也是php中的基础类型和简单型变量</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>通过zvalue结构可以看出，在php中，字符串是由指向实际数据的指针和长度结构体组成，这点和c++中的string比较类似。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>由于通过一个实际变量表示长度，和c不同，它的字符串可以是2进制数据（包含\0），同时在php中，求字符串长度strlen是O(1)操作。在新增、修改、追加字符串操作时，php都会重新分配内存生成新的字符串。最后，出于安全考虑，php在生成一个字符串时末尾仍然会添加\0</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>常见的字符串拼接方式及速度比较</p>
+</blockquote>
+
+<blockquote>
+<p>假设有如下4个变量：</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>$strA=‘123’; $strB = ‘456’; $intA=123; intB=456;</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>现在对如下的几种字符串拼接方式做一个比较和说明</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>1、$res = $strA.$strB和$res = “$strA$strB”</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>这种情况下，zend会重新malloc一块内存并进行相应处理，其速度一般</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>2、$strA = $strA.$strB</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>这种是速度最快的，zend会在当前strA基础上直接relloc，避免重复拷贝</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>3、$res = $intA.$intB</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>这种速度较慢，因为需要做隐式的格式转换，实际编写程序中也应该注意尽量避免</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>4、$strA = sprintf (“%s%s”,$strA.$strB);</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>这会是最慢的一种方式，因为sprintf在php中并不是一个语言结构，本身对于格式识别和处理就需要耗费比较多时间，另外本身机制也是malloc。不过sprintf的方式最具可读性，实际中可以根据具体情况灵活选择。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>如前所述，Php的数组通过Zend HashTable来天然实现</p>
+</blockquote>
+
+<blockquote>
+<p>foreach操作如何实现？</p>
+</blockquote>
+
+<blockquote>
+<p>对一个数组的foreach就是通过遍历hashtable中的双向链表完成。对于索引数组，通过foreach遍历效率比for高很多，省去了key-&gt;value的查找，Count操作直接调用HashTable-NumOfElements，O(1)操作</p>
+</blockquote>
+
+<blockquote>
+<p>对于’123’这样的字符串，zend会转换为其整数形式。$arr[‘123’]和$arr[123]是等价的</p>
+</blockquote>
+
+<blockquote>
+<p>资源类型变量：</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>这是php中最复杂的一种变量，也是一种复合型结构。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>PHP的zval可以表示广泛的数据类型，但是对于自定义的数据类型却很难充分描述。由于没有有效的方式描绘这些复合结构，因此也没有办法对它们使用传统的操作符。要解决这个问题，只需要通过一个本质上任意的标识符（label）引用指针，这种方式被称为资源。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>在zval中，对于resource，lval作为指针来使用，直接指向资源所在的地址。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>Resource可以是任意的复合结构，我们熟悉的mysqli、fsock、memcached等都是资源。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>对于一个自定义的数据类型，要想将它作为资源。首先需要进行注册，zend会为它分配全局唯一标示</p>
+</blockquote>
+</blockquote>
+
+<p>* 获取一个资源变量</p>
+
+<blockquote>
+<blockquote>
+<p>对于资源，zend维护了一个id-&gt;实际数据的hash_tale。对于一个resource，在zval中只记录了它的id。fetch的时候通过id在hash_table中找到具体的值返回</p>
+</blockquote>
+</blockquote>
+
+<p>* 资源销毁</p>
+
+<blockquote>
+<blockquote>
+<p>资源的数据类型是多种多样的。Zend本身没有办法销毁它。因此需要用户在注册资源的时候提供销毁函数。当unset资源时，zend调用相应的函数完成析构。同时从全局资源表中删除它。</p>
+</blockquote>
+</blockquote>
+
+<p>* 持久化资源</p>
+
+<blockquote>
+<blockquote>
+<p>资源可以长期驻留，不只是在所有引用它的变量超出作用域之后，甚至是在一个请求结束了并且新的请求产生之后。这些资源称为持久资源，因为它们贯通SAPI的整个生命周期持续存在，除非特意销毁。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>很多情况下，持久化资源可以在一定程度上提高性能。比如我们常见的mysql_pconnect ,持久化资源通过pemalloc分配内存，这样在请求结束的时候不会释放。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>对zend来说，对两者本身并不区分。<em>(?哪两者？)</em></p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>PHP变量的作用域：</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>PHP中的局部变量和全局变量是如何实现的？</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>对于一个请求，任意时刻php都可以看到两个符号表(symbol_table和active_symbol_table)，其中前者用来维护全局变量。后者是一个指针，指向当前活动的变量符号表，当程序进入到某个函数中时，zend就会为它分配一个符号表x同时将active_symbol_table指向a。通过这样的方式实现全局、局部变量的区分。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>获取变量值：php的符号表是通过hash_table实现的，对于每个变量都分配唯一标识，获取的时候根据标识从表中找到相应zval返回。</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>函数中使用全局变量：在函数中，我们可以通过显式申明global来使用全局变量。在active_symbol_table中创建symbol_table中同名变量的引用，如果symbol_table中没有同名变量则会先创建。<em>我的理解：变量是存在symbol_table中的(如果存在的话,不存在则自动创建)，如果使用global声明,则会在active_symbol_table创建这个变量的引用)</em></p>
+</blockquote>
+</blockquote>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#PHP-ref">
+    		PHP <span>22</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#PHP底层-ref">PHP底层 <span>7</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/2013/08/20/hello-world" title="Hello World">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/08/24/php-garbage-collection-mechanism" title="PHP新的垃圾回收机制">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+
