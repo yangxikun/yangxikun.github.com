@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -126,7 +135,7 @@
     <div class="content">
       <p><em>学习自<a href='http://www.php-internals.com/book/'>TIPI</a>,做个小结,内容从TIPI中选取</em></p>
 
-<h3 id='id8'>常量</h3>
+<h3 id='id206'>常量</h3>
 
 <blockquote>
 <p>常量是在变量的zval结构的基础上添加了一些额外的元素,内部结构如下。</p>
@@ -150,7 +159,7 @@
 </blockquote>
 </blockquote>
 
-<h3 id='id9'>标准常量的初始化</h3>
+<h3 id='id207'>标准常量的初始化</h3>
 
 <blockquote>
 <p>通过define()函数定义的常量的模块编号都是PHP_USER_CONSTANT，这表示是用户定义的常量。 除此之外我们在平时使用较多的常量：如错误报告级别E_ALL, E_WARNING等常量就有点不同了。 这些是PHP内置定义的常量，他们属于标准常量。</p>
@@ -189,7 +198,7 @@
 <p>代码很容易理解，前面看到注册内置常量都是用了CONST_PERSISTENT标志位，也就是说， 这些常量都是持久化常量。</p>
 </blockquote>
 
-<h3 id='id10'>魔术常量</h3>
+<h3 id='id208'>魔术常量</h3>
 
 <blockquote>
 <p>PHP提供了大量的预定义常量，有一些是内置的，也有一些是扩展提供的，只有在加载了这些扩展库时才会出现。</p>
@@ -203,19 +212,19 @@
 <p>PHP内核会在词法解析时将这些常量的内容赋值进行替换，而不是在运行时进行分析。这些常量其实相当于一个占位符，在词法解析时这些占位符就被替换成实际的值。</p>
 </blockquote>
 
-<h3 id='id11'>预定义变量</h3>
+<h3 id='id209'>预定义变量</h3>
 
 <blockquote>
 <p>诸如$_GET，$_POST，$_SERVER，$_FILES等变量都是PHP的预定义变量,PHP是在脚本运行之前就将预定义变量加入到了符号表。</p>
 </blockquote>
 
-<h3 id='id12'>静态变量</h3>
+<h3 id='id210'>静态变量</h3>
 
 <blockquote>
 <p>Zend为每个函数(准确的说是zend_op_array)分配了一个私有的符号表来保存该函数的静态变量。</p>
 </blockquote>
 
-<h3 id='id13'>类型提示的实现</h3>
+<h3 id='id211'>类型提示的实现</h3>
 
 <blockquote>
 <p>PHP中的类型提示功能只能用于参数为对象的提示，而无法用于为整数，字串，浮点等类型提示。在PHP5.1之后，PHP支持对数组的类型提示。</p>
@@ -239,7 +248,7 @@
 <p>以上代码会在中间代码生成时产生错误报告,具体实现翻书吧。</p>
 </blockquote>
 
-<h3 id='id14'>变量的作用域</h3>
+<h3 id='id212'>变量的作用域</h3>
 
 <blockquote>
 <p>PHP中的变量都保存在符号表中,对于全局变量和局部变量,分别存放在symbol_table和相对应的active_symbol_table.</p>

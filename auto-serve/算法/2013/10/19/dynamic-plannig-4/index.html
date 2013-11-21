@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -130,7 +139,7 @@
 <p>给定n中物品和一背包。物品i的重量是wi，其价值为vi，背包的容量为c。应如何选择装入背包中的物品，使得装入背包中物品的总价值最大？</p>
 </blockquote>
 
-<h3 id='id86'>定义数据结构</h3>
+<h3 id='id284'>定义数据结构</h3>
 
 <blockquote>
 <p>给定<img alt='dynamic1' src='/assets/img/201310220101.png' />，要求找出一个n元0-1向量<img alt='dynamic1' src='/assets/img/201310220102.png' />，使得<img alt='dynamic1' src='/assets/img/201310220103.png' />，而且<img alt='dynamic1' src='/assets/img/201310220104.png' />达到最大值。即求:</p>
@@ -148,7 +157,7 @@
 </blockquote>
 </blockquote>
 
-<h3 id='id87'>最优子结构</h3>
+<h3 id='id285'>最优子结构</h3>
 
 <blockquote>
 <p>设<code>(y1,y2,...,yn)</code>是所给0-1背包问题的一个最优解，则<code>(y2,y3,...,yn)</code>是下面所给相应子问题的一个最优解:</p>
@@ -174,7 +183,7 @@
 <p>这说明<code>(y1,z2,...zn)</code>是所给0-1背包问题的一个更优解,从而<code>(y1,y2,...,yn)</code>不是所给0-1背包问题的最优解,与假设矛盾.</p>
 </blockquote>
 
-<h3 id='id88'>递归关系</h3>
+<h3 id='id286'>递归关系</h3>
 
 <blockquote>
 <p>设所给0-1背包问题的子问题</p>
@@ -202,7 +211,7 @@
 </blockquote>
 </blockquote>
 
-<h3 id='id89'>算法代码</h3>
+<h3 id='id287'>算法代码</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>Knapsack</span><span class='p'>(</span><span class='n'>Type</span> <span class='n'>v</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>w</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>c</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>n</span><span class='p'>,</span> <span class='n'>Type</span> <span class='o'>**</span><span class='n'>m</span><span class='p'>)</span> <span class='p'>{</span>
 <span class='lineno'> 2</span>     <span class='kt'>int</span> <span class='n'>jMax</span> <span class='o'>=</span> <span class='n'>min</span><span class='p'>(</span><span class='n'>w</span><span class='p'>[</span><span class='n'>n</span><span class='p'>]</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>,</span> <span class='n'>c</span><span class='p'>);</span>
 <span class='lineno'> 3</span>     <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>j</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='n'>j</span> <span class='o'>&lt;=</span> <span class='n'>jMax</span><span class='p'>;</span> <span class='n'>j</span><span class='o'>++</span><span class='p'>)</span> <span class='n'>m</span><span class='p'>[</span><span class='n'>n</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>

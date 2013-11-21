@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -124,7 +133,7 @@
       <span>14 September 2013</span>
     </div>
     <div class="content">
-      <h3 id='id44'>定义</h3>
+      <h3 id='id242'>定义</h3>
 
 <blockquote>
 <p>根据设定的哈希函数H(key)和处理冲突的方法将一组关键字映像到一个有限的连续的地址集(区间)上,并以关键字在地址集中的值作为记录在表中的存储位置.</p>
@@ -154,7 +163,7 @@
 <p>哈希表装填因子</p>
 </blockquote>
 
-<h3 id='id45'>哈希表的查找和插入</h3>
+<h3 id='id243'>哈希表的查找和插入</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='c1'>//开放定址哈希表的存储结构</span>
 <span class='lineno'> 2</span> <span class='kt'>int</span> <span class='n'>hashsize</span><span class='p'>[]</span> <span class='o'>=</span> <span class='p'>{</span> <span class='mi'>997</span><span class='p'>,</span> <span class='p'>...</span> <span class='p'>};</span><span class='c1'>//哈希表容量递增表,一个合适的素数序列</span>
 <span class='lineno'> 3</span> <span class='k'>typedef</span> <span class='k'>struct</span><span class='p'>{</span>
@@ -192,7 +201,7 @@
 <span class='lineno'>35</span> <span class='p'>}</span><span class='c1'>//InsertHash</span>
 </code></pre>
 </div>
-<h3 id='id46'>算法应用</h3>
+<h3 id='id244'>算法应用</h3>
 
 <blockquote>
 <p>一些可以考虑用哈希算法处理的算法问题,来<a href='http://blog.csdn.net/v_JULY_v/article/details/6256463'>从头到尾彻底解析Hash 表算法</a>:</p>

@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -124,7 +133,7 @@
       <span>04 September 2013</span>
     </div>
     <div class="content">
-      <h3 id='id28'>思想</h3>
+      <h3 id='id226'>思想</h3>
 
 <ol>
 <li>假设最小生成树点集为V,图的所有点集为U,初始化V含有U中任意个顶点.</li>
@@ -136,7 +145,7 @@
 <li>U不为空转步骤2,为空继续. 5.结束.</li>
 </ol>
 
-<h3 id='id29'>辅助</h3>
+<h3 id='id227'>辅助</h3>
 
 <ol>
 <li>closedge[]数组记录了相应顶点到V的最短距离<code>struct{ VertexType adjvex; VRType lowcost;}closedge[MAX]</code>.</li>
@@ -144,7 +153,7 @@
 
 <p>2. 图的存储结构为邻接矩阵.</p>
 
-<h3 id='id30'>算法</h3>
+<h3 id='id228'>算法</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>MiniSpanTree_PRIM</span><span class='p'>(</span> <span class='n'>MGraph</span> <span class='n'>G</span><span class='p'>,</span> <span class='n'>VertexType</span> <span class='n'>u</span> <span class='p'>){</span>
 <span class='lineno'> 2</span>     <span class='c1'>//MGraph G 图的邻接矩阵</span>
 <span class='lineno'> 3</span>     <span class='n'>k</span> <span class='o'>=</span> <span class='n'>LocateVex</span><span class='p'>(</span> <span class='n'>G</span><span class='p'>,</span> <span class='n'>u</span> <span class='p'>);</span>

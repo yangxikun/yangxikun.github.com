@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -130,7 +139,7 @@
 <p>在PHP的SPL中,有iterator这个类库,它的主要用途在于为一组数据集(可以是数组或对象)提供各种遍历的方法.</p>
 </blockquote>
 
-<h3 id='id70'>一个简单的迭代</h3>
+<h3 id='id268'>一个简单的迭代</h3>
 <div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span> 
 <span class='lineno'> 2</span> <span class='k'>class</span> <span class='nc'>testIterator</span> <span class='k'>implements</span> <span class='nx'>iterator</span> <span class='p'>{</span>
 <span class='lineno'> 3</span>     <span class='k'>private</span> <span class='nv'>$_store</span><span class='p'>;</span><span class='c1'>//存储数据的集合</span>

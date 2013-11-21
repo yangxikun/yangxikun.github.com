@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -124,7 +133,7 @@
       <span>04 September 2013</span>
     </div>
     <div class="content">
-      <h3 id='id26'>深度优先搜索</h3>
+      <h3 id='id224'>深度优先搜索</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='n'>Boolean</span> <span class='n'>visited</span><span class='p'>[</span><span class='n'>MAX</span><span class='p'>];</span><span class='c1'>//访问标记数组</span>
 <span class='lineno'> 2</span> 
 <span class='lineno'> 3</span> <span class='kt'>void</span> <span class='nf'>DFSTraverse</span><span class='p'>(</span> <span class='n'>Graph</span> <span class='n'>G</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>v</span> <span class='p'>){</span>
@@ -145,7 +154,7 @@
 <span class='lineno'>18</span> <span class='p'>}</span>
 </code></pre>
 </div>
-<h3 id='id27'>广度优先搜索</h3>
+<h3 id='id225'>广度优先搜索</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>BFSTraverse</span><span class='p'>(</span> <span class='n'>Graph</span> <span class='n'>G</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>v</span> <span class='p'>){</span>
 <span class='lineno'> 2</span>     <span class='c1'>//使用辅助队列Q和访问标记数组visited</span>
 <span class='lineno'> 3</span>     <span class='k'>for</span><span class='p'>(</span> <span class='n'>v</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span> <span class='n'>v</span><span class='o'>&lt;</span><span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span><span class='p'>;</span> <span class='n'>v</span><span class='o'>++</span> <span class='p'>){</span>

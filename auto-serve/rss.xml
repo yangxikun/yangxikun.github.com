@@ -5,52 +5,68 @@
         <description>Kun Blog - Rokety Yang</description>
         <link>http://yangxikun.github.io</link>
         <link>http://yangxikun.github.io</link>
-        <lastBuildDate>2013-11-13T21:46:05+08:00</lastBuildDate>
-        <pubDate>2013-11-13T21:46:05+08:00</pubDate>
+        <lastBuildDate>2013-11-21T11:03:41+08:00</lastBuildDate>
+        <pubDate>2013-11-21T11:03:41+08:00</pubDate>
         <ttl>1800</ttl>
 
 
         <item>
                 <title>Linux 进程、进程组、会话周期、控制终端</title>
-                <description>&lt;h3 id='id92'&gt;进程&lt;/h3&gt;
+                <description>&lt;p&gt;&lt;em&gt;参考自&lt;a href='http://blog.csdn.net/hairetz/article/details/4195036'&gt;Linux守护进程的编程实现&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id='id290'&gt;进程&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;为使程序能并发执行，且为了对并发（并发指两个或多个事件在同一时间间隔内发生）执行的程序加以描述和控制，于是引入了“进程”的概念。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id93'&gt;守护进程&lt;/h3&gt;
+&lt;h3 id='id291'&gt;守护进程&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;守护进程，也就是通常说的Daemon进程，是Linux中的后台服务进程。它是一个生存期较长的进程，通常独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。守护进程是脱离于终端并且在后台运行的进程。守护进程脱离于终端是为了避免进程在执行过程中的信息在任何终端上显示并且进程也不会被任何终端所产生的终端信息所打断。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id94'&gt;进程组&lt;/h3&gt;
+&lt;h3 id='id292'&gt;进程组&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;每个进程都属于一个进程组。每个进程组都有一个组长进程，组长进程的进程号等于进程组ID。只要某个进程组中有一个进程存在，则该进程组就存在，与组长进程是否终止无关。从进程组创建开始到其中最后一个进程离开为止的时间区间成为进程组的生存期。进程组中最后一个进程可以终止或者转移到另一个进程组中。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id95'&gt;会话周期&lt;/h3&gt;
+&lt;h3 id='id293'&gt;会话周期&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;会话周期是一个或多个进程组的集合。通常，一个会话开始于用户登录，终止于用户退出，在此期间该用户运行的所有进程都属于这个会话期。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id96'&gt;控制终端&lt;/h3&gt;
+&lt;h3 id='id294'&gt;控制终端&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;会话的领头进程打开一个终端之后, 该终端就成为该会话的控制终端 (SVR4/Linux) 与控制终端建立连接的会话领头进程称为控制进程 (session leader) 。一个会话只能有一个控制终端 ，产生在控制终端上的输入和信号将发送给会话的前台进程组中的所有进程 ，终端上的连接断开时 (比如网络断开或 Modem 断开), 挂起信号将发送到控制进程(session leader) 。平时在X-window下是使用的terminal称为伪终端，但它也是一个控制终端。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id97'&gt;僵死进程&lt;/h3&gt;
+&lt;h3 id='id295'&gt;僵死进程&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;在&lt;code&gt;fork()/execve()&lt;/code&gt;过程中，假设子进程结束时父进程仍存在，而父进程&lt;code&gt;fork()&lt;/code&gt;之前既没安装&lt;code&gt;SIGCHLD&lt;/code&gt;信号处理函数调用&lt;code&gt;waitpid()&lt;/code&gt;等待子进程结束，又没有显式忽略该信号，则子进程成为僵死进程，无法正常结束，此时即使是root身份&lt;code&gt;kill -9&lt;/code&gt;也不能杀死僵死进程。补救办法是杀死僵尸进程的父进程(僵死进程的父进程必然存在)，僵死进程成为&amp;#8221;孤儿进程&amp;#8221;，过继给1号进程&lt;code&gt;init&lt;/code&gt;，&lt;code&gt;init&lt;/code&gt;始终会负责清理僵死进程。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h4 id='id98'&gt;守护进程编写的要点：&lt;/h4&gt;
+&lt;h4 id='id296'&gt;守护进程编写的要点：&lt;/h4&gt;
 
-&lt;p&gt;1、在父进程（此时是一个进程组的组长）中使用fork()产生子进程（将来的守护进程由它产生）； 2、调用setsid()，用于生成一个新的会话 注意如果当前进程是会话组长时，调用失败。第一点已经可以保证进程不是会话组长了，所以setsid()调用成功后，进程成为新的会话组长和新的进程组长，并与原来的登录会话和进程组脱离。由于会话对控制终端的独占性，进程同时与控制终端脱离； 3、禁止进程重新打开控制终端 第二步之后，进程已经成为无终端的会话组长。但它可以重新申请打开一个控制终端。可以通过使进程不再成为会话组长来禁止进程重新打开控制终端，在上面的控制终端中已经提到了只有会话组长才能打开控制终端； 4、关闭打开的文件描述符 进程从创建它的父进程那里继承了打开的文件描述符。如不关闭，将会浪费系统资源，造成进程所在的文件系统无法卸下以及引起无法预料的错误； 5、改变当前工作目录 进程活动时，其工作目录所在的文件系统不能卸下。一般需要将工作目录改变到根目录。对于需要转储核心，写运行日志的进程将工作目录改变到特定目录如&lt;code&gt;/tmp&lt;/code&gt;； 6、重设文件创建掩模 进程从创建它的父进程那里继承了文件创建掩模。它可能修改守护进程所创建的文件的存取位。为防止这一点，将文件创建掩模清除：&lt;code&gt;umask(0)&lt;/code&gt;； 7、处理SIGCHLD信号 处理SIGCHLD信号并不是必须的。但对于某些进程，特别是服务器进程往往在请求到来时生成子进程处理请求。如果父进程不等待子进程结束，子进程将成为僵尸进程（zombie）从而占用系统资源。如果父进程等待子进程结束，将增加父进程的负担，影响服务器进程的并发性能。在Linux下可以简单地将&lt;code&gt;SIGCHLD&lt;/code&gt;信号的操作设为&lt;code&gt;SIG_IGN&lt;/code&gt;。 &lt;code&gt;signal(SIGCHLD,SIG_IGN); &lt;/code&gt; 这样，内核在子进程结束时不会产生僵尸进程。这一点与BSD4不同，BSD4下必须显式等待子进程结束才能释放僵尸进程。 8、重定向标准输入、标准输出和标准错误输出到&lt;code&gt;/dev/null&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;1、在父进程（此时是一个进程组的组长）中使用fork()产生子进程（将来的守护进程由它产生）；&lt;/p&gt;
+
+&lt;p&gt;2、调用setsid()，用于生成一个新的会话 注意如果当前进程是会话组长时，调用失败。第一点已经可以保证进程不是会话组长了，所以setsid()调用成功后，进程成为新的会话组长和新的进程组长，并与原来的登录会话和进程组脱离。由于会话对控制终端的独占性，进程同时与控制终端脱离；&lt;/p&gt;
+
+&lt;p&gt;3、禁止进程重新打开控制终端 第二步之后，进程已经成为无终端的会话组长。但它可以重新申请打开一个控制终端。可以通过使进程不再成为会话组长来禁止进程重新打开控制终端，在上面的控制终端中已经提到了只有会话组长才能打开控制终端；&lt;/p&gt;
+
+&lt;p&gt;4、关闭打开的文件描述符 进程从创建它的父进程那里继承了打开的文件描述符。如不关闭，将会浪费系统资源，造成进程所在的文件系统无法卸下以及引起无法预料的错误；&lt;/p&gt;
+
+&lt;p&gt;5、改变当前工作目录 进程活动时，其工作目录所在的文件系统不能卸下。一般需要将工作目录改变到根目录。对于需要转储核心，写运行日志的进程将工作目录改变到特定目录如&lt;code&gt;/tmp&lt;/code&gt;；&lt;/p&gt;
+
+&lt;p&gt;6、重设文件创建掩模 进程从创建它的父进程那里继承了文件创建掩模。它可能修改守护进程所创建的文件的存取位。为防止这一点，将文件创建掩模清除：&lt;code&gt;umask(0)&lt;/code&gt;；&lt;/p&gt;
+
+&lt;p&gt;7、处理SIGCHLD信号 处理SIGCHLD信号并不是必须的。但对于某些进程，特别是服务器进程往往在请求到来时生成子进程处理请求。如果父进程不等待子进程结束，子进程将成为僵尸进程（zombie）从而占用系统资源。如果父进程等待子进程结束，将增加父进程的负担，影响服务器进程的并发性能。在Linux下可以简单地将&lt;code&gt;SIGCHLD&lt;/code&gt;信号的操作设为&lt;code&gt;SIG_IGN&lt;/code&gt;。 &lt;code&gt;signal(SIGCHLD,SIG_IGN); &lt;/code&gt; 这样，内核在子进程结束时不会产生僵尸进程。这一点与BSD4不同，BSD4下必须显式等待子进程结束才能释放僵尸进程。&lt;/p&gt;
+
+&lt;p&gt;8、重定向标准输入、标准输出和标准错误输出到&lt;code&gt;/dev/null&lt;/code&gt;，防止发生EIO错误。&lt;/p&gt;
 
 &lt;p&gt;先来看看上面第1步是为何，编译执行下面代码：&lt;/p&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='cp'&gt;#include&amp;lt;sys/types.h&amp;gt;&lt;/span&gt;
@@ -77,9 +93,13 @@
 &lt;span class='lineno'&gt;22&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;然后在另一个terminal中执行：&lt;code&gt;ps axj | grep tp&lt;/code&gt; &lt;img alt='process' src='/assets/img/201311130101.png' /&gt; 从上图可以看出父进程的PID是7667，且是进程组7667的组长，所以我们写守护进程的第一步就是要使用&lt;code&gt;fork()&lt;/code&gt;产生子进程。&lt;/p&gt;
+&lt;p&gt;然后在另一个terminal中执行：&lt;code&gt;ps axj | grep tp&lt;/code&gt;&lt;/p&gt;
 
-&lt;h3 id='id99'&gt;守护进程实例&lt;/h3&gt;
+&lt;p&gt;&lt;img alt='process' src='/assets/img/201311130101.png' /&gt;&lt;/p&gt;
+
+&lt;p&gt;从上图可以看出父进程的PID是7667，且是进程组7667的组长，所以我们写守护进程的第一步就是要使用&lt;code&gt;fork()&lt;/code&gt;产生子进程。&lt;/p&gt;
+
+&lt;h3 id='id297'&gt;守护进程实例&lt;/h3&gt;
 
 &lt;p&gt;源代码：&lt;/p&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='cp'&gt;#include&amp;lt;sys/types.h&amp;gt;&lt;/span&gt;
@@ -154,7 +174,11 @@
 &lt;span class='lineno'&gt;70&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;查看守护进程： &lt;img alt='process' src='/assets/img/201311130102.png' /&gt; 由上图可以看出，守护进程的PID为8368，所属进程组为8367，会话ID为8367，没有控制终端，最重要的一点是父进程为1（即init进程）。&lt;/p&gt;</description>
+&lt;p&gt;查看守护进程，执行&lt;code&gt;ps axj | grep tp&lt;/code&gt;：&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt='process' src='/assets/img/201311130102.png' /&gt;&lt;/p&gt;
+
+&lt;p&gt;由上图可以看出，守护进程的PID为8368，所属进程组为8367，会话ID为8367，没有控制终端，最重要的一点是父进程为1（即init进程）。&lt;/p&gt;</description>
                 <link>http://yangxikun.github.io/Linux/2013/11/11/linux-process</link>
                 <guid>http://yangxikun.github.io/Linux/2013/11/11/linux-process</guid>
                 <pubDate>2013-11-11T00:00:00+08:00</pubDate>
@@ -182,7 +206,7 @@
 
         <item>
                 <title>使用共享内存和信号量模仿cp命令</title>
-                <description>&lt;h3 id='id91'&gt;学习共享内存和信号量的结合使用&lt;/h3&gt;
+                <description>&lt;h3 id='id289'&gt;学习共享内存和信号量的结合使用&lt;/h3&gt;
 
 &lt;p&gt;&lt;em&gt;学习自《linux网络编程》，以下实例程序也是仿照书上的，但是觉得书本上的实现有问题，会发生死锁，自己修改了实现方法。&lt;/em&gt;&lt;/p&gt;
 
@@ -366,7 +390,7 @@
 
         <item>
                 <title>依赖注入模式</title>
-                <description>&lt;h3 id='id90'&gt;什么是依赖注入模式？&lt;/h3&gt;
+                <description>&lt;h3 id='id288'&gt;什么是依赖注入模式？&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;控制反转（Inversion of Control，英文缩写为IoC）是一个重要的面向对象编程的法则来削减计算机程序的耦合问题。 控制反转还有一个名字叫做依赖注入（Dependency Injection）。简称DI。许多功能都是由两个或是更多的类通过彼此的合作来实现业务逻辑，这使得每个对象都需要，与其合作的对象（也就是它所依赖的对象）的引用。如果这个获取过程要靠自身实现，那么如你所见，这将导致代码高度耦合并且难以测试。&lt;/p&gt;
@@ -579,7 +603,7 @@
 &lt;p&gt;给定n中物品和一背包。物品i的重量是wi，其价值为vi，背包的容量为c。应如何选择装入背包中的物品，使得装入背包中物品的总价值最大？&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id86'&gt;定义数据结构&lt;/h3&gt;
+&lt;h3 id='id284'&gt;定义数据结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;给定&lt;img alt='dynamic1' src='/assets/img/201310220101.png' /&gt;，要求找出一个n元0-1向量&lt;img alt='dynamic1' src='/assets/img/201310220102.png' /&gt;，使得&lt;img alt='dynamic1' src='/assets/img/201310220103.png' /&gt;，而且&lt;img alt='dynamic1' src='/assets/img/201310220104.png' /&gt;达到最大值。即求:&lt;/p&gt;
@@ -597,7 +621,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id87'&gt;最优子结构&lt;/h3&gt;
+&lt;h3 id='id285'&gt;最优子结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;设&lt;code&gt;(y1,y2,...,yn)&lt;/code&gt;是所给0-1背包问题的一个最优解，则&lt;code&gt;(y2,y3,...,yn)&lt;/code&gt;是下面所给相应子问题的一个最优解:&lt;/p&gt;
@@ -623,7 +647,7 @@
 &lt;p&gt;这说明&lt;code&gt;(y1,z2,...zn)&lt;/code&gt;是所给0-1背包问题的一个更优解,从而&lt;code&gt;(y1,y2,...,yn)&lt;/code&gt;不是所给0-1背包问题的最优解,与假设矛盾.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id88'&gt;递归关系&lt;/h3&gt;
+&lt;h3 id='id286'&gt;递归关系&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;设所给0-1背包问题的子问题&lt;/p&gt;
@@ -651,7 +675,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id89'&gt;算法代码&lt;/h3&gt;
+&lt;h3 id='id287'&gt;算法代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;Knapsack&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;Type&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;w&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;c&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;Type&lt;/span&gt; &lt;span class='o'&gt;**&lt;/span&gt;&lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;jMax&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='n'&gt;min&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;w&lt;/span&gt;&lt;span class='p'&gt;[&lt;/span&gt;&lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;]&lt;/span&gt;&lt;span class='o'&gt;-&lt;/span&gt;&lt;span class='mi'&gt;1&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;c&lt;/span&gt;&lt;span class='p'&gt;);&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;for&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;j&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;j&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;=&lt;/span&gt; &lt;span class='n'&gt;jMax&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;j&lt;/span&gt;&lt;span class='o'&gt;++&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;[&lt;/span&gt;&lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;][&lt;/span&gt;&lt;span class='n'&gt;j&lt;/span&gt;&lt;span class='p'&gt;]&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
@@ -691,7 +715,7 @@
 &lt;p&gt;算法是基于数据结构的,定义了好的数据结构才能更好的求解问题.所以先定义数据结构:&lt;code&gt;b[j]=max{ai+...+aj}&lt;/code&gt;其中&lt;code&gt;1&amp;lt;=i&amp;lt;=j&amp;lt;=n&lt;/code&gt;,表示b&lt;span&gt;j&lt;/span&gt;是以a&lt;span&gt;j&lt;/span&gt;为结尾的子段所能达到的最大值.在求解出b&lt;span&gt;1&lt;/span&gt;,b&lt;span&gt;2&lt;/span&gt;,&amp;#8230;,b&lt;span&gt;n&lt;/span&gt;之后,从b&lt;span&gt;1&amp;#8230;n&lt;/span&gt;中求出一个最大的值就可以得到原问题的最优解.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id83'&gt;分析最优子结构&lt;/h3&gt;
+&lt;h3 id='id281'&gt;分析最优子结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;上面已经定义了数据结构,接着就要证明其是否具有最优子结构性质,这里我们所证明的最优子结构是指以a&lt;span&gt;k&lt;/span&gt;为结尾的子段所能达到的最大值,虽然与原问题的最优解不一样,但我们却可以从这个最优子结构中得出原问题的解,所以在动态规划算法中,最优子结构并不是依据原问题的最优解而设定,应该是根据定义的数据结构,但又得确保最后能归纳出原问题的最优解.反证法:&lt;/p&gt;
@@ -709,7 +733,7 @@
 &lt;p&gt;b&lt;span&gt;j&lt;/span&gt;的子问题就是a&lt;span&gt;1&amp;#8230;j&lt;/span&gt;的所有子段,显然由上面两种情况,可以得出b&lt;span&gt;j&lt;/span&gt;确实包含了它的子问题的最优解.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id84'&gt;建立递归关系&lt;/h3&gt;
+&lt;h3 id='id282'&gt;建立递归关系&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;由最优子结构的分析可得:&lt;/p&gt;
@@ -727,7 +751,7 @@
 &lt;p&gt;当&lt;code&gt;b[j-1]&amp;lt;=0&lt;/code&gt;时,&lt;code&gt;b[j]=a[j]&lt;/code&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id85'&gt;算法代码&lt;/h3&gt;
+&lt;h3 id='id283'&gt;算法代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt;1&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='nf'&gt;MaxSum&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='o'&gt;*&lt;/span&gt;&lt;span class='n'&gt;a&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt;2&lt;/span&gt;     &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;sum&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;b&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
 &lt;span class='lineno'&gt;3&lt;/span&gt;     &lt;span class='k'&gt;for&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;1&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;=&lt;/span&gt; &lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt;&lt;span class='o'&gt;++&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
@@ -810,7 +834,7 @@
 &lt;p&gt;最长公共子序列:给定两个序列,找出它们的公共子序列.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id80'&gt;分析最优子结构&lt;/h3&gt;
+&lt;h3 id='id278'&gt;分析最优子结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;设序列X={x1,x2,&amp;#8230;,xm}和Y={y1,y2,&amp;#8230;,ym}的最长公共子序列为Z={z1,z2,&amp;#8230;,zk},则&lt;/p&gt;
@@ -834,7 +858,7 @@
 &lt;p&gt;用反证法证明上文1的结论:若zk!=xm,则{z1,z2,&amp;#8230;,zk,xm}是X和Y的长度为k+1的公共子序列.这与Z是X和Y的最长公共子序列矛盾.所以zk=xm=yn,由此可知Zk-1是Xm-1和Yn-1的长度为k-1的最长公共子序列.上文2和3的结论也可以用反正法证明.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id81'&gt;建立递归关系&lt;/h3&gt;
+&lt;h3 id='id279'&gt;建立递归关系&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;设c[i][j]记录序列Xi和Yj的最长公共子序列的长度.其中,Xi={x1,x2,&amp;#8230;,xi};Yj={y1,y2,&amp;#8230;,yj}.由最优子结构可得:&lt;/p&gt;
@@ -858,7 +882,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id82'&gt;算法代码&lt;/h3&gt;
+&lt;h3 id='id280'&gt;算法代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;LCSLength&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;cha&lt;/span&gt; &lt;span class='o'&gt;*&lt;/span&gt;&lt;span class='n'&gt;x&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;char&lt;/span&gt; &lt;span class='o'&gt;*&lt;/span&gt;&lt;span class='n'&gt;y&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='o'&gt;**&lt;/span&gt;&lt;span class='n'&gt;c&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='o'&gt;**&lt;/span&gt;&lt;span class='n'&gt;b&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;&lt;span class='n'&gt;j&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;for&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;i&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;1&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;=&lt;/span&gt; &lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt;&lt;span class='o'&gt;++&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='n'&gt;c&lt;/span&gt;&lt;span class='p'&gt;[&lt;/span&gt;&lt;span class='n'&gt;i&lt;/span&gt;&lt;span class='p'&gt;][&lt;/span&gt;&lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;]&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
@@ -892,13 +916,13 @@
         border: 1px solid black
     }
 &lt;/style&gt;
-&lt;h3 id='id71'&gt;分隔符&lt;/h3&gt;
+&lt;h3 id='id269'&gt;分隔符&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;当使用 PCRE 函数的时候，模式需要由分隔符闭合包裹。分隔符可以使任意非字母数字、非反斜线、非空白字符。经常使用的分隔符是正斜线(/)、hash符号(#) 以及取反符号(~)。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id72'&gt;元字符&lt;/h3&gt;
+&lt;h3 id='id270'&gt;元字符&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;元字符是正则表达式中具有特殊意义的专用字符,用来规定其前导字符在目标对象中的出现模式.&lt;/p&gt;
@@ -908,19 +932,19 @@
 &lt;p&gt;共有两种不同的元字符：一种是可以在模式中方括号外任何地方使用的，另外一种 是需要在方括号内使用的。(元字符列表)&lt;span&gt;http://www.php.net/manual/zh/regexp.reference.meta.php&lt;/span&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id73'&gt;字符组&lt;/h3&gt;
+&lt;h3 id='id271'&gt;字符组&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;使用中括号的字符集称为字符组.例如&lt;code&gt;[c[aou?*)]]t&lt;/code&gt;,注意字符组里的元字符可以不转义.在字符组中要使用&lt;code&gt;\&lt;/code&gt;时,在其前面要多加&lt;code&gt;\\&lt;/code&gt;两个斜线.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id74'&gt;分支&lt;/h3&gt;
+&lt;h3 id='id272'&gt;分支&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;在圆括号中使用|进行分支.例如:&lt;code&gt;(c|h|to)at&lt;/code&gt;,可以匹配&lt;code&gt;cat&lt;/code&gt;,&lt;code&gt;hat&lt;/code&gt;,&lt;code&gt;toat&lt;/code&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id75'&gt;分组&lt;/h3&gt;
+&lt;h3 id='id273'&gt;分组&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;通过圆括号分隔界定，并且它们可以嵌套.常用分组语法:&lt;/p&gt;
@@ -973,7 +997,7 @@
 &lt;p&gt;可以看看这篇博文:&lt;a href='http://www.anrip.com/post/1126'&gt;正则表达式 – 分组语法（捕获/断言/注释）&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id76'&gt;反向引用&lt;/h3&gt;
+&lt;h3 id='id274'&gt;反向引用&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;注意它不仅可以用在pattern中,还可以用在replacement中,例如:&lt;/p&gt;
@@ -985,13 +1009,13 @@
 &lt;span class='lineno'&gt;5&lt;/span&gt; &lt;span class='cp'&gt;?&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id77'&gt;贪婪/懒惰匹配模式&lt;/h3&gt;
+&lt;h3 id='id275'&gt;贪婪/懒惰匹配模式&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;在重复量词之后加个?就形成了懒惰模式,例如:&lt;code&gt;a.*b&lt;/code&gt;匹配&lt;code&gt;aabab&lt;/code&gt;整个字符串,而&lt;code&gt;a.*?b&lt;/code&gt;匹配&lt;code&gt;aabab&lt;/code&gt;的&lt;code&gt;aab&lt;/code&gt;和&lt;code&gt;ab&lt;/code&gt;两组字符.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id78'&gt;常用的模式&lt;/h3&gt;
+&lt;h3 id='id276'&gt;常用的模式&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;ol&gt;
@@ -1013,7 +1037,7 @@
 &lt;span class='lineno'&gt;5&lt;/span&gt; &lt;span class='cp'&gt;?&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id79'&gt;正则表达式的效率与优化&lt;/h3&gt;
+&lt;h3 id='id277'&gt;正则表达式的效率与优化&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;ol&gt;
@@ -1141,7 +1165,7 @@
 &lt;p&gt;在PHP的SPL中,有iterator这个类库,它的主要用途在于为一组数据集(可以是数组或对象)提供各种遍历的方法.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id70'&gt;一个简单的迭代&lt;/h3&gt;
+&lt;h3 id='id268'&gt;一个简单的迭代&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='php'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='cp'&gt;&amp;lt;?php&lt;/span&gt; 
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='k'&gt;class&lt;/span&gt; &lt;span class='nc'&gt;testIterator&lt;/span&gt; &lt;span class='k'&gt;implements&lt;/span&gt; &lt;span class='nx'&gt;iterator&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;private&lt;/span&gt; &lt;span class='nv'&gt;$_store&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;&lt;span class='c1'&gt;//存储数据的集合&lt;/span&gt;
@@ -1188,7 +1212,7 @@
 
         <item>
                 <title>递归与分治--合并排序</title>
-                <description>&lt;h3 id='id69'&gt;思想&lt;/h3&gt;
+                <description>&lt;h3 id='id267'&gt;思想&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;将待排序元素分成大小大致相同的两个子集合,分别对两个子集合进行排序,最终将排好序的子集合合并成所要求的排好序的集合.&lt;/p&gt;
@@ -1257,7 +1281,7 @@
 
         <item>
                 <title>动态规划--矩阵连乘问题</title>
-                <description>&lt;h3 id='id65'&gt;问题描述&lt;/h3&gt;
+                <description>&lt;h3 id='id263'&gt;问题描述&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;给定n个矩阵{A1,A2,&amp;#8230;,An},其中Ai与Ai+1是可乘的,i=1,2,&amp;#8230;,n-1.求使用矩阵结合律使n个矩阵的连乘积需要的数乘次数最少.&lt;/p&gt;
@@ -1279,7 +1303,7 @@
 &lt;p&gt;(A1(A2(A3A4))),(A1((A2A3)A4)),((A1A2)(A3A4))等,不同完全加括号的连乘积所需的数乘次数不同,我们要求的就是数乘次数最少的完全加括号方式.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id66'&gt;分析最优子结构&lt;/h3&gt;
+&lt;h3 id='id264'&gt;分析最优子结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;在递归分治中,我们不需要对问题分析最优子结构,因为递归分治不是用于求最优解的,它是将原问题划分为子问题,逐个求解出子问题后合并为原问题的解.而动态规划用于求解问题的最优解,所以需要对问题的最优子结构进行分析,且动态规划每个子问题的解并不是一起合并为原问题的解,而是从子问题的解中挑选出合适的解得出父问题的解.&lt;/p&gt;
@@ -1315,7 +1339,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id67'&gt;建立递归关系&lt;/h3&gt;
+&lt;h3 id='id265'&gt;建立递归关系&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;这是这几动态规划的第二步.设计算A[i:j],&lt;code&gt;1&amp;lt;=i&amp;lt;=j&amp;lt;=n&lt;/code&gt;,所需的最少数乘次数为m[i][j],则原问题的最优值为m[1][n].&lt;/p&gt;
@@ -1345,7 +1369,7 @@
 &lt;p&gt;Pi-1PkPj是指数组Pi-1Pk和PkPj相乘所需计算量.用s[i][j]记录k可得出最优值m[i][j]的断开点,并可递归地由s[i][j]构造出相应的最优解.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id68'&gt;算法代码&lt;/h3&gt;
+&lt;h3 id='id266'&gt;算法代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;MatrixChain&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='o'&gt;*&lt;/span&gt;&lt;span class='n'&gt;p&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='o'&gt;**&lt;/span&gt;&lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='o'&gt;**&lt;/span&gt;&lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='c1'&gt;//m[i][j]记录A[i:j]最少计算量的值,s[i][j]记录断开点&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;for&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;1&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;=&lt;/span&gt; &lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;i&lt;/span&gt;&lt;span class='o'&gt;++&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;[&lt;/span&gt;&lt;span class='n'&gt;i&lt;/span&gt;&lt;span class='p'&gt;][&lt;/span&gt;&lt;span class='n'&gt;i&lt;/span&gt;&lt;span class='p'&gt;]&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
@@ -1407,7 +1431,7 @@
                 <title>注册表模式</title>
                 <description>&lt;p&gt;&lt;em&gt;学习自《Guide to PHP Design Patterns》&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id='id63'&gt;注册表模式&lt;/h3&gt;
+&lt;h3 id='id261'&gt;注册表模式&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;注册表模式用于访问全局可重用的对象,可以容纳多个类的多个实例.这些类的实例一般都是经常被调用到或当做参数传递的.&lt;/p&gt;
@@ -1427,7 +1451,7 @@
 &lt;li&gt;Register::remove()通过对象名在注册表中删除一个对象&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id='id64'&gt;实例代码:&lt;/h3&gt;
+&lt;h3 id='id262'&gt;实例代码:&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='php'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='cp'&gt;&amp;lt;?php&lt;/span&gt; 
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='sd'&gt;/**&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt; &lt;span class='sd'&gt; * 注册表类&lt;/span&gt;
@@ -1640,7 +1664,7 @@
 
         <item>
                 <title>递归与分治--格雷码</title>
-                <description>&lt;h3 id='id62'&gt;格雷码&lt;/h3&gt;
+                <description>&lt;h3 id='id260'&gt;格雷码&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Gray码是一个长度为2^n的序列.序列中无相同元素,每个元素都是长度为n位的(0,1)串,相邻元素恰好只有一位不同.&lt;/p&gt;
@@ -1691,7 +1715,7 @@
 
         <item>
                 <title>递归与分治--汉诺塔</title>
-                <description>&lt;h3 id='id60'&gt;汉诺塔移动圆盘的递归分解&lt;/h3&gt;
+                <description>&lt;h3 id='id258'&gt;汉诺塔移动圆盘的递归分解&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;如下图所示:&lt;/p&gt;
@@ -1703,7 +1727,7 @@
 &lt;p&gt;当n=1时,直接将圆盘移到b即可; 当n&amp;gt;1时,首先将n-1个较小的圆盘借助b移到c上,再将a剩下的最大圆盘移到b上,接着将c中n-1个圆盘借助a移动到b.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id61'&gt;算法代码&lt;/h3&gt;
+&lt;h3 id='id259'&gt;算法代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt;1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;hanoi&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;n&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;a&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;b&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;c&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt;2&lt;/span&gt;     &lt;span class='c1'&gt;//函数实现将a中的圆盘借助c,移动到b&lt;/span&gt;
 &lt;span class='lineno'&gt;3&lt;/span&gt;     &lt;span class='k'&gt;if&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;n&lt;/span&gt; &lt;span class='o'&gt;&amp;gt;&lt;/span&gt; &lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
@@ -1721,7 +1745,7 @@
 
         <item>
                 <title>递归与分治--全排列</title>
-                <description>&lt;h3 id='id58'&gt;排列问题&lt;/h3&gt;
+                <description>&lt;h3 id='id256'&gt;排列问题&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;设R={r1,r2,r3,&amp;#8230;,rn}是要进行排列的n个元素,Ri=R-{ri}.集合X的全排列记为Perm(X).(ri)Perm(X)表示在全排列Perm(X)的每一个排列前加上前缀ri得到的排列.R的全排列可归纳定义如下:&lt;/p&gt;
@@ -1731,7 +1755,7 @@
 &lt;p&gt;当n=1时,Perm(R)=(r),其中r是集合R中唯一的元素; 当n&amp;gt;1时,Perm(R)由(r1)Perm(R1),(r2)Perm(R2),&amp;#8230;,(rn)Perm(Rn)构成,如此,Perm(R1),&amp;#8230;,Perm(Rn)也可以递归分解下去.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id59'&gt;算法代码&lt;/h3&gt;
+&lt;h3 id='id257'&gt;算法代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;Perm&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;Type&lt;/span&gt; &lt;span class='n'&gt;list&lt;/span&gt;&lt;span class='p'&gt;[],&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;k&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='c1'&gt;//产生list[k:m]的所有全排列&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;if&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;k&lt;/span&gt; &lt;span class='o'&gt;==&lt;/span&gt; &lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
@@ -1757,7 +1781,7 @@
                 <title>PHP中比较少用但很有用的几个函数</title>
                 <description>&lt;p&gt;&lt;em&gt;转载自&lt;a href='http://www.admin10000.com/document/2610.html'&gt;8个开发必备的PHP 功能&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id='id56'&gt;函数接收任意数量的参数&lt;/h3&gt;
+&lt;h3 id='id254'&gt;函数接收任意数量的参数&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='php'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='cp'&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='k'&gt;function&lt;/span&gt; &lt;span class='nf'&gt;funtest&lt;/span&gt;&lt;span class='p'&gt;()&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='nv'&gt;$args&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='nb'&gt;func_get_args&lt;/span&gt;&lt;span class='p'&gt;();&lt;/span&gt;
@@ -1818,7 +1842,7 @@
 &lt;span class='lineno'&gt;18&lt;/span&gt; &lt;span class='cp'&gt;?&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id57'&gt;字符串压缩&lt;/h3&gt;
+&lt;h3 id='id255'&gt;字符串压缩&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;当我们说到压缩，我们可能会想到文件压缩，其实，字符串也是可以压缩的。PHP提供了gzcompress() 和 gzuncompress() 函数：&lt;/p&gt;
@@ -1864,7 +1888,7 @@
 
         <item>
                 <title>递归遍历目录</title>
-                <description>&lt;h3 id='id54'&gt;方法一&lt;/h3&gt;
+                <description>&lt;h3 id='id252'&gt;方法一&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='php'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='x'&gt;&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='cp'&gt;&amp;lt;?php&lt;/span&gt; 
 &lt;span class='lineno'&gt; 3&lt;/span&gt; &lt;span class='k'&gt;function&lt;/span&gt; &lt;span class='nf'&gt;showDir&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='nv'&gt;$dir&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt;
@@ -1884,7 +1908,7 @@
 &lt;span class='lineno'&gt;17&lt;/span&gt; &lt;span class='cp'&gt;?&amp;gt;&lt;/span&gt;&lt;span class='x' /&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id55'&gt;方法二&lt;/h3&gt;
+&lt;h3 id='id253'&gt;方法二&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='php'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='x'&gt;&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='cp'&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt; &lt;span class='k'&gt;function&lt;/span&gt; &lt;span class='nf'&gt;showDir&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='nv'&gt;$dir&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt;
@@ -1978,7 +2002,7 @@
 
         <item>
                 <title>堆排序</title>
-                <description>&lt;h3 id='id52'&gt;思想&lt;/h3&gt;
+                <description>&lt;h3 id='id250'&gt;思想&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;ol&gt;
@@ -1994,7 +2018,7 @@
 &lt;p&gt;3.将根结点与最后一个记录交换,这样整个记录的最小值就放在了序列的最后了. 4.接下来就是重复地调整为最小堆,然后根结点与堆中最后一个结点交换.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id53'&gt;代码&lt;/h3&gt;
+&lt;h3 id='id251'&gt;代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;HeapAdjust&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;HeapType&lt;/span&gt; &lt;span class='o'&gt;&amp;amp;&lt;/span&gt;&lt;span class='n'&gt;H&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;s&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;m&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='c1'&gt;//H.r[s..m]中记录的关键字除H.r[s].key之外均满足堆的定义,本函数调整H.r[s]的关键字,&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='c1'&gt;//使H.r[s..m]成为一个小顶堆&lt;/span&gt;
@@ -2050,7 +2074,7 @@
 
         <item>
                 <title>快速排序</title>
-                <description>&lt;h3 id='id49'&gt;思想&lt;/h3&gt;
+                <description>&lt;h3 id='id247'&gt;思想&lt;/h3&gt;
 
 &lt;p&gt;&lt;em&gt;主要是递归思想的3个主要步骤&lt;/em&gt;&lt;/p&gt;
 
@@ -2066,7 +2090,7 @@
 &lt;p&gt;合并:由于是原址排序,不需要进行合并.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id50'&gt;分解&lt;/h3&gt;
+&lt;h3 id='id248'&gt;分解&lt;/h3&gt;
 
 &lt;p&gt;&lt;em&gt;基准元素是随机的,这样是为了降低划分极不平衡的情况发生的概率&lt;/em&gt;&lt;/p&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='nf'&gt;RandomizedPartition&lt;/span&gt; &lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;Type&lt;/span&gt; &lt;span class='n'&gt;a&lt;/span&gt;&lt;span class='p'&gt;[],&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;p&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;r&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
@@ -2083,7 +2107,7 @@
 &lt;span class='lineno'&gt;12&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;&lt;span class='c1'&gt;//RandomizedPartition&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id51'&gt;递归求解&lt;/h3&gt;
+&lt;h3 id='id249'&gt;递归求解&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt;1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;RandomizedQuickSort&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;Type&lt;/span&gt; &lt;span class='n'&gt;a&lt;/span&gt;&lt;span class='p'&gt;[],&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;p&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;r&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt;2&lt;/span&gt;     &lt;span class='k'&gt;if&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;p&lt;/span&gt; &lt;span class='o'&gt;&amp;lt;&lt;/span&gt; &lt;span class='n'&gt;r&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;&lt;span class='c1'&gt;//注意递归必须要有递归出口&lt;/span&gt;
 &lt;span class='lineno'&gt;3&lt;/span&gt;         &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;q&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='n'&gt;RandomizedPartition&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;a&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;p&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;r&lt;/span&gt;&lt;span class='p'&gt;);&lt;/span&gt;
@@ -2102,13 +2126,13 @@
                 <title>单例模式</title>
                 <description>&lt;p&gt;&lt;em&gt;学习自《Guide to PHP Design Patterns》&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id='id47'&gt;什么是单例模式?&lt;/h3&gt;
+&lt;h3 id='id245'&gt;什么是单例模式?&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;一个类在整个PHP程序运行过程中,只需要被实例化一次,这些类通常是提供一些功能,且在程序中需要多次调用,最经典的莫过于数据库连接类.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id48'&gt;单例模式示例&lt;/h3&gt;
+&lt;h3 id='id246'&gt;单例模式示例&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='php'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='cp'&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='sd'&gt;/**&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt; &lt;span class='sd'&gt; * 数据库连接类&lt;/span&gt;
@@ -2150,7 +2174,7 @@
 
         <item>
                 <title>哈希表</title>
-                <description>&lt;h3 id='id44'&gt;定义&lt;/h3&gt;
+                <description>&lt;h3 id='id242'&gt;定义&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;根据设定的哈希函数H(key)和处理冲突的方法将一组关键字映像到一个有限的连续的地址集(区间)上,并以关键字在地址集中的值作为记录在表中的存储位置.&lt;/p&gt;
@@ -2180,7 +2204,7 @@
 &lt;p&gt;哈希表装填因子&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id45'&gt;哈希表的查找和插入&lt;/h3&gt;
+&lt;h3 id='id243'&gt;哈希表的查找和插入&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='c1'&gt;//开放定址哈希表的存储结构&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;hashsize&lt;/span&gt;&lt;span class='p'&gt;[]&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='p'&gt;{&lt;/span&gt; &lt;span class='mi'&gt;997&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='p'&gt;...&lt;/span&gt; &lt;span class='p'&gt;};&lt;/span&gt;&lt;span class='c1'&gt;//哈希表容量递增表,一个合适的素数序列&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt; &lt;span class='k'&gt;typedef&lt;/span&gt; &lt;span class='k'&gt;struct&lt;/span&gt;&lt;span class='p'&gt;{&lt;/span&gt;
@@ -2218,7 +2242,7 @@
 &lt;span class='lineno'&gt;35&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;&lt;span class='c1'&gt;//InsertHash&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id46'&gt;算法应用&lt;/h3&gt;
+&lt;h3 id='id244'&gt;算法应用&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;一些可以考虑用哈希算法处理的算法问题,来&lt;a href='http://blog.csdn.net/v_JULY_v/article/details/6256463'&gt;从头到尾彻底解析Hash 表算法&lt;/a&gt;:&lt;/p&gt;
@@ -2296,7 +2320,7 @@
 &lt;p&gt;工厂模式所带来的好处:增强系统的可扩展性和编码时尽量少的修改量.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id43'&gt;简单的工厂示例:&lt;/h3&gt;
+&lt;h3 id='id241'&gt;简单的工厂示例:&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='php'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='cp'&gt;&amp;lt;?php&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt; &lt;span class='sd'&gt;/**&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt; &lt;span class='sd'&gt; * 产品基类&lt;/span&gt;
@@ -2378,7 +2402,7 @@
 
         <item>
                 <title>AOE网(关键路径)</title>
-                <description>&lt;h3 id='id36'&gt;描述&lt;/h3&gt;
+                <description>&lt;h3 id='id234'&gt;描述&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;AOE网是一个带权的有向无环图,其中,顶点表示事件,弧表示活动,权表示活动持续的时间.通常,AOE网可用来估算工程的完成时间.&lt;/p&gt;
@@ -2390,13 +2414,13 @@
 
 &lt;p&gt;&lt;img alt='AOE' src='/assets/img/201309070101.jpg' /&gt;&lt;/p&gt;
 
-&lt;h3 id='id37'&gt;问题&lt;/h3&gt;
+&lt;h3 id='id235'&gt;问题&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;1.完成整项工程至少需要多少时间? 2.哪些活动是影响工程进度的关键?&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id38'&gt;思想&lt;/h3&gt;
+&lt;h3 id='id236'&gt;思想&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;ol&gt;
@@ -2408,7 +2432,7 @@
 &lt;/ol&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id39'&gt;求解分析&lt;/h3&gt;
+&lt;h3 id='id237'&gt;求解分析&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;辨别关键活动就是要找e(i)=l(i)的活动.设AOE网中活动的最早开始时间为e(i)和最迟开始时间为l(i),事件的最早发生时间为ve(j)和最迟发生时间为vl(j).如果活动ai由弧&lt;code&gt;j,k&lt;/code&gt;表示,其持续时间记为dut(&lt;code&gt;j,k&lt;/code&gt;),则有如下关系:&lt;/p&gt;
@@ -2446,7 +2470,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id40'&gt;算法流程&lt;/h3&gt;
+&lt;h3 id='id238'&gt;算法流程&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;ol&gt;
@@ -2460,13 +2484,13 @@
 &lt;/ol&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id41'&gt;辅助&lt;/h3&gt;
+&lt;h3 id='id239'&gt;辅助&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;栈T用于存储拓扑序列 ve数组记录事件最早开始时间,vl数组记录事件最迟开始时间&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id42'&gt;代码&lt;/h3&gt;
+&lt;h3 id='id240'&gt;代码&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='n'&gt;Status&lt;/span&gt; &lt;span class='nf'&gt;TopologicalSort&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt;&lt;span class='n'&gt;ALGraph&lt;/span&gt; &lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;Stack&lt;/span&gt; &lt;span class='o'&gt;&amp;amp;&lt;/span&gt;&lt;span class='n'&gt;T&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='c1'&gt;//有向图G采用邻接表存储结构&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='c1'&gt;//若G无回路,则输出G的顶点的一个拓扑序列并返回OK,否则ERROR.&lt;/span&gt;
@@ -2517,7 +2541,7 @@
                 <title>值对象模式</title>
                 <description>&lt;p&gt;&lt;em&gt;学习自《Guide to PHP Design Patterns》&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id='id34'&gt;什么是值对象模式？&lt;/h3&gt;
+&lt;h3 id='id232'&gt;什么是值对象模式？&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;像PHP的整型那样运作：如果你把同一个对象资源赋值给两个不同的变量，然后改变其中的一个变量，另一个变量仍然不受影响。事实上，这就是Value Object模式的目标所在。&lt;em&gt;(这个有点像PHP变量的引用计数，写时拷贝)&lt;/em&gt;&lt;/p&gt;
@@ -2642,7 +2666,7 @@
 &lt;p&gt;从上面的代码和测试中可以看出,$p1和$p2拥有相同的BadDollar实例.为什么会这样呢?因为PHP5中,对象实例赋值给变量是按引用赋值的,且修改了对象实例的内容时,并不会像普通类型变量一样发生&amp;#8221;写时复制,&amp;#8221;值对象模式就是为了实现对象的&amp;#8221;写时复制&amp;#8221;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id35'&gt;解决方案&lt;/h3&gt;
+&lt;h3 id='id233'&gt;解决方案&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;修改BadDollar类的add方法,如下&lt;/p&gt;
@@ -2664,7 +2688,7 @@
 
         <item>
                 <title>最短路径问题(迪杰斯特拉算法)</title>
-                <description>&lt;h3 id='id31'&gt;思想&lt;/h3&gt;
+                <description>&lt;h3 id='id229'&gt;思想&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Dijkstra求有向网G的某一个顶点到其余顶点的最短路径问题.&lt;/li&gt;
@@ -2678,7 +2702,7 @@
 &lt;li&gt;如果U不为空,转步骤3,否则继续. 6.结束&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id='id32'&gt;辅助&lt;/h3&gt;
+&lt;h3 id='id230'&gt;辅助&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;路径P(二维数组boolean型),当为true时,表示P[i][j]从起点到顶点i的最短路径经过顶点j,为false,表明没有经过顶点j.&lt;/li&gt;
@@ -2688,7 +2712,7 @@
 &lt;li&gt;标记数组final(一维数组boolean型),final&lt;span&gt;i&lt;/span&gt;为true时,表示顶点i加入了V集合.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id='id33'&gt;算法&lt;/h3&gt;
+&lt;h3 id='id231'&gt;算法&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;ShortestPath_DIJ&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;MGraph&lt;/span&gt; &lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;v0&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;PathMatrix&lt;/span&gt; &lt;span class='o'&gt;&amp;amp;&lt;/span&gt;&lt;span class='n'&gt;P&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;ShortPathTable&lt;/span&gt; &lt;span class='o'&gt;&amp;amp;&lt;/span&gt;&lt;span class='n'&gt;D&lt;/span&gt;&lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='k'&gt;for&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='o'&gt;=&lt;/span&gt;&lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='o'&gt;&amp;lt;&lt;/span&gt;&lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='n'&gt;vexnum&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='o'&gt;++&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;         &lt;span class='n'&gt;final&lt;/span&gt;&lt;span class='p'&gt;[&lt;/span&gt;&lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='p'&gt;]&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='n'&gt;FALSE&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;&lt;span class='c1'&gt;//初始化标记数组&lt;/span&gt;
@@ -2725,7 +2749,7 @@
 
         <item>
                 <title>最小生成树(普利姆算法)</title>
-                <description>&lt;h3 id='id28'&gt;思想&lt;/h3&gt;
+                <description>&lt;h3 id='id226'&gt;思想&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;假设最小生成树点集为V,图的所有点集为U,初始化V含有U中任意个顶点.&lt;/li&gt;
@@ -2737,7 +2761,7 @@
 &lt;li&gt;U不为空转步骤2,为空继续. 5.结束.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id='id29'&gt;辅助&lt;/h3&gt;
+&lt;h3 id='id227'&gt;辅助&lt;/h3&gt;
 
 &lt;ol&gt;
 &lt;li&gt;closedge[]数组记录了相应顶点到V的最短距离&lt;code&gt;struct{ VertexType adjvex; VRType lowcost;}closedge[MAX]&lt;/code&gt;.&lt;/li&gt;
@@ -2745,7 +2769,7 @@
 
 &lt;p&gt;2. 图的存储结构为邻接矩阵.&lt;/p&gt;
 
-&lt;h3 id='id30'&gt;算法&lt;/h3&gt;
+&lt;h3 id='id228'&gt;算法&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;MiniSpanTree_PRIM&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;MGraph&lt;/span&gt; &lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;VertexType&lt;/span&gt; &lt;span class='n'&gt;u&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='c1'&gt;//MGraph G 图的邻接矩阵&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='n'&gt;k&lt;/span&gt; &lt;span class='o'&gt;=&lt;/span&gt; &lt;span class='n'&gt;LocateVex&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='n'&gt;u&lt;/span&gt; &lt;span class='p'&gt;);&lt;/span&gt;
@@ -2770,7 +2794,7 @@
 
         <item>
                 <title>图的深度优先搜索和广度优先搜索</title>
-                <description>&lt;h3 id='id26'&gt;深度优先搜索&lt;/h3&gt;
+                <description>&lt;h3 id='id224'&gt;深度优先搜索&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='n'&gt;Boolean&lt;/span&gt; &lt;span class='n'&gt;visited&lt;/span&gt;&lt;span class='p'&gt;[&lt;/span&gt;&lt;span class='n'&gt;MAX&lt;/span&gt;&lt;span class='p'&gt;];&lt;/span&gt;&lt;span class='c1'&gt;//访问标记数组&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt; 
 &lt;span class='lineno'&gt; 3&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;DFSTraverse&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;Graph&lt;/span&gt; &lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
@@ -2791,7 +2815,7 @@
 &lt;span class='lineno'&gt;18&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id27'&gt;广度优先搜索&lt;/h3&gt;
+&lt;h3 id='id225'&gt;广度优先搜索&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='kt'&gt;void&lt;/span&gt; &lt;span class='nf'&gt;BFSTraverse&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;Graph&lt;/span&gt; &lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt; &lt;span class='kt'&gt;int&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='c1'&gt;//使用辅助队列Q和访问标记数组visited&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;for&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='o'&gt;=&lt;/span&gt;&lt;span class='mi'&gt;0&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='o'&gt;&amp;lt;&lt;/span&gt;&lt;span class='n'&gt;G&lt;/span&gt;&lt;span class='p'&gt;.&lt;/span&gt;&lt;span class='n'&gt;vexnum&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt; &lt;span class='n'&gt;v&lt;/span&gt;&lt;span class='o'&gt;++&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
@@ -2872,7 +2896,7 @@
                 <title>php 函数的实现</title>
                 <description>&lt;p&gt;&lt;em&gt;学习自&lt;a href='http://www.php-internals.com/book/'&gt;TIPI&lt;/a&gt;,做个小结,内容从TIPI中选取&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id='id24'&gt;函数类型&lt;/h3&gt;
+&lt;h3 id='id222'&gt;函数类型&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;用户定义的函数&lt;/p&gt;
@@ -2904,7 +2928,7 @@
 &lt;p&gt;变量函数&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id25'&gt;函数的内部结构&lt;/h3&gt;
+&lt;h3 id='id223'&gt;函数的内部结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Zend引擎将函数分为以下类型：&lt;/p&gt;
@@ -3064,7 +3088,7 @@
 
         <item>
                 <title>二叉树的遍历</title>
-                <description>&lt;h3 id='id20'&gt;存储结构&lt;/h3&gt;
+                <description>&lt;h3 id='id218'&gt;存储结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;链式存储结构&lt;/p&gt;
@@ -3075,7 +3099,7 @@
 &lt;span class='lineno'&gt;4&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;&lt;span class='n'&gt;BiTNode&lt;/span&gt;&lt;span class='p'&gt;,&lt;/span&gt;&lt;span class='o'&gt;*&lt;/span&gt;&lt;span class='n'&gt;BiTree&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id21'&gt;先序遍历(根左右)&lt;/h3&gt;
+&lt;h3 id='id219'&gt;先序遍历(根左右)&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='n'&gt;Status&lt;/span&gt; &lt;span class='nf'&gt;PreOrderTraverse&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;BiTree&lt;/span&gt; &lt;span class='n'&gt;T&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='n'&gt;InitStack&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;S&lt;/span&gt; &lt;span class='p'&gt;);&lt;/span&gt;&lt;span class='n'&gt;p&lt;/span&gt;&lt;span class='o'&gt;=&lt;/span&gt;&lt;span class='n'&gt;T&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;while&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;p&lt;/span&gt; &lt;span class='o'&gt;||&lt;/span&gt; &lt;span class='o'&gt;!&lt;/span&gt;&lt;span class='n'&gt;StackEmpty&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;S&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
@@ -3092,7 +3116,7 @@
 &lt;span class='lineno'&gt;14&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id22'&gt;中序遍历(左根右)&lt;/h3&gt;
+&lt;h3 id='id220'&gt;中序遍历(左根右)&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='n'&gt;Status&lt;/span&gt; &lt;span class='nf'&gt;InOrderTraverse&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;BiTree&lt;/span&gt; &lt;span class='n'&gt;T&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='n'&gt;InitStack&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;S&lt;/span&gt; &lt;span class='p'&gt;);&lt;/span&gt;&lt;span class='n'&gt;p&lt;/span&gt;&lt;span class='o'&gt;=&lt;/span&gt;&lt;span class='n'&gt;T&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;while&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;p&lt;/span&gt; &lt;span class='o'&gt;||&lt;/span&gt; &lt;span class='o'&gt;!&lt;/span&gt;&lt;span class='n'&gt;StackEmpty&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;S&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
@@ -3108,7 +3132,7 @@
 &lt;span class='lineno'&gt;13&lt;/span&gt; &lt;span class='p'&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;h3 id='id23'&gt;后序遍历(左右根)&lt;/h3&gt;
+&lt;h3 id='id221'&gt;后序遍历(左右根)&lt;/h3&gt;
 &lt;div class='highlight'&gt;&lt;pre&gt;&lt;code class='cpp'&gt;&lt;span class='lineno'&gt; 1&lt;/span&gt; &lt;span class='n'&gt;Status&lt;/span&gt; &lt;span class='nf'&gt;PostOrderTraverse&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;BiTree&lt;/span&gt; &lt;span class='n'&gt;T&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
 &lt;span class='lineno'&gt; 2&lt;/span&gt;     &lt;span class='n'&gt;InitStack&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;S&lt;/span&gt; &lt;span class='p'&gt;);&lt;/span&gt;&lt;span class='n'&gt;p&lt;/span&gt;&lt;span class='o'&gt;=&lt;/span&gt;&lt;span class='n'&gt;T&lt;/span&gt;&lt;span class='p'&gt;;&lt;/span&gt;
 &lt;span class='lineno'&gt; 3&lt;/span&gt;     &lt;span class='k'&gt;while&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;p&lt;/span&gt; &lt;span class='o'&gt;||&lt;/span&gt; &lt;span class='o'&gt;!&lt;/span&gt;&lt;span class='n'&gt;StackEmpty&lt;/span&gt;&lt;span class='p'&gt;(&lt;/span&gt; &lt;span class='n'&gt;S&lt;/span&gt; &lt;span class='p'&gt;)&lt;/span&gt; &lt;span class='p'&gt;){&lt;/span&gt;
@@ -3137,7 +3161,7 @@
 
         <item>
                 <title>拓扑排序</title>
-                <description>&lt;h3 id='id18'&gt;什么是拓扑序列&lt;/h3&gt;
+                <description>&lt;h3 id='id216'&gt;什么是拓扑序列&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;由某个集合上的一个偏序得到该集合上的一个全序，这个操作称之为拓扑排序。&lt;/p&gt;
@@ -3203,7 +3227,7 @@
 &lt;p&gt;AOV网是一种有向无回路的图。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id19'&gt;拓扑排序的使用&lt;/h3&gt;
+&lt;h3 id='id217'&gt;拓扑排序的使用&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;验证一个有向图无回路存在:&lt;/p&gt;
@@ -3253,13 +3277,13 @@
 
         <item>
                 <title>带着操作系统的知识编程</title>
-                <description>&lt;h3 id='id15'&gt;标题解释&lt;/h3&gt;
+                <description>&lt;h3 id='id213'&gt;标题解释&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;在coding时,有时遇到的问题可以用操作系统的知识来解决.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id16'&gt;问题描述&lt;/h3&gt;
+&lt;h3 id='id214'&gt;问题描述&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;在一个PHP代码文件里有两段主要代码:其一是提供A数据(这部分代码给个昵称为ACode),其二是提供B数据(这部分代码给个昵称为BCode).其中BCode需要A数据中的部分数据(给个昵称为need)才能计算出B数据.&lt;/p&gt;
@@ -3277,7 +3301,7 @@
 &lt;p&gt;现在需要的实现是:ACode在得到need的时候,BCode就能很快开始执行,而ACode剩下的代码可以和BCode并行执行.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id17'&gt;如何实现?&lt;/h3&gt;
+&lt;h3 id='id215'&gt;如何实现?&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;模拟操作系统进程同步的实现,这里将ACode比喻为ACode进程,BCode比喻为BCode进程.&lt;/p&gt;
@@ -3376,7 +3400,7 @@
                 <title>php 变量(下)</title>
                 <description>&lt;p&gt;&lt;em&gt;学习自&lt;a href='http://www.php-internals.com/book/'&gt;TIPI&lt;/a&gt;,做个小结,内容从TIPI中选取&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id='id8'&gt;常量&lt;/h3&gt;
+&lt;h3 id='id206'&gt;常量&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;常量是在变量的zval结构的基础上添加了一些额外的元素,内部结构如下。&lt;/p&gt;
@@ -3400,7 +3424,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id9'&gt;标准常量的初始化&lt;/h3&gt;
+&lt;h3 id='id207'&gt;标准常量的初始化&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;通过define()函数定义的常量的模块编号都是PHP_USER_CONSTANT，这表示是用户定义的常量。 除此之外我们在平时使用较多的常量：如错误报告级别E_ALL, E_WARNING等常量就有点不同了。 这些是PHP内置定义的常量，他们属于标准常量。&lt;/p&gt;
@@ -3439,7 +3463,7 @@
 &lt;p&gt;代码很容易理解，前面看到注册内置常量都是用了CONST_PERSISTENT标志位，也就是说， 这些常量都是持久化常量。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id10'&gt;魔术常量&lt;/h3&gt;
+&lt;h3 id='id208'&gt;魔术常量&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;PHP提供了大量的预定义常量，有一些是内置的，也有一些是扩展提供的，只有在加载了这些扩展库时才会出现。&lt;/p&gt;
@@ -3453,19 +3477,19 @@
 &lt;p&gt;PHP内核会在词法解析时将这些常量的内容赋值进行替换，而不是在运行时进行分析。这些常量其实相当于一个占位符，在词法解析时这些占位符就被替换成实际的值。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id11'&gt;预定义变量&lt;/h3&gt;
+&lt;h3 id='id209'&gt;预定义变量&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;诸如$_GET，$_POST，$_SERVER，$_FILES等变量都是PHP的预定义变量,PHP是在脚本运行之前就将预定义变量加入到了符号表。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id12'&gt;静态变量&lt;/h3&gt;
+&lt;h3 id='id210'&gt;静态变量&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Zend为每个函数(准确的说是zend_op_array)分配了一个私有的符号表来保存该函数的静态变量。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id13'&gt;类型提示的实现&lt;/h3&gt;
+&lt;h3 id='id211'&gt;类型提示的实现&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;PHP中的类型提示功能只能用于参数为对象的提示，而无法用于为整数，字串，浮点等类型提示。在PHP5.1之后，PHP支持对数组的类型提示。&lt;/p&gt;
@@ -3489,7 +3513,7 @@
 &lt;p&gt;以上代码会在中间代码生成时产生错误报告,具体实现翻书吧。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id14'&gt;变量的作用域&lt;/h3&gt;
+&lt;h3 id='id212'&gt;变量的作用域&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;PHP中的变量都保存在符号表中,对于全局变量和局部变量,分别存放在symbol_table和相对应的active_symbol_table.&lt;/p&gt;
@@ -3513,7 +3537,7 @@
 &lt;p&gt;标量类型:boolean,integer,float,string 复合类型:array,object 特殊类型:resource,NULL&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id6'&gt;变量存储结构&lt;/h3&gt;
+&lt;h3 id='id204'&gt;变量存储结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;zval结构体定义在Zend/zend.h文件中,其结构如下:&lt;/p&gt;
@@ -3535,7 +3559,7 @@
 &lt;p&gt;zval结构体的&lt;strong&gt;type&lt;/strong&gt;字段就是实现&lt;strong&gt;弱类型&lt;/strong&gt;最关键的字段了，type的值可以为： IS_NULL、IS_BOOL、IS_LONG、IS_DOUBLE、IS_STRING、IS_ARRAY、IS_OBJECT和IS_RESOURCE 之一。 从字面上就很好理解，他们只是类型的唯一标示，根据类型的不同将不同的值存储到value字段。 除此之外，和他们定义在一起的类型还有IS_CONSTANT和IS_CONSTANT_ARRAY。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id7'&gt;变量的值存储结构&lt;/h3&gt;
+&lt;h3 id='id205'&gt;变量的值存储结构&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;变量的值存储在zvalue_value联合体中，结构体定义如下：&lt;/p&gt;
@@ -3621,7 +3645,7 @@
 
 &lt;p&gt;PHP的执行分三个阶段：处理请求的开始阶段、处理请求阶段、请求之后的结束阶段。&lt;/p&gt;
 
-&lt;h4 id='id3'&gt;处理请求的开始阶段：&lt;/h4&gt;
+&lt;h4 id='id201'&gt;处理请求的开始阶段：&lt;/h4&gt;
 
 &lt;blockquote&gt;
 &lt;blockquote&gt;
@@ -3635,7 +3659,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id4'&gt;处理请求阶段：&lt;/h3&gt;
+&lt;h3 id='id202'&gt;处理请求阶段：&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;blockquote&gt;
@@ -3663,7 +3687,7 @@
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id='id5'&gt;处理请求的结束阶段：&lt;/h3&gt;
+&lt;h3 id='id203'&gt;处理请求的结束阶段：&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;blockquote&gt;
@@ -3685,7 +3709,7 @@
                 <title>PHP新的垃圾回收机制</title>
                 <description>&lt;p&gt;&lt;em&gt;参考自&lt;a href='http://blog.csdn.net/phpkernel/article/details/5734743'&gt;PHP新的垃圾回收机制:Zend GC详解&lt;/a&gt;和&lt;a href='http://php.net/manual/zh/features.gc.refcounting-basics.php'&gt;引用计数基本知识&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id='id2'&gt;什么算垃圾?&lt;/h3&gt;
+&lt;h3 id='id200'&gt;什么算垃圾?&lt;/h3&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;当一个变量的refcount_gc为0时,将会被作为垃圾进行回收处理.&lt;/p&gt;
@@ -3879,7 +3903,7 @@
 &lt;p&gt;全称是Server Application Programming Interface，也就是服务端应用编程接口，sapi通过一系列&lt;strong&gt;钩子函数&lt;/strong&gt;（如Apache的hook机制），使得php可以和外围交互数据，这是php非常优雅和成功的一个设计，通过sapi成功的将php本身和上层应用解耦隔离，php可以不再考虑如何针对不同应用进行兼容，而应用本身也可以针对自己的特点实现不同的处理方式，后面将在sapi章节中介绍。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h5 id='id1'&gt;上层应用&lt;/h5&gt;
+&lt;h5 id='id199'&gt;上层应用&lt;/h5&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;这就我们平时编写的php程序，通过不同的sapi方式得到各种各样的应用模式，如通过webserver实现web应用、在命令行下以脚本方式运行（CLI模式）等等。&lt;/p&gt;

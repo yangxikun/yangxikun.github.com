@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -124,7 +133,7 @@
       <span>01 October 2013</span>
     </div>
     <div class="content">
-      <h3 id='id65'>问题描述</h3>
+      <h3 id='id263'>问题描述</h3>
 
 <blockquote>
 <p>给定n个矩阵{A1,A2,&#8230;,An},其中Ai与Ai+1是可乘的,i=1,2,&#8230;,n-1.求使用矩阵结合律使n个矩阵的连乘积需要的数乘次数最少.</p>
@@ -146,7 +155,7 @@
 <p>(A1(A2(A3A4))),(A1((A2A3)A4)),((A1A2)(A3A4))等,不同完全加括号的连乘积所需的数乘次数不同,我们要求的就是数乘次数最少的完全加括号方式.</p>
 </blockquote>
 
-<h3 id='id66'>分析最优子结构</h3>
+<h3 id='id264'>分析最优子结构</h3>
 
 <blockquote>
 <p>在递归分治中,我们不需要对问题分析最优子结构,因为递归分治不是用于求最优解的,它是将原问题划分为子问题,逐个求解出子问题后合并为原问题的解.而动态规划用于求解问题的最优解,所以需要对问题的最优子结构进行分析,且动态规划每个子问题的解并不是一起合并为原问题的解,而是从子问题的解中挑选出合适的解得出父问题的解.</p>
@@ -182,7 +191,7 @@
 </blockquote>
 </blockquote>
 
-<h3 id='id67'>建立递归关系</h3>
+<h3 id='id265'>建立递归关系</h3>
 
 <blockquote>
 <p>这是这几动态规划的第二步.设计算A[i:j],<code>1&lt;=i&lt;=j&lt;=n</code>,所需的最少数乘次数为m[i][j],则原问题的最优值为m[1][n].</p>
@@ -212,7 +221,7 @@
 <p>Pi-1PkPj是指数组Pi-1Pk和PkPj相乘所需计算量.用s[i][j]记录k可得出最优值m[i][j]的断开点,并可递归地由s[i][j]构造出相应的最优解.</p>
 </blockquote>
 
-<h3 id='id68'>算法代码</h3>
+<h3 id='id266'>算法代码</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>MatrixChain</span><span class='p'>(</span><span class='kt'>int</span> <span class='o'>*</span><span class='n'>p</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>n</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>m</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>s</span><span class='p'>){</span>
 <span class='lineno'> 2</span>     <span class='c1'>//m[i][j]记录A[i:j]最少计算量的值,s[i][j]记录断开点</span>
 <span class='lineno'> 3</span>     <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;=</span> <span class='n'>n</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='n'>m</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>i</span><span class='p'>]</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>

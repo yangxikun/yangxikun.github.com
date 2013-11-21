@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -126,7 +135,7 @@
     <div class="content">
       <p><em>学习自《Guide to PHP Design Patterns》</em></p>
 
-<h3 id='id34'>什么是值对象模式？</h3>
+<h3 id='id232'>什么是值对象模式？</h3>
 
 <blockquote>
 <p>像PHP的整型那样运作：如果你把同一个对象资源赋值给两个不同的变量，然后改变其中的一个变量，另一个变量仍然不受影响。事实上，这就是Value Object模式的目标所在。<em>(这个有点像PHP变量的引用计数，写时拷贝)</em></p>
@@ -251,7 +260,7 @@
 <p>从上面的代码和测试中可以看出,$p1和$p2拥有相同的BadDollar实例.为什么会这样呢?因为PHP5中,对象实例赋值给变量是按引用赋值的,且修改了对象实例的内容时,并不会像普通类型变量一样发生&#8221;写时复制,&#8221;值对象模式就是为了实现对象的&#8221;写时复制&#8221;.</p>
 </blockquote>
 
-<h3 id='id35'>解决方案</h3>
+<h3 id='id233'>解决方案</h3>
 
 <blockquote>
 <p>修改BadDollar类的add方法,如下</p>

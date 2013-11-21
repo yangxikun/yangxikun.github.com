@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -132,7 +141,7 @@
 <p>最长公共子序列:给定两个序列,找出它们的公共子序列.</p>
 </blockquote>
 
-<h3 id='id80'>分析最优子结构</h3>
+<h3 id='id278'>分析最优子结构</h3>
 
 <blockquote>
 <p>设序列X={x1,x2,&#8230;,xm}和Y={y1,y2,&#8230;,ym}的最长公共子序列为Z={z1,z2,&#8230;,zk},则</p>
@@ -156,7 +165,7 @@
 <p>用反证法证明上文1的结论:若zk!=xm,则{z1,z2,&#8230;,zk,xm}是X和Y的长度为k+1的公共子序列.这与Z是X和Y的最长公共子序列矛盾.所以zk=xm=yn,由此可知Zk-1是Xm-1和Yn-1的长度为k-1的最长公共子序列.上文2和3的结论也可以用反正法证明.</p>
 </blockquote>
 
-<h3 id='id81'>建立递归关系</h3>
+<h3 id='id279'>建立递归关系</h3>
 
 <blockquote>
 <p>设c[i][j]记录序列Xi和Yj的最长公共子序列的长度.其中,Xi={x1,x2,&#8230;,xi};Yj={y1,y2,&#8230;,yj}.由最优子结构可得:</p>
@@ -180,7 +189,7 @@
 </blockquote>
 </blockquote>
 
-<h3 id='id82'>算法代码</h3>
+<h3 id='id280'>算法代码</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>LCSLength</span><span class='p'>(</span><span class='kt'>int</span> <span class='n'>m</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>n</span><span class='p'>,</span> <span class='n'>cha</span> <span class='o'>*</span><span class='n'>x</span><span class='p'>,</span> <span class='kt'>char</span> <span class='o'>*</span><span class='n'>y</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>c</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>b</span><span class='p'>){</span>
 <span class='lineno'> 2</span>     <span class='kt'>int</span> <span class='n'>i</span><span class='p'>,</span><span class='n'>j</span><span class='p'>;</span>
 <span class='lineno'> 3</span>     <span class='k'>for</span><span class='p'>(</span><span class='n'>i</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;=</span> <span class='n'>m</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='n'>c</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='mi'>0</span><span class='p'>]</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>

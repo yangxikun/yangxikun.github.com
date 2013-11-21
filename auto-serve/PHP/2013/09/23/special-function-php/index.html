@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -126,7 +135,7 @@
     <div class="content">
       <p><em>转载自<a href='http://www.admin10000.com/document/2610.html'>8个开发必备的PHP 功能</a></em></p>
 
-<h3 id='id56'>函数接收任意数量的参数</h3>
+<h3 id='id254'>函数接收任意数量的参数</h3>
 <div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span>
 <span class='lineno'> 2</span> <span class='k'>function</span> <span class='nf'>funtest</span><span class='p'>()</span> <span class='p'>{</span>
 <span class='lineno'> 3</span>     <span class='nv'>$args</span> <span class='o'>=</span> <span class='nb'>func_get_args</span><span class='p'>();</span>
@@ -187,7 +196,7 @@
 <span class='lineno'>18</span> <span class='cp'>?&gt;</span><span class='x' />
 </code></pre>
 </div>
-<h3 id='id57'>字符串压缩</h3>
+<h3 id='id255'>字符串压缩</h3>
 
 <blockquote>
 <p>当我们说到压缩，我们可能会想到文件压缩，其实，字符串也是可以压缩的。PHP提供了gzcompress() 和 gzuncompress() 函数：</p>

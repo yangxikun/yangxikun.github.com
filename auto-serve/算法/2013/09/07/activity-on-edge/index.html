@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -124,7 +133,7 @@
       <span>07 September 2013</span>
     </div>
     <div class="content">
-      <h3 id='id36'>描述</h3>
+      <h3 id='id234'>描述</h3>
 
 <blockquote>
 <p>AOE网是一个带权的有向无环图,其中,顶点表示事件,弧表示活动,权表示活动持续的时间.通常,AOE网可用来估算工程的完成时间.</p>
@@ -136,13 +145,13 @@
 
 <p><img alt='AOE' src='/assets/img/201309070101.jpg' /></p>
 
-<h3 id='id37'>问题</h3>
+<h3 id='id235'>问题</h3>
 
 <blockquote>
 <p>1.完成整项工程至少需要多少时间? 2.哪些活动是影响工程进度的关键?</p>
 </blockquote>
 
-<h3 id='id38'>思想</h3>
+<h3 id='id236'>思想</h3>
 
 <blockquote>
 <ol>
@@ -154,7 +163,7 @@
 </ol>
 </blockquote>
 
-<h3 id='id39'>求解分析</h3>
+<h3 id='id237'>求解分析</h3>
 
 <blockquote>
 <p>辨别关键活动就是要找e(i)=l(i)的活动.设AOE网中活动的最早开始时间为e(i)和最迟开始时间为l(i),事件的最早发生时间为ve(j)和最迟发生时间为vl(j).如果活动ai由弧<code>j,k</code>表示,其持续时间记为dut(<code>j,k</code>),则有如下关系:</p>
@@ -192,7 +201,7 @@
 </blockquote>
 </blockquote>
 
-<h3 id='id40'>算法流程</h3>
+<h3 id='id238'>算法流程</h3>
 
 <blockquote>
 <ol>
@@ -206,13 +215,13 @@
 </ol>
 </blockquote>
 
-<h3 id='id41'>辅助</h3>
+<h3 id='id239'>辅助</h3>
 
 <blockquote>
 <p>栈T用于存储拓扑序列 ve数组记录事件最早开始时间,vl数组记录事件最迟开始时间</p>
 </blockquote>
 
-<h3 id='id42'>代码</h3>
+<h3 id='id240'>代码</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='n'>Status</span> <span class='nf'>TopologicalSort</span><span class='p'>(</span><span class='n'>ALGraph</span> <span class='n'>G</span><span class='p'>,</span> <span class='n'>Stack</span> <span class='o'>&amp;</span><span class='n'>T</span><span class='p'>){</span>
 <span class='lineno'> 2</span>     <span class='c1'>//有向图G采用邻接表存储结构</span>
 <span class='lineno'> 3</span>     <span class='c1'>//若G无回路,则输出G的顶点的一个拓扑序列并返回OK,否则ERROR.</span>

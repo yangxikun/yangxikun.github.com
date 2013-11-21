@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -124,7 +133,7 @@
       <span>05 September 2013</span>
     </div>
     <div class="content">
-      <h3 id='id31'>思想</h3>
+      <h3 id='id229'>思想</h3>
 
 <ol>
 <li>Dijkstra求有向网G的某一个顶点到其余顶点的最短路径问题.</li>
@@ -138,7 +147,7 @@
 <li>如果U不为空,转步骤3,否则继续. 6.结束</li>
 </ol>
 
-<h3 id='id32'>辅助</h3>
+<h3 id='id230'>辅助</h3>
 
 <ol>
 <li>路径P(二维数组boolean型),当为true时,表示P[i][j]从起点到顶点i的最短路径经过顶点j,为false,表明没有经过顶点j.</li>
@@ -148,7 +157,7 @@
 <li>标记数组final(一维数组boolean型),final<span>i</span>为true时,表示顶点i加入了V集合.</li>
 </ol>
 
-<h3 id='id33'>算法</h3>
+<h3 id='id231'>算法</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>ShortestPath_DIJ</span><span class='p'>(</span> <span class='n'>MGraph</span> <span class='n'>G</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>v0</span><span class='p'>,</span> <span class='n'>PathMatrix</span> <span class='o'>&amp;</span><span class='n'>P</span><span class='p'>,</span> <span class='n'>ShortPathTable</span> <span class='o'>&amp;</span><span class='n'>D</span><span class='p'>){</span>
 <span class='lineno'> 2</span>     <span class='k'>for</span><span class='p'>(</span> <span class='n'>v</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span> <span class='n'>v</span><span class='o'>&lt;</span><span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span><span class='p'>;</span> <span class='n'>v</span><span class='o'>++</span> <span class='p'>){</span>
 <span class='lineno'> 3</span>         <span class='n'>final</span><span class='p'>[</span><span class='n'>v</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>FALSE</span><span class='p'>;</span><span class='c1'>//初始化标记数组</span>

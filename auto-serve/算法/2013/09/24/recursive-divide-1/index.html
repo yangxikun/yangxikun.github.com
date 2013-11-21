@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -124,7 +133,7 @@
       <span>24 September 2013</span>
     </div>
     <div class="content">
-      <h3 id='id58'>排列问题</h3>
+      <h3 id='id256'>排列问题</h3>
 
 <blockquote>
 <p>设R={r1,r2,r3,&#8230;,rn}是要进行排列的n个元素,Ri=R-{ri}.集合X的全排列记为Perm(X).(ri)Perm(X)表示在全排列Perm(X)的每一个排列前加上前缀ri得到的排列.R的全排列可归纳定义如下:</p>
@@ -134,7 +143,7 @@
 <p>当n=1时,Perm(R)=(r),其中r是集合R中唯一的元素; 当n&gt;1时,Perm(R)由(r1)Perm(R1),(r2)Perm(R2),&#8230;,(rn)Perm(Rn)构成,如此,Perm(R1),&#8230;,Perm(Rn)也可以递归分解下去.</p>
 </blockquote>
 
-<h3 id='id59'>算法代码</h3>
+<h3 id='id257'>算法代码</h3>
 <div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>Perm</span><span class='p'>(</span><span class='n'>Type</span> <span class='n'>list</span><span class='p'>[],</span> <span class='kt'>int</span> <span class='n'>k</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>m</span><span class='p'>){</span>
 <span class='lineno'> 2</span>     <span class='c1'>//产生list[k:m]的所有全排列</span>
 <span class='lineno'> 3</span>     <span class='k'>if</span> <span class='p'>(</span><span class='n'>k</span> <span class='o'>==</span> <span class='n'>m</span><span class='p'>)</span> <span class='p'>{</span>

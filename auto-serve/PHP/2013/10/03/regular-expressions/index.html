@@ -32,6 +32,15 @@
     <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
     <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
   </head>
 
   <body>
@@ -129,13 +138,13 @@
         border: 1px solid black
     }
 </style>
-<h3 id='id71'>分隔符</h3>
+<h3 id='id269'>分隔符</h3>
 
 <blockquote>
 <p>当使用 PCRE 函数的时候，模式需要由分隔符闭合包裹。分隔符可以使任意非字母数字、非反斜线、非空白字符。经常使用的分隔符是正斜线(/)、hash符号(#) 以及取反符号(~)。</p>
 </blockquote>
 
-<h3 id='id72'>元字符</h3>
+<h3 id='id270'>元字符</h3>
 
 <blockquote>
 <p>元字符是正则表达式中具有特殊意义的专用字符,用来规定其前导字符在目标对象中的出现模式.</p>
@@ -145,19 +154,19 @@
 <p>共有两种不同的元字符：一种是可以在模式中方括号外任何地方使用的，另外一种 是需要在方括号内使用的。(元字符列表)<span>http://www.php.net/manual/zh/regexp.reference.meta.php</span></p>
 </blockquote>
 
-<h3 id='id73'>字符组</h3>
+<h3 id='id271'>字符组</h3>
 
 <blockquote>
 <p>使用中括号的字符集称为字符组.例如<code>[c[aou?*)]]t</code>,注意字符组里的元字符可以不转义.在字符组中要使用<code>\</code>时,在其前面要多加<code>\\</code>两个斜线.</p>
 </blockquote>
 
-<h3 id='id74'>分支</h3>
+<h3 id='id272'>分支</h3>
 
 <blockquote>
 <p>在圆括号中使用|进行分支.例如:<code>(c|h|to)at</code>,可以匹配<code>cat</code>,<code>hat</code>,<code>toat</code>.</p>
 </blockquote>
 
-<h3 id='id75'>分组</h3>
+<h3 id='id273'>分组</h3>
 
 <blockquote>
 <p>通过圆括号分隔界定，并且它们可以嵌套.常用分组语法:</p>
@@ -210,7 +219,7 @@
 <p>可以看看这篇博文:<a href='http://www.anrip.com/post/1126'>正则表达式 – 分组语法（捕获/断言/注释）</a></p>
 </blockquote>
 
-<h3 id='id76'>反向引用</h3>
+<h3 id='id274'>反向引用</h3>
 
 <blockquote>
 <p>注意它不仅可以用在pattern中,还可以用在replacement中,例如:</p>
@@ -222,13 +231,13 @@
 <span class='lineno'>5</span> <span class='cp'>?&gt;</span><span class='x' />
 </code></pre>
 </div>
-<h3 id='id77'>贪婪/懒惰匹配模式</h3>
+<h3 id='id275'>贪婪/懒惰匹配模式</h3>
 
 <blockquote>
 <p>在重复量词之后加个?就形成了懒惰模式,例如:<code>a.*b</code>匹配<code>aabab</code>整个字符串,而<code>a.*?b</code>匹配<code>aabab</code>的<code>aab</code>和<code>ab</code>两组字符.</p>
 </blockquote>
 
-<h3 id='id78'>常用的模式</h3>
+<h3 id='id276'>常用的模式</h3>
 
 <blockquote>
 <ol>
@@ -250,7 +259,7 @@
 <span class='lineno'>5</span> <span class='cp'>?&gt;</span><span class='x' />
 </code></pre>
 </div>
-<h3 id='id79'>正则表达式的效率与优化</h3>
+<h3 id='id277'>正则表达式的效率与优化</h3>
 
 <blockquote>
 <ol>
