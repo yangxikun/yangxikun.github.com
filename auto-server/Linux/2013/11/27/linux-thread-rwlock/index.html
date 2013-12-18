@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>linux线程使用读写锁共享全局变量</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>linux线程使用读写锁共享全局变量 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>27 November 2013</span>
+    </div>
+    <div class="content">
+      <p><em>学习自：<a href='http://blog.csdn.net/dai_weitao/article/details/1752843'>Linux线程同步(3): 读写锁(rwlock)</a>和<a href='http://blog.csdn.net/jnu_simba/article/details/9106513'>linux网络编程之posix 线程（一）：pthread 系列函数 和 简单多线程服务器端程序</a></em></p>
+
+<h4 id='_rwlock'>读写锁 (rwlock)功能特点简介</h4>
+
+<p>读写锁实际是一种特殊的自旋锁，它把对共享资源的访问者划分成读者和写者，读者只对共享资源进行读访问，写者则需要对共享资源进行写操作。这种锁相对于自旋锁而言，能提高并发性，因为在多处理器系统中，它允许同时有多个读者来访问共享资源，最大可能的读者数为实际的逻辑CPU数。写者是排他性的，一个读写锁同时只能有一个写者或多个读者（与CPU数相关），但不能同时既有读者又有写者。</p>
+
+<p>在读写锁保持期间也是抢占失效的。</p>
+
+<p>如果读写锁当前没有读者，也没有写者，那么写者可以立刻获得读写锁，否则它必须自旋在那里，直到没有任何写者或读者。如果读写锁没有写者，那么读者可以立即获得该读写锁，否则读者必须自旋在那里，直到写者释放该读写锁。</p>
+
+<p>1. 特性：</p>
+
+<p>一次只有一个线程可以占有写模式的读写锁, 但是可以有多个线程同时占有读模式的读写锁. 正是因为这个特性,</p>
+
+<p>当读写锁是写加锁状态时, 在这个锁被解锁之前, 所有试图对这个锁加锁的线程都会被阻塞.</p>
+
+<p>当读写锁在读加锁状态时, 所有试图以读模式对它进行加锁的线程都可以得到访问权, 但是如果线程希望以写模式对此锁进行加锁, 它必须直到知道所有的线程释放锁.</p>
+
+<p>通常, 当读写锁处于读模式锁住状态时, 如果有另外线程试图以写模式加锁, 读写锁通常会阻塞随后的读模式锁请求, 这样可以避免读模式锁长期占用, 而等待的写模式锁请求长期阻塞.</p>
+
+<p>2. 适用性:</p>
+
+<p>读写锁适合于对数据结构的读次数比写次数多得多的情况. 因为, 读模式锁定时可以共享, 以写模式锁住时意味着独占, 所以读写锁又叫共享-独占锁.</p>
+
+<h4 id='id101'>实例：使用读写锁实现线程间共享全局变量</h4>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='cp'>#include&lt;pthread.h&gt;</span>
+<span class='lineno'> 2</span> <span class='cp'>#include&lt;stdio.h&gt;</span>
+<span class='lineno'> 3</span> <span class='cp'>#include&lt;unistd.h&gt;</span>
+<span class='lineno'> 4</span> <span class='cp'>#include&lt;errno.h&gt;</span>
+<span class='lineno'> 5</span> <span class='cp'>#include&lt;stdlib.h&gt;</span>
+<span class='lineno'> 6</span> <span class='cp'>#include&lt;string.h&gt;</span>
+<span class='lineno'> 7</span> 
+<span class='lineno'> 8</span> <span class='cm'>/* 读写锁对象 */</span>
+<span class='lineno'> 9</span> <span class='k'>static</span> <span class='kt'>pthread_rwlock_t</span> <span class='n'>rwlock</span><span class='p'>;</span>
+<span class='lineno'>10</span> 
+<span class='lineno'>11</span> <span class='kt'>int</span> <span class='n'>a</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'>12</span> 
+<span class='lineno'>13</span> <span class='kt'>void</span><span class='o'>*</span> <span class='nf'>thread_function</span> <span class='p'>(</span><span class='kt'>void</span> <span class='o'>*</span><span class='n'>arg</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>14</span> 
+<span class='lineno'>15</span>     <span class='kt'>int</span> <span class='n'>res</span><span class='p'>;</span>
+<span class='lineno'>16</span>     <span class='cm'>/* 获取写锁 */</span>
+<span class='lineno'>17</span>     <span class='n'>res</span> <span class='o'>=</span> <span class='n'>pthread_rwlock_wrlock</span><span class='p'>(</span><span class='o'>&amp;</span><span class='n'>rwlock</span><span class='p'>);</span>
+<span class='lineno'>18</span>     <span class='k'>if</span> <span class='p'>(</span><span class='n'>res</span> <span class='o'>!=</span> <span class='mi'>0</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>19</span>         <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;%s</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>strerror</span><span class='p'>(</span><span class='n'>res</span><span class='p'>));</span>
+<span class='lineno'>20</span>         <span class='n'>exit</span><span class='p'>(</span><span class='n'>EXIT_FAILURE</span><span class='p'>);</span>
+<span class='lineno'>21</span>     <span class='p'>}</span>
+<span class='lineno'>22</span> 
+<span class='lineno'>23</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;子线程获取写锁</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='lineno'>24</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;原来a的值:%d</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>a</span><span class='p'>);</span>
+<span class='lineno'>25</span>     <span class='n'>a</span> <span class='o'>=</span> <span class='mi'>100</span><span class='p'>;</span>
+<span class='lineno'>26</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;修改后a的值:%d</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>a</span><span class='p'>);</span>
+<span class='lineno'>27</span> 
+<span class='lineno'>28</span>     <span class='cm'>/* 释放写锁 */</span>
+<span class='lineno'>29</span>     <span class='n'>res</span> <span class='o'>=</span> <span class='n'>pthread_rwlock_unlock</span><span class='p'>(</span><span class='o'>&amp;</span><span class='n'>rwlock</span><span class='p'>);</span>
+<span class='lineno'>30</span>     <span class='k'>if</span> <span class='p'>(</span><span class='n'>res</span> <span class='o'>!=</span> <span class='mi'>0</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>31</span>         <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;%s</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>strerror</span><span class='p'>(</span><span class='n'>res</span><span class='p'>));</span>
+<span class='lineno'>32</span>         <span class='n'>exit</span><span class='p'>(</span><span class='n'>EXIT_FAILURE</span><span class='p'>);</span>
+<span class='lineno'>33</span>     <span class='p'>}</span>
+<span class='lineno'>34</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;子线程释放写锁</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='lineno'>35</span> 
+<span class='lineno'>36</span>     <span class='k'>return</span> <span class='nb'>NULL</span><span class='p'>;</span>
+<span class='lineno'>37</span> <span class='p'>}</span>
+<span class='lineno'>38</span> 
+<span class='lineno'>39</span> <span class='kt'>int</span> <span class='nf'>main</span><span class='p'>()</span> <span class='p'>{</span>
+<span class='lineno'>40</span> 
+<span class='lineno'>41</span>     <span class='kt'>int</span> <span class='n'>res</span><span class='p'>;</span>
+<span class='lineno'>42</span>     <span class='cm'>/* 初始化写写锁 */</span>
+<span class='lineno'>43</span>     <span class='n'>res</span> <span class='o'>=</span> <span class='n'>pthread_rwlock_init</span><span class='p'>(</span><span class='o'>&amp;</span><span class='n'>rwlock</span><span class='p'>,</span> <span class='nb'>NULL</span><span class='p'>);</span>
+<span class='lineno'>44</span>     <span class='k'>if</span> <span class='p'>(</span><span class='n'>res</span> <span class='o'>!=</span> <span class='mi'>0</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>45</span>         <span class='n'>perror</span><span class='p'>(</span><span class='s'>&quot;pthread_rwlock_init&quot;</span><span class='p'>);</span>
+<span class='lineno'>46</span>         <span class='n'>exit</span><span class='p'>(</span><span class='n'>EXIT_FAILURE</span><span class='p'>);</span>
+<span class='lineno'>47</span>     <span class='p'>}</span>
+<span class='lineno'>48</span> 
+<span class='lineno'>49</span>     <span class='cm'>/* 创建新线程 */</span>
+<span class='lineno'>50</span>     <span class='kt'>pthread_t</span> <span class='kr'>thread</span><span class='p'>;</span>
+<span class='lineno'>51</span>     <span class='n'>res</span> <span class='o'>=</span> <span class='n'>pthread_create</span><span class='p'>(</span><span class='o'>&amp;</span><span class='kr'>thread</span><span class='p'>,</span> <span class='nb'>NULL</span><span class='p'>,</span> <span class='o'>&amp;</span><span class='n'>thread_function</span><span class='p'>,</span> <span class='nb'>NULL</span><span class='p'>);</span>
+<span class='lineno'>52</span>     <span class='k'>if</span> <span class='p'>(</span><span class='n'>res</span> <span class='o'>!=</span> <span class='mi'>0</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>53</span>         <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;%s</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>strerror</span><span class='p'>(</span><span class='n'>res</span><span class='p'>));</span>
+<span class='lineno'>54</span>         <span class='n'>exit</span><span class='p'>(</span><span class='n'>EXIT_FAILURE</span><span class='p'>);</span>
+<span class='lineno'>55</span>     <span class='p'>}</span>
+<span class='lineno'>56</span> 
+<span class='lineno'>57</span>     <span class='cm'>/* 获取写锁 */</span>
+<span class='lineno'>58</span>     <span class='n'>res</span> <span class='o'>=</span> <span class='n'>pthread_rwlock_wrlock</span><span class='p'>(</span><span class='o'>&amp;</span><span class='n'>rwlock</span><span class='p'>);</span>
+<span class='lineno'>59</span>     <span class='k'>if</span> <span class='p'>(</span><span class='n'>res</span> <span class='o'>!=</span> <span class='mi'>0</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>60</span>         <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;%s</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>strerror</span><span class='p'>(</span><span class='n'>res</span><span class='p'>));</span>
+<span class='lineno'>61</span>         <span class='n'>exit</span><span class='p'>(</span><span class='n'>EXIT_FAILURE</span><span class='p'>);</span>
+<span class='lineno'>62</span>     <span class='p'>}</span>
+<span class='lineno'>63</span> 
+<span class='lineno'>64</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;主线程获取写锁</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='lineno'>65</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;原来a的值:%d</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>a</span><span class='p'>);</span>
+<span class='lineno'>66</span>     <span class='n'>a</span> <span class='o'>=</span> <span class='mi'>10</span><span class='p'>;</span>
+<span class='lineno'>67</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;修改后a的值:%d</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>a</span><span class='p'>);</span>
+<span class='lineno'>68</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;主线程睡眠5s</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='lineno'>69</span>     <span class='n'>sleep</span><span class='p'>(</span><span class='mi'>5</span><span class='p'>);</span>
+<span class='lineno'>70</span> 
+<span class='lineno'>71</span>     <span class='cm'>/* 释放写锁 */</span>
+<span class='lineno'>72</span>     <span class='n'>res</span> <span class='o'>=</span> <span class='n'>pthread_rwlock_unlock</span><span class='p'>(</span><span class='o'>&amp;</span><span class='n'>rwlock</span><span class='p'>);</span>
+<span class='lineno'>73</span>     <span class='k'>if</span> <span class='p'>(</span><span class='n'>res</span> <span class='o'>!=</span> <span class='mi'>0</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>74</span>         <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;%s</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>,</span> <span class='n'>strerror</span><span class='p'>(</span><span class='n'>res</span><span class='p'>));</span>
+<span class='lineno'>75</span>         <span class='n'>exit</span><span class='p'>(</span><span class='n'>EXIT_FAILURE</span><span class='p'>);</span>
+<span class='lineno'>76</span>     <span class='p'>}</span>
+<span class='lineno'>77</span>     <span class='n'>printf</span><span class='p'>(</span><span class='s'>&quot;主线程释放写锁</span><span class='se'>\n</span><span class='s'>&quot;</span><span class='p'>);</span>
+<span class='lineno'>78</span> 
+<span class='lineno'>79</span>     <span class='n'>pthread_join</span><span class='p'>(</span><span class='kr'>thread</span><span class='p'>,</span> <span class='nb'>NULL</span><span class='p'>);</span>
+<span class='lineno'>80</span>     <span class='k'>return</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'>81</span> <span class='p'>}</span>
+</code></pre>
+</div>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#Linux-ref">
+    		Linux <span>5</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#线程-ref">线程 <span>2</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/11/22/session-and-cookie" title="Session和Cookie小结以及PHP单点登陆的实现">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/Linux/2013/11/27/process-and-thread" title="Linux线程实现">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+

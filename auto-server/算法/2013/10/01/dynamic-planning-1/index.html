@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>动态规划--矩阵连乘问题</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>动态规划--矩阵连乘问题 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>01 October 2013</span>
+    </div>
+    <div class="content">
+      <h3 id='id65'>问题描述</h3>
+
+<blockquote>
+<p>给定n个矩阵{A1,A2,&#8230;,An},其中Ai与Ai+1是可乘的,i=1,2,&#8230;,n-1.求使用矩阵结合律使n个矩阵的连乘积需要的数乘次数最少.</p>
+</blockquote>
+
+<blockquote>
+<p>由于矩阵乘法满足结合律,故计算矩阵的连乘积可以有许多不同的计算次序.这种计算次序可以用加括号的方式来确定.</p>
+</blockquote>
+
+<blockquote>
+<p>完全加括号的矩阵连乘积可递归地定义为: 1.单个矩阵时完全加括号的; 2.矩阵连乘积A是完全加括号的,则A可表示为2个完全加括号的矩阵连乘积B和C的乘积并加括号,即A=(BC);</p>
+</blockquote>
+
+<blockquote>
+<p>例如,矩阵连乘积A1A2A3A4可以有以下几种不同的完全加括号方式:</p>
+</blockquote>
+
+<blockquote>
+<p>(A1(A2(A3A4))),(A1((A2A3)A4)),((A1A2)(A3A4))等,不同完全加括号的连乘积所需的数乘次数不同,我们要求的就是数乘次数最少的完全加括号方式.</p>
+</blockquote>
+
+<h3 id='id66'>分析最优子结构</h3>
+
+<blockquote>
+<p>在递归分治中,我们不需要对问题分析最优子结构,因为递归分治不是用于求最优解的,它是将原问题划分为子问题,逐个求解出子问题后合并为原问题的解.而动态规划用于求解问题的最优解,所以需要对问题的最优子结构进行分析,且动态规划每个子问题的解并不是一起合并为原问题的解,而是从子问题的解中挑选出合适的解得出父问题的解.</p>
+</blockquote>
+
+<blockquote>
+<p>最优子结构是指原问题的最优解包含着其子问题的最优解,例如:假设(A1(A2(A3A4)))是矩阵连乘积A1A2A3A4的最优解,那么A2(A3A4)是其子问题矩阵连乘积A2A3A4的最优解.</p>
+</blockquote>
+
+<blockquote>
+<p>要使用动态规划算法求解问题,就必须先证明原问题具有最优子结构性质,因为只有符合这个性质,原问题的最优解才可以从子问题的最优解中得出.这和递归分治类似,都是自底向上的求解方式,从子问题的解得出原问题的解.</p>
+</blockquote>
+
+<blockquote>
+<p>证明矩阵连乘积问题具有最优子结构:</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>将矩阵连乘积AiAi+1&#8230;Aj简记为A[i:j].考擦计算A[1:n]的最优计算次序.设这个计算次序在矩阵Ak和Ak+1之间将矩阵链断开,<code>1&lt;=k&lt;n</code>,则其相应的完全加括号方式为((A1&#8230;Ak)(Ak+1&#8230;An)).依此次序,先计算A[1:k]和A[k+1:n],然后将计算结果相乘得到A[1:n],依此计算顺序总计算量为A[1:k]的计算量加上A[k+1:n]的计算量,再加上A[1:k]和A[k+1:n]相乘的计算量.</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>问题的关键点在于:计算A[1:n]的最优次序所包含的计算矩阵子链A[1:k]和A[k+1:n]的次序也是最优的,即原问题具有最优子结构性质.</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>反证法证明:如果存在一个计算A[1:k]的次序需要的计算量更少,则用此次序替换原来的次序,得到的计算A[1:n]的计算量将比最优次序所需计算量更少,这是一个矛盾.</p>
+</blockquote>
+</blockquote>
+
+<h3 id='id67'>建立递归关系</h3>
+
+<blockquote>
+<p>这是这几动态规划的第二步.设计算A[i:j],<code>1&lt;=i&lt;=j&lt;=n</code>,所需的最少数乘次数为m[i][j],则原问题的最优值为m[1][n].</p>
+</blockquote>
+
+<blockquote>
+<p>当<code>i=j</code>时,A[i:j]=Ai为单一矩阵,所以m[i][i]=0,i=1,2,&#8230;,n;</p>
+</blockquote>
+
+<blockquote>
+<p>当<code>i&lt;j</code>时,可利用最优子结构性质来计算m[i][j].事实上,若计算A[i:j]的最优次序在Ak和Ak+1之间断开,<code>i&lt;=k&lt;j</code>,则m[i][j]=m[i][k]+m[k+1][j]+Pi-1PkPj <code>i&lt;=k&lt;j</code>.因此,k时这j-i个位置中使计算量达到最小的那个位置.从而m[i][j]可以递归地定义为</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>m[i][j] = 0 <code>i = j</code></p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>m[i][j] = min{m[i][k]+m[k+1][j]+Pi-1PkPj} <code>i &lt; j</code></p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>Pi-1PkPj是指数组Pi-1Pk和PkPj相乘所需计算量.用s[i][j]记录k可得出最优值m[i][j]的断开点,并可递归地由s[i][j]构造出相应的最优解.</p>
+</blockquote>
+
+<h3 id='id68'>算法代码</h3>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='kt'>void</span> <span class='nf'>MatrixChain</span><span class='p'>(</span><span class='kt'>int</span> <span class='o'>*</span><span class='n'>p</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>n</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>m</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>s</span><span class='p'>){</span>
+<span class='lineno'> 2</span>     <span class='c1'>//m[i][j]记录A[i:j]最少计算量的值,s[i][j]记录断开点</span>
+<span class='lineno'> 3</span>     <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;=</span> <span class='n'>n</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='n'>m</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>i</span><span class='p'>]</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'> 4</span>     <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>r</span> <span class='o'>=</span> <span class='mi'>2</span><span class='p'>;</span> <span class='n'>r</span> <span class='o'>&lt;=</span> <span class='n'>n</span><span class='p'>;</span> <span class='n'>r</span><span class='o'>++</span><span class='p'>)</span><span class='c1'>//步长控制</span>
+<span class='lineno'> 5</span>         <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;=</span> <span class='n'>n</span><span class='o'>-</span><span class='n'>r</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'> 6</span>             <span class='kt'>int</span> <span class='n'>j</span> <span class='o'>=</span> <span class='n'>i</span><span class='o'>+</span><span class='n'>r</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>;</span>
+<span class='lineno'> 7</span>             <span class='n'>m</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>m</span><span class='p'>[</span><span class='n'>i</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span><span class='o'>+</span><span class='n'>p</span><span class='p'>[</span><span class='n'>i</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>]</span><span class='o'>*</span><span class='n'>p</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>*</span><span class='n'>p</span><span class='p'>[</span><span class='n'>j</span><span class='p'>];</span>
+<span class='lineno'> 8</span>             <span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span> <span class='o'>=</span> <span class='mi'>1</span><span class='p'>;</span>
+<span class='lineno'> 9</span>             <span class='k'>for</span> <span class='p'>(</span><span class='kt'>int</span> <span class='n'>k</span> <span class='o'>=</span> <span class='n'>i</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>;</span> <span class='n'>k</span> <span class='o'>&lt;</span> <span class='n'>j</span><span class='p'>;</span> <span class='n'>k</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>10</span>                 <span class='kt'>int</span> <span class='n'>t</span> <span class='o'>=</span> <span class='n'>m</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>k</span><span class='p'>]</span><span class='o'>+</span><span class='n'>m</span><span class='p'>[</span><span class='n'>k</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span><span class='o'>+</span><span class='n'>p</span><span class='p'>[</span><span class='n'>i</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>]</span><span class='o'>*</span><span class='n'>p</span><span class='p'>[</span><span class='n'>k</span><span class='p'>]</span><span class='o'>*</span><span class='n'>p</span><span class='p'>[</span><span class='n'>j</span><span class='p'>];</span>
+<span class='lineno'>11</span>                 <span class='k'>if</span> <span class='p'>(</span><span class='n'>t</span> <span class='o'>&lt;</span> <span class='n'>m</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>])</span> <span class='p'>{</span><span class='n'>m</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>t</span><span class='p'>;</span><span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>k</span><span class='p'>;}</span>
+<span class='lineno'>12</span>             <span class='p'>}</span>
+<span class='lineno'>13</span>         <span class='p'>}</span>
+<span class='lineno'>14</span> <span class='p'>}</span>
+<span class='lineno'>15</span> 
+<span class='lineno'>16</span> <span class='kt'>void</span> <span class='nf'>TraceBack</span><span class='p'>(</span><span class='kt'>int</span> <span class='n'>i</span><span class='p'>,</span> <span class='kt'>int</span> <span class='n'>j</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>**</span><span class='n'>s</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>17</span>     <span class='c1'>//根据s数组,递归求A[i:j]的最优解</span>
+<span class='lineno'>18</span>     <span class='k'>if</span><span class='p'>(</span><span class='n'>i</span> <span class='o'>==</span> <span class='n'>j</span><span class='p'>)</span> <span class='k'>return</span><span class='p'>;</span>
+<span class='lineno'>19</span>     <span class='n'>TraceBack</span><span class='p'>(</span><span class='n'>i</span><span class='p'>,</span> <span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>],</span> <span class='n'>s</span><span class='p'>);</span>
+<span class='lineno'>20</span>     <span class='n'>TraceBack</span><span class='p'>(</span><span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>,</span> <span class='n'>j</span><span class='p'>,</span> <span class='n'>s</span><span class='p'>);</span>
+<span class='lineno'>21</span>     <span class='n'>cout</span><span class='o'>&lt;&lt;</span><span class='s'>&quot;Multiply A&quot;</span><span class='o'>&lt;&lt;</span><span class='n'>i</span><span class='o'>&lt;&lt;</span><span class='s'>&quot;,&quot;</span><span class='o'>&lt;&lt;</span><span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>];</span>
+<span class='lineno'>22</span>     <span class='n'>cout</span><span class='o'>&lt;&lt;</span><span class='s'>&quot; and A&quot;</span><span class='o'>&lt;&lt;</span><span class='p'>(</span><span class='n'>s</span><span class='p'>[</span><span class='n'>i</span><span class='p'>][</span><span class='n'>j</span><span class='p'>]</span><span class='o'>+</span><span class='mi'>1</span><span class='p'>)</span><span class='o'>&lt;&lt;</span><span class='s'>&quot;,&quot;</span><span class='o'>&lt;&lt;</span><span class='n'>j</span><span class='o'>&lt;&lt;</span><span class='n'>endl</span><span class='p'>;</span>
+<span class='lineno'>23</span> <span class='p'>}</span>
+</code></pre>
+</div>
+<blockquote>
+<p>如果连矩阵乘积为A1A2A3A4A5,则代码执行时,计算子矩阵链顺序为:</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>m[1][2],m[2][3],m[3][4],m[4][5]</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>m[1][3],m[2][4],m[3][5]</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>m[1][4],m[2][5]</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>m[1][5]</p>
+</blockquote>
+</blockquote>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#算法-ref">
+    		算法 <span>17</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#算法-ref">算法 <span>10</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/09/29/register-pattern" title="注册表模式">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/算法/2013/10/01/recursive-divide-4" title="递归与分治--合并排序">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+

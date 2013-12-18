@@ -9,11 +9,11 @@ tags: [PHP设计模式]
 
 *学习自《PHP 精粹》*
 
->对于javascript开发者来说,这是一个再熟悉不过的模式了,因为js通过事件驱动来执行,例如页面加载,单击,鼠标移动等.
+对于javascript开发者来说,这是一个再熟悉不过的模式了,因为js通过事件驱动来执行,例如页面加载,单击,鼠标移动等.
 
->观察者模式的核心在于允许你的应用程序注册一个回调,当某个特定的事件发生时便会触发它.
+观察者模式的核心在于允许你的应用程序注册一个回调,当某个特定的事件发生时便会触发它.
 
->下面例子通过一个Event类实现观察者模式:
+下面例子通过一个Event类实现观察者模式:
 
 {% highlight php linenos %}
 <?php
@@ -91,5 +91,123 @@ class DataRecord {
 
 $data = new DataRecord();
 $data->save();
+?>
+{% endhighlight %}
+
+GitHub上一个PHPDesignPattern的项目使用了SPL接口实现的观察者模式：
+
+目的：为了实现发布/订阅行为的对象，每当一个“目标”对象改变它的状态，附加的“观察员”将被通报。它是用来缩短耦合对象的量，并使用松散的耦合来代替。
+
+观察者：
+{% highlight php linenos %}
+<?php
+
+namespace DesignPatterns\Observer;
+
+/**
+ * class UserObserver
+ */
+class UserObserver implements \SplObserver
+{
+    /**
+     * This is the only method to implement as an observer.
+     * It is called by the Subject (usually by SplSubject::notify() )
+     * 
+     * @param \SplSubject $subject
+     */
+    public function update(\SplSubject $subject)
+    {
+        echo get_class($subject) . ' has been updated';
+    }
+}
+?>
+{% endhighlight %}
+
+“目标”对象：
+{% highlight php linenos %}
+<?php
+
+namespace DesignPatterns\Observer;
+
+/**
+ * Observer pattern : The observed object (the subject)
+ * 
+ * The subject maintains a list of Observers and sends notifications.
+ *
+ */
+class User implements \SplSubject
+{
+    /**
+     * user data
+     *
+     * @var array
+     */
+    protected $data = array();
+
+    /**
+     * observers
+     *
+     * @var array
+     */
+    protected $observers = array();
+
+    /**
+     * attach a new observer
+     *
+     * @param \SplObserver $observer
+     *
+     * @return void
+     */
+    public function attach(\SplObserver $observer)
+    {
+        $this->observers[] = $observer;
+    }
+
+    /**
+     * detach an observer
+     *
+     * @param \SplObserver $observer
+     *
+     * @return void
+     */
+    public function detach(\SplObserver $observer)
+    {
+        $index = array_search($observer, $this->observers);
+
+        if (false !== $index) {
+            unset($this->observers[$index]);
+        }
+    }
+
+    /**
+     * notify observers
+     *
+     * @return void
+     */
+    public function notify()
+    {
+        /** @var SplObserver $observer */
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
+    }
+
+    /**
+     * Ideally one would better write setter/getter for all valid attributes and only call notify()
+     * on attributes that matter when changed
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    public function __set($name, $value)
+    {
+        $this->data[$name] = $value;
+
+        // notify the observers, that user has been updated
+        $this->notify();
+    }
+}
 ?>
 {% endhighlight %}

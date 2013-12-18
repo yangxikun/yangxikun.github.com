@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>正则表达式小结</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45895463-1', 'blogkun.com');
+    ga('send', 'pageview');
+    </script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>正则表达式小结 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>03 October 2013</span>
+    </div>
+    <div class="content">
+      <style>
+    tr,td {
+        border: 1px solid black
+    }
+</style>
+<h3 id='id269'>分隔符</h3>
+
+<blockquote>
+<p>当使用 PCRE 函数的时候，模式需要由分隔符闭合包裹。分隔符可以使任意非字母数字、非反斜线、非空白字符。经常使用的分隔符是正斜线(/)、hash符号(#) 以及取反符号(~)。</p>
+</blockquote>
+
+<h3 id='id270'>元字符</h3>
+
+<blockquote>
+<p>元字符是正则表达式中具有特殊意义的专用字符,用来规定其前导字符在目标对象中的出现模式.</p>
+</blockquote>
+
+<blockquote>
+<p>共有两种不同的元字符：一种是可以在模式中方括号外任何地方使用的，另外一种 是需要在方括号内使用的。(元字符列表)<span>http://www.php.net/manual/zh/regexp.reference.meta.php</span></p>
+</blockquote>
+
+<h3 id='id271'>字符组</h3>
+
+<blockquote>
+<p>使用中括号的字符集称为字符组.例如<code>[c[aou?*)]]t</code>,注意字符组里的元字符可以不转义.在字符组中要使用<code>\</code>时,在其前面要多加<code>\\</code>两个斜线.</p>
+</blockquote>
+
+<h3 id='id272'>分支</h3>
+
+<blockquote>
+<p>在圆括号中使用|进行分支.例如:<code>(c|h|to)at</code>,可以匹配<code>cat</code>,<code>hat</code>,<code>toat</code>.</p>
+</blockquote>
+
+<h3 id='id273'>分组</h3>
+
+<blockquote>
+<p>通过圆括号分隔界定，并且它们可以嵌套.常用分组语法:</p>
+</blockquote>
+<table cellspacing='0'>
+<tbody>
+<tr>
+<td>分类</td>
+<td>代码/语法</td>
+<td>说明</td>
+</tr>
+<tr>
+<td rowspan='3'>捕获</td>
+<td>(exp)</td>
+<td>匹配exp,并捕获文本到自动命名的组里</td>
+</tr>
+<tr>
+<td>(?&lt;name&gt;exp)</td>
+<td>匹配exp,并捕获文本到名称为name的组里，也可以写成(?’name’exp)</td>
+</tr>
+<tr>
+<td>(?:exp)</td>
+<td>匹配exp,不捕获匹配的文本，也不给此分组分配组号</td>
+</tr>
+<tr>
+<td rowspan='4'>断言</td>
+<td>(?=exp)</td>
+<td>匹配exp前面的位置</td>
+</tr>
+<tr>
+<td>(?&lt;=exp)</td>
+<td>匹配exp后面的位置</td>
+</tr>
+<tr>
+<td>(?!exp)</td>
+<td>匹配后面跟的不是exp的位置</td>
+</tr>
+<tr>
+<td>(?&lt;!exp)</td>
+<td>匹配前面不是exp的位置</td>
+</tr>
+<tr>
+<td rowspan='1'>注释</td>
+<td>(?#comment)</td>
+<td>这种类型的分组不对正则表达式的处理产生任何影响，用于提供注释让人阅读</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>可以看看这篇博文:<a href='http://www.anrip.com/post/1126'>正则表达式 – 分组语法（捕获/断言/注释）</a></p>
+</blockquote>
+
+<h3 id='id274'>反向引用</h3>
+
+<blockquote>
+<p>注意它不仅可以用在pattern中,还可以用在replacement中,例如:</p>
+</blockquote>
+<div class='highlight'><pre><code class='php'><span class='lineno'>1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'>2</span> <span class='nv'>$str</span> <span class='o'>=</span> <span class='s1'>&#39;\*?123&#39;</span><span class='p'>;</span>
+<span class='lineno'>3</span> <span class='nv'>$str</span> <span class='o'>=</span> <span class='nb'>preg_replace</span><span class='p'>(</span><span class='s1'>&#39;~[\\\*?]+(\d+)~&#39;</span><span class='p'>,</span> <span class='s1'>&#39;\1&#39;</span><span class='p'>,</span> <span class='nv'>$str</span><span class='p'>);</span>
+<span class='lineno'>4</span> <span class='nb'>var_dump</span><span class='p'>(</span><span class='nv'>$str</span><span class='p'>);</span>
+<span class='lineno'>5</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<h3 id='id275'>贪婪/懒惰匹配模式</h3>
+
+<blockquote>
+<p>在重复量词之后加个?就形成了懒惰模式,例如:<code>a.*b</code>匹配<code>aabab</code>整个字符串,而<code>a.*?b</code>匹配<code>aabab</code>的<code>aab</code>和<code>ab</code>两组字符.</p>
+</blockquote>
+
+<h3 id='id276'>常用的模式</h3>
+
+<blockquote>
+<ol>
+<li>忽略大小写模式(i)</li>
+
+<li>多行模式(m)</li>
+
+<li>点号通配模式(s),即点号可以匹配换行符</li>
+
+<li>懒惰模式(U),相当于重复量词之后加了个?</li>
+
+<li>支持UTF-8转义表达(u)</li>
+</ol>
+</blockquote>
+<div class='highlight'><pre><code class='php'><span class='lineno'>1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'>2</span> <span class='nv'>$str</span> <span class='o'>=</span> <span class='s1'>&#39;你好世界&#39;</span><span class='p'>;</span>
+<span class='lineno'>3</span> <span class='nb'>preg_match</span><span class='p'>(</span><span class='s1'>&#39;~[\x{4e00}-\x{9fa5}]+~u&#39;</span><span class='p'>,</span> <span class='nv'>$str</span><span class='p'>,</span> <span class='nv'>$matches</span><span class='p'>);</span>
+<span class='lineno'>4</span> <span class='nb'>var_dump</span><span class='p'>(</span><span class='nv'>$matches</span><span class='p'>);</span>
+<span class='lineno'>5</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<h3 id='id277'>正则表达式的效率与优化</h3>
+
+<blockquote>
+<ol>
+<li>使用字符组会比分支条件快一点<br /></li>
+
+<li>尽量使用与匹配字符相同类型的元字符<br /></li>
+
+<li>匹配字符数目确定的就不用任意多量词<br /></li>
+
+<li>尽量使用字符串处理函数代替正则<br /></li>
+
+<li>合理使用括号,每使用一个普通括号,而不是非捕获型括号<code>(?:)</code>,就会保留一部分内存等着再次被访问<br /></li>
+
+<li>使用PHP原生函数<a href='http://www.php.net/manual/zh/ref.filter.php'>Filter系列函数</a>和<a href='http://www.php.net/manual/zh/ref.ctype.php'>ctype函数</a></li>
+</ol>
+</blockquote>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#PHP-ref">
+    		PHP <span>22</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#PHP应用-ref">PHP应用 <span>2</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/10/02/observer-pattern" title="观察者模式">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/算法/2013/10/04/dynamic-planning-2" title="动态规划--最长公共子序列">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+

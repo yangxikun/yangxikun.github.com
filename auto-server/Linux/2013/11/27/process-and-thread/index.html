@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>Linux线程实现</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>Linux线程实现 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>27 November 2013</span>
+    </div>
+    <div class="content">
+      <p><em>学习自：<a href='http://wenx05124561.blog.163.com/blog/static/1240008052011717114011994/'>linux进程与线程</a></em></p>
+
+<h3 id='id102'>进程</h3>
+
+<blockquote>
+<p>进程是程序运行的实体，并且占有一定的系统资源。</p>
+</blockquote>
+
+<h3 id='id103'>线程</h3>
+
+<blockquote>
+<p>Linux的进程，线程实现是在核外进行的，核内提供的是创建进程的接口<code>do_fork()</code>。内核提供了 三个系统调用<code>__clone()</code>和<code>fork()</code>以及<code>vfort()</code>，最终都用不同的参数调用<code>do_fork()</code>核内API。 <code>do_fork()</code> 提供了很多参数，包括<code>CLONE_VM</code>（共享内存空间）、<code>CLONE_FS</code>（共享文件系统信息）、<code>CLONE_FILES</code>（共享文件描述符表）、 <code>CLONE_SIGHAND</code>（共享信号句柄表）和<code>CLONE_PID</code>（共享进程ID，仅对核内进程，即0号进程有效）等。</p>
+</blockquote>
+
+<blockquote>
+<p>Linux下不管是多线程编程还是多进程编程，linux通过<code>clone()</code>系统调用实现产生进程或者线程。无论是<code>fork()</code>，还是<code>vfork()</code>、<code>__clone()</code>最后都根据各自需要的参数标志去调用<code>clone()</code>，然后有<code>clone()</code>去调用<code>do_fork()</code>。这样一说，最终都是用<code>do_fork()</code>实现的多进程编程，只是进程创建时的参数不同，从而导致有不同的共享环境。</p>
+</blockquote>
+
+<blockquote>
+<p>当使用<code>pthread_create()</code>来创建线程时,则最终通过设置参数来调用<code>__clone()</code>，而这些参数又全部传给核内的<code>do_fork()</code>，从而创建的&#8221;进程&#8221;拥有共享的运行环境，只有栈是独立的，由 <code>__clone()</code>传入。我们说在linux中，线程仅仅是一个使用共享资源的轻量级进程。调用<code>clone()</code>时候<code>flag</code>指定为<code>CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND</code>。</p>
+</blockquote>
+
+<p><em>错误检查：以前学过的系统函数都是成功返回0，失败返回-1，而错误号保存在全局变量<code>errno</code>中，而pthread库的函数都是通过返回值返回错误号，虽然每个线程也都有一个<code>errno</code>，但这是为了兼容其它函数接口而提供的，<code>pthread</code>库本身并不使用它，通过返回值返回错误码更加清晰。由于<code>pthread_create</code>的错误码不保存在errno中，因此不能直接用<code>perror(3)</code>打印错误信息，可以先用<code>strerror(3)</code>把错误码转换成错误信息再打印。</em></p>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#Linux-ref">
+    		Linux <span>5</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#线程-ref">线程 <span>2</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/Linux/2013/11/27/linux-thread-rwlock" title="linux线程使用读写锁共享全局变量">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/12/18/using-php-fetch-data" title="使用PHP进行网页数据抓取小结">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+

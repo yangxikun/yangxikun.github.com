@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>PHP生命周期</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>PHP生命周期 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>24 August 2013</span>
+    </div>
+    <div class="content">
+      <p><em>学习自<a href='http://www.php-internals.com/book/'>TIPI</a>，整文为总结，斜体字为自己添加的内容</em></p>
+
+<p>PHP的执行分三个阶段：处理请求的开始阶段、处理请求阶段、请求之后的结束阶段。</p>
+
+<h4 id='id3'>处理请求的开始阶段：</h4>
+
+<blockquote>
+<blockquote>
+<p>1 模块初始化阶段(MINIT)，在整个SAPI生命周期内(例如Apache启动以后的整个生命周期内或者命令行程序整个执行过程中)，该过程只进行一次。<em>(这应该就是为何修改了php.ini之后，要重启Apache的原因)</em>；</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>2 模块激活阶段(RINIT)，该过程发生在请求阶段， 例如通过url请求某个页面，则在每次请求之前都会进行模块激活。<em>(为何不先激活呢？因为方便模块在RINIT阶段针对各种请求设置环境变量或其他的操作)</em>；</p>
+</blockquote>
+</blockquote>
+
+<h3 id='id4'>处理请求阶段：</h3>
+
+<blockquote>
+<blockquote>
+<p>1 词法分析：将php文件翻译成一个个的token；</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>2 语法分析：根据生成的token和语法规则进行分析；</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>3 Zend引擎：将代码编译为opcode后并执行，在执行的过程中还会重复进行编译-执行，例如执行了include语句</p>
+</blockquote>
+</blockquote>
+
+<p><em>(为何不在第一次编译就把这些包含进来的文件也一起编译好？)</em>；</p>
+
+<blockquote>
+<blockquote>
+<p>.调用SAPI的输出函数返回执行结果。</p>
+</blockquote>
+</blockquote>
+
+<h3 id='id5'>处理请求的结束阶段：</h3>
+
+<blockquote>
+<blockquote>
+<p>1 停用模块：RSHUTDOWN对应于RINIT，释放资源等操作</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>2 关闭模块：MSHUTDOWN对应于MINIT，SAPI生命周期结束(Web服务器退出或者命令行脚本执行完毕退出)</p>
+</blockquote>
+</blockquote>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#PHP-ref">
+    		PHP <span>22</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#PHP底层-ref">PHP底层 <span>7</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/08/24/php-garbage-collection-mechanism" title="PHP新的垃圾回收机制">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/08/24/php-val" title="php 变量(上)">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>哈希表</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>哈希表 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>14 September 2013</span>
+    </div>
+    <div class="content">
+      <h3 id='id44'>定义</h3>
+
+<blockquote>
+<p>根据设定的哈希函数H(key)和处理冲突的方法将一组关键字映像到一个有限的连续的地址集(区间)上,并以关键字在地址集中的值作为记录在表中的存储位置.</p>
+</blockquote>
+
+<blockquote>
+<p>哈系函数指将key经过计算得出的结果作为哈希表的索引.</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>普通的哈希构造函数:直接定址法,除留取余法等</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>处理冲突的方法指当不同的key经过哈希函数计算后得到相同的值时,该如何处理.</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>常见的处理哈希冲突的方法:开放定址法(线性探测再散列,二次探测再散列,随机探测再散列),再哈希法,链地址法等</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>哈希表装填因子</p>
+</blockquote>
+
+<h3 id='id45'>哈希表的查找和插入</h3>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='c1'>//开放定址哈希表的存储结构</span>
+<span class='lineno'> 2</span> <span class='kt'>int</span> <span class='n'>hashsize</span><span class='p'>[]</span> <span class='o'>=</span> <span class='p'>{</span> <span class='mi'>997</span><span class='p'>,</span> <span class='p'>...</span> <span class='p'>};</span><span class='c1'>//哈希表容量递增表,一个合适的素数序列</span>
+<span class='lineno'> 3</span> <span class='k'>typedef</span> <span class='k'>struct</span><span class='p'>{</span>
+<span class='lineno'> 4</span>     <span class='n'>ElemType</span> <span class='o'>*</span><span class='n'>elem</span><span class='p'>;</span><span class='c1'>//数据元素存储基址,动态分配数组</span>
+<span class='lineno'> 5</span>     <span class='kt'>int</span> <span class='n'>count</span><span class='p'>;</span><span class='c1'>//当前数据元素个数</span>
+<span class='lineno'> 6</span>     <span class='kt'>int</span> <span class='n'>sizeIndex</span><span class='p'>;</span><span class='c1'>//hashsize[sizeindex]为当前容量</span>
+<span class='lineno'> 7</span> <span class='p'>}</span><span class='n'>HashTable</span><span class='p'>;</span>
+<span class='lineno'> 8</span> 
+<span class='lineno'> 9</span> <span class='cp'>#define SUCCESS 1</span>
+<span class='lineno'>10</span> <span class='cp'>#define UNSUCCESS 0</span>
+<span class='lineno'>11</span> <span class='cp'>#define DUPLICATE -1</span>
+<span class='lineno'>12</span>  <span class='n'>Status</span> <span class='nf'>SearchHash</span><span class='p'>(</span><span class='n'>HashTable</span> <span class='n'>H</span><span class='p'>,</span> <span class='n'>KeyType</span> <span class='n'>K</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>&amp;</span><span class='n'>p</span><span class='p'>,</span> <span class='kt'>int</span> <span class='o'>&amp;</span><span class='n'>c</span><span class='p'>){</span>
+<span class='lineno'>13</span>     <span class='c1'>//在开放定址哈希表H中查找关键字为K的元素,若查找成功,以p指示待查数据</span>
+<span class='lineno'>14</span>     <span class='c1'>//元素在表中位置,并返回SUCCESS；否则,以p指示插入位置,并返回UNSUCCESS,</span>
+<span class='lineno'>15</span>     <span class='c1'>//c用以计算冲突次数,其初值为零,供建表插入时参考</span>
+<span class='lineno'>16</span>     <span class='n'>p</span> <span class='o'>=</span> <span class='n'>Hash</span><span class='p'>(</span> <span class='n'>K</span> <span class='p'>);</span>
+<span class='lineno'>17</span>     <span class='k'>while</span><span class='p'>(</span> <span class='n'>H</span><span class='p'>.</span><span class='n'>elem</span><span class='p'>[</span><span class='n'>p</span><span class='p'>].</span><span class='n'>key</span> <span class='o'>!=</span> <span class='n'>NULLKEY</span> <span class='o'>&amp;&amp;</span> <span class='o'>!</span><span class='n'>EQ</span><span class='p'>(</span><span class='n'>K</span><span class='p'>,</span> <span class='n'>H</span><span class='p'>.</span><span class='n'>elem</span><span class='p'>[</span><span class='n'>p</span><span class='p'>].</span><span class='n'>key</span> <span class='p'>)</span> <span class='p'>)</span><span class='c1'>//该位置填有记录并且关键字不相等</span>
+<span class='lineno'>18</span>         <span class='n'>collision</span><span class='p'>(</span><span class='n'>p</span><span class='p'>,</span> <span class='o'>++</span><span class='n'>c</span><span class='p'>);</span><span class='c1'>//求得下一个探查地址p</span>
+<span class='lineno'>19</span>     <span class='k'>if</span><span class='p'>(</span> <span class='n'>EQ</span><span class='p'>(</span><span class='n'>K</span><span class='p'>,</span> <span class='n'>H</span><span class='p'>.</span><span class='n'>elem</span><span class='p'>[</span><span class='n'>p</span><span class='p'>].</span><span class='n'>key</span> <span class='p'>)</span> <span class='p'>)</span>
+<span class='lineno'>20</span>         <span class='k'>return</span> <span class='n'>SUCCESS</span><span class='p'>;</span><span class='c1'>//查找成功,p返回待查数据元素位置</span>
+<span class='lineno'>21</span>     <span class='k'>else</span>
+<span class='lineno'>22</span>         <span class='k'>return</span> <span class='n'>UNSUCCESS</span><span class='p'>;</span><span class='c1'>//查找不成功,即H.elem[p].key == NULLKEY,p返回插入位置</span>
+<span class='lineno'>23</span> <span class='p'>}</span><span class='c1'>//SearchHash</span>
+<span class='lineno'>24</span> 
+<span class='lineno'>25</span> <span class='n'>Status</span> <span class='nf'>InsertHash</span><span class='p'>(</span><span class='n'>HashTable</span> <span class='o'>&amp;</span><span class='n'>H</span><span class='p'>,</span> <span class='n'>Elemtype</span> <span class='n'>e</span><span class='p'>){</span>
+<span class='lineno'>26</span>     <span class='c1'>//查找不成功时插入数据元素e到开放定址哈希表中,并返回OK；若冲突次数过大,则重建哈希表</span>
+<span class='lineno'>27</span>     <span class='n'>c</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'>28</span>     <span class='k'>if</span><span class='p'>(</span> <span class='n'>SeatchHash</span><span class='p'>(</span><span class='n'>H</span><span class='p'>,</span> <span class='n'>e</span><span class='p'>.</span><span class='n'>key</span><span class='p'>,</span> <span class='n'>p</span><span class='p'>,</span> <span class='n'>c</span><span class='p'>)</span> <span class='p'>){</span>
+<span class='lineno'>29</span>         <span class='k'>return</span> <span class='n'>DUPLICATE</span><span class='p'>;</span>
+<span class='lineno'>30</span>     <span class='p'>}</span><span class='k'>else</span> <span class='k'>if</span><span class='p'>(</span> <span class='n'>c</span> <span class='o'>&lt;</span> <span class='n'>hashsize</span><span class='p'>[</span><span class='n'>H</span><span class='p'>,</span><span class='n'>sizeindex</span><span class='p'>]</span><span class='o'>/</span><span class='mi'>2</span> <span class='p'>){</span><span class='c1'>//表中已有与e有相同关键字的元素</span>
+<span class='lineno'>31</span>         <span class='n'>H</span><span class='p'>.</span><span class='n'>elem</span><span class='p'>[</span><span class='n'>p</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>e</span><span class='p'>;</span> <span class='o'>++</span><span class='n'>H</span><span class='p'>.</span><span class='n'>count</span><span class='p'>;</span> <span class='k'>return</span> <span class='n'>OK</span><span class='p'>;</span>
+<span class='lineno'>32</span>     <span class='p'>}</span><span class='k'>else</span><span class='p'>{</span>
+<span class='lineno'>33</span>         <span class='n'>RecreateHashTable</span><span class='p'>(</span><span class='n'>H</span><span class='p'>);</span> <span class='k'>return</span> <span class='n'>UNSUCCESS</span><span class='p'>;</span><span class='c1'>//重建哈希表</span>
+<span class='lineno'>34</span>     <span class='p'>}</span>
+<span class='lineno'>35</span> <span class='p'>}</span><span class='c1'>//InsertHash</span>
+</code></pre>
+</div>
+<h3 id='id46'>算法应用</h3>
+
+<blockquote>
+<p>一些可以考虑用哈希算法处理的算法问题,来<a href='http://blog.csdn.net/v_JULY_v/article/details/6256463'>从头到尾彻底解析Hash 表算法</a>:</p>
+</blockquote>
+
+<blockquote>
+<p>题目:假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。），请你统计最热门的10个查询串，要求使用的内存不能超过1G。</p>
+</blockquote>
+
+<blockquote>
+<p>思路：先用hash统计每个记录个数(每次递增某条记录的重复数目时,基本为O(1)操作,比遍历快多了)，再用堆求出top10.</p>
+</blockquote>
+
+<blockquote>
+<p>题目：海量日志数据，提取出某日访问百度次数最多的那个IP。</p>
+</blockquote>
+
+<blockquote>
+<p>思路：IP的数目还是有限的，最多2^32个，假设存储整个IP的话需要15个字节，那么所有IP将占用60G的空间，且每次都要在这60G中查找出相应的IP并计数。好的方案：将IP哈希到一张哈希表上，并且是3次哈希，第一次作为哈希表索引，其余两次作为校验。以后每次有IP访问就将其进行3次哈希，在哈希表中找到相应的值并递增访问次数。</p>
+</blockquote>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#算法-ref">
+    		算法 <span>17</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#数据结构-ref">数据结构 <span>7</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/09/13/factory-pattern" title="工厂模式">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/09/17/singleton-pattern" title="单例模式">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+

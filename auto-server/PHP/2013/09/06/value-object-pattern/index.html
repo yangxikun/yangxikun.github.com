@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>值对象模式</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>值对象模式 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>06 September 2013</span>
+    </div>
+    <div class="content">
+      <p><em>学习自《Guide to PHP Design Patterns》</em></p>
+
+<h3 id='id34'>什么是值对象模式？</h3>
+
+<blockquote>
+<p>像PHP的整型那样运作：如果你把同一个对象资源赋值给两个不同的变量，然后改变其中的一个变量，另一个变量仍然不受影响。事实上，这就是Value Object模式的目标所在。<em>(这个有点像PHP变量的引用计数，写时拷贝)</em></p>
+</blockquote>
+
+<h3 id='bug'>来看一个有bug的程序例子</h3>
+<div class='highlight'><pre><code class='php'><span class='lineno'>  1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'>  2</span> <span class='sd'>/**</span>
+<span class='lineno'>  3</span> <span class='sd'> * 货币类</span>
+<span class='lineno'>  4</span> <span class='sd'> */</span>
+<span class='lineno'>  5</span> 
+<span class='lineno'>  6</span> <span class='k'>class</span> <span class='nc'>BadDollar</span> <span class='p'>{</span>
+<span class='lineno'>  7</span> 
+<span class='lineno'>  8</span>   <span class='sd'>/**</span>
+<span class='lineno'>  9</span> <span class='sd'>   * 货币数量</span>
+<span class='lineno'> 10</span> <span class='sd'>   *</span>
+<span class='lineno'> 11</span> <span class='sd'>   * @var Float</span>
+<span class='lineno'> 12</span> <span class='sd'>   */</span>
+<span class='lineno'> 13</span>   <span class='k'>protected</span> <span class='nv'>$amount</span><span class='p'>;</span>
+<span class='lineno'> 14</span> 
+<span class='lineno'> 15</span>   <span class='sd'>/**</span>
+<span class='lineno'> 16</span> <span class='sd'>   * 构造函数</span>
+<span class='lineno'> 17</span> <span class='sd'>   *</span>
+<span class='lineno'> 18</span> <span class='sd'>   * @return Null</span>
+<span class='lineno'> 19</span> <span class='sd'>   */</span>
+<span class='lineno'> 20</span>   <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>__construct</span><span class='p'>(</span> <span class='nv'>$amount</span> <span class='o'>=</span> <span class='mi'>0</span> <span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'> 21</span>     <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>amount</span> <span class='o'>=</span> <span class='p'>(</span><span class='nx'>float</span><span class='p'>)</span><span class='nv'>$amount</span><span class='p'>;</span>
+<span class='lineno'> 22</span>   <span class='p'>}</span>
+<span class='lineno'> 23</span> 
+<span class='lineno'> 24</span>   <span class='sd'>/**</span>
+<span class='lineno'> 25</span> <span class='sd'>   * 返回$amount的值 </span>
+<span class='lineno'> 26</span> <span class='sd'>   *</span>
+<span class='lineno'> 27</span> <span class='sd'>   * @return Float</span>
+<span class='lineno'> 28</span> <span class='sd'>   */</span>
+<span class='lineno'> 29</span>   <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>getAmount</span><span class='p'>()</span> <span class='p'>{</span>
+<span class='lineno'> 30</span>     <span class='k'>return</span> <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>amount</span><span class='p'>;</span>
+<span class='lineno'> 31</span>   <span class='p'>}</span>
+<span class='lineno'> 32</span> 
+<span class='lineno'> 33</span>   <span class='sd'>/**</span>
+<span class='lineno'> 34</span> <span class='sd'>   * 将$amount的值增加</span>
+<span class='lineno'> 35</span> <span class='sd'>   *</span>
+<span class='lineno'> 36</span> <span class='sd'>   * @return Null</span>
+<span class='lineno'> 37</span> <span class='sd'>   */</span>
+<span class='lineno'> 38</span>   <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>add</span><span class='p'>(</span> <span class='nv'>$dollar</span> <span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'> 39</span>     <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>amount</span> <span class='o'>+=</span> <span class='nv'>$dollar</span><span class='o'>-&gt;</span><span class='na'>getAmount</span><span class='p'>();</span>
+<span class='lineno'> 40</span>   <span class='p'>}</span>
+<span class='lineno'> 41</span> 
+<span class='lineno'> 42</span> <span class='p'>}</span>
+<span class='lineno'> 43</span> 
+<span class='lineno'> 44</span> <span class='sd'>/**</span>
+<span class='lineno'> 45</span> <span class='sd'> * 工作类</span>
+<span class='lineno'> 46</span> <span class='sd'> */</span>
+<span class='lineno'> 47</span> <span class='k'>class</span> <span class='nc'>Work</span> <span class='p'>{</span>
+<span class='lineno'> 48</span> 
+<span class='lineno'> 49</span>   <span class='sd'>/**</span>
+<span class='lineno'> 50</span> <span class='sd'>   * 工资</span>
+<span class='lineno'> 51</span> <span class='sd'>   *</span>
+<span class='lineno'> 52</span> <span class='sd'>   * @var Float</span>
+<span class='lineno'> 53</span> <span class='sd'>   */</span>
+<span class='lineno'> 54</span>   <span class='k'>protected</span> <span class='nv'>$salary</span><span class='p'>;</span>
+<span class='lineno'> 55</span> 
+<span class='lineno'> 56</span>   <span class='sd'>/**</span>
+<span class='lineno'> 57</span> <span class='sd'>   * 构造函数</span>
+<span class='lineno'> 58</span> <span class='sd'>   *</span>
+<span class='lineno'> 59</span> <span class='sd'>   * @return Null</span>
+<span class='lineno'> 60</span> <span class='sd'>   */</span>
+<span class='lineno'> 61</span>   <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>__construct</span><span class='p'>()</span> <span class='p'>{</span>
+<span class='lineno'> 62</span>     <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>salary</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>BadDollar</span><span class='p'>(</span> <span class='mi'>200</span> <span class='p'>);</span>
+<span class='lineno'> 63</span>   <span class='p'>}</span>
+<span class='lineno'> 64</span> 
+<span class='lineno'> 65</span>   <span class='sd'>/**</span>
+<span class='lineno'> 66</span> <span class='sd'>   * 支付薪水</span>
+<span class='lineno'> 67</span> <span class='sd'>   *</span>
+<span class='lineno'> 68</span> <span class='sd'>   * @return class BadDollar</span>
+<span class='lineno'> 69</span> <span class='sd'>   */</span>
+<span class='lineno'> 70</span>   <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>payDay</span><span class='p'>()</span> <span class='p'>{</span>
+<span class='lineno'> 71</span>     <span class='k'>return</span> <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>salary</span><span class='p'>;</span>
+<span class='lineno'> 72</span>   <span class='p'>}</span>
+<span class='lineno'> 73</span> 
+<span class='lineno'> 74</span> <span class='p'>}</span>
+<span class='lineno'> 75</span> 
+<span class='lineno'> 76</span> <span class='sd'>/**</span>
+<span class='lineno'> 77</span> <span class='sd'> * 职工类</span>
+<span class='lineno'> 78</span> <span class='sd'> */</span>
+<span class='lineno'> 79</span> <span class='k'>class</span> <span class='nc'>Person</span> <span class='p'>{</span>
+<span class='lineno'> 80</span> 
+<span class='lineno'> 81</span>   <span class='sd'>/**</span>
+<span class='lineno'> 82</span> <span class='sd'>   * 钱包</span>
+<span class='lineno'> 83</span> <span class='sd'>   *</span>
+<span class='lineno'> 84</span> <span class='sd'>   * @var class BadDollar</span>
+<span class='lineno'> 85</span> <span class='sd'>   */</span>
+<span class='lineno'> 86</span>   <span class='k'>public</span> <span class='nv'>$wallet</span><span class='p'>;</span>
+<span class='lineno'> 87</span> <span class='p'>}</span>
+<span class='lineno'> 88</span> 
+<span class='lineno'> 89</span> <span class='sd'>/**</span>
+<span class='lineno'> 90</span> <span class='sd'> * 测试类</span>
+<span class='lineno'> 91</span> <span class='sd'> */</span>
+<span class='lineno'> 92</span> <span class='k'>class</span> <span class='nc'>StackTest</span> <span class='k'>extends</span> <span class='nx'>PHPUnit_Framework_TestCase</span><span class='p'>{</span>
+<span class='lineno'> 93</span>   <span class='sd'>/**</span>
+<span class='lineno'> 94</span> <span class='sd'>   * 测试BadDollar类的正确性</span>
+<span class='lineno'> 95</span> <span class='sd'>   */</span>
+<span class='lineno'> 96</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>testBadDollarWorking</span><span class='p'>(){</span>
+<span class='lineno'> 97</span>         <span class='nv'>$job</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Work</span><span class='p'>;</span>
+<span class='lineno'> 98</span>         <span class='nv'>$p1</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Person</span><span class='p'>;</span>
+<span class='lineno'> 99</span>         <span class='nv'>$p2</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Person</span><span class='p'>;</span>
+<span class='lineno'>100</span>         <span class='nv'>$p1</span><span class='o'>-&gt;</span><span class='na'>wallet</span> <span class='o'>=</span> <span class='nv'>$job</span><span class='o'>-&gt;</span><span class='na'>payDay</span><span class='p'>();</span>
+<span class='lineno'>101</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>assertEquals</span><span class='p'>(</span> <span class='mi'>200</span><span class='p'>,</span> <span class='nv'>$p1</span><span class='o'>-&gt;</span><span class='na'>wallet</span><span class='o'>-&gt;</span><span class='na'>getAmount</span><span class='p'>()</span> <span class='p'>);</span>
+<span class='lineno'>102</span>         <span class='nv'>$p2</span><span class='o'>-&gt;</span><span class='na'>wallet</span> <span class='o'>=</span> <span class='nv'>$job</span><span class='o'>-&gt;</span><span class='na'>payDay</span><span class='p'>();</span>
+<span class='lineno'>103</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>assertEquals</span><span class='p'>(</span> <span class='mi'>200</span><span class='p'>,</span> <span class='nv'>$p2</span><span class='o'>-&gt;</span><span class='na'>wallet</span><span class='o'>-&gt;</span><span class='na'>getAmount</span><span class='p'>()</span> <span class='p'>);</span>
+<span class='lineno'>104</span>         <span class='nv'>$p1</span><span class='o'>-&gt;</span><span class='na'>wallet</span><span class='o'>-&gt;</span><span class='na'>add</span><span class='p'>(</span><span class='nv'>$job</span><span class='o'>-&gt;</span><span class='na'>payDay</span><span class='p'>());</span>
+<span class='lineno'>105</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>assertEquals</span><span class='p'>(</span> <span class='mi'>400</span><span class='p'>,</span> <span class='nv'>$p1</span><span class='o'>-&gt;</span><span class='na'>wallet</span><span class='o'>-&gt;</span><span class='na'>getAmount</span><span class='p'>()</span> <span class='p'>);</span>
+<span class='lineno'>106</span>         <span class='c1'>//this is bad — actually 400</span>
+<span class='lineno'>107</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>assertEquals</span><span class='p'>(</span> <span class='mi'>200</span><span class='p'>,</span> <span class='nv'>$p2</span><span class='o'>-&gt;</span><span class='na'>wallet</span><span class='o'>-&gt;</span><span class='na'>getAmount</span><span class='p'>()</span> <span class='p'>);</span>
+<span class='lineno'>108</span>         <span class='c1'>//this is really bad — actually 400</span>
+<span class='lineno'>109</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>assertEquals</span><span class='p'>(</span> <span class='mi'>200</span><span class='p'>,</span> <span class='nv'>$job</span><span class='o'>-&gt;</span><span class='na'>payDay</span><span class='p'>()</span><span class='o'>-&gt;</span><span class='na'>getAmount</span><span class='p'>()</span> <span class='p'>);</span>
+<span class='lineno'>110</span>     <span class='p'>}</span>
+<span class='lineno'>111</span> <span class='p'>}</span>
+<span class='lineno'>112</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<blockquote>
+<p>从上面的代码和测试中可以看出,$p1和$p2拥有相同的BadDollar实例.为什么会这样呢?因为PHP5中,对象实例赋值给变量是按引用赋值的,且修改了对象实例的内容时,并不会像普通类型变量一样发生&#8221;写时复制,&#8221;值对象模式就是为了实现对象的&#8221;写时复制&#8221;.</p>
+</blockquote>
+
+<h3 id='id35'>解决方案</h3>
+
+<blockquote>
+<p>修改BadDollar类的add方法,如下</p>
+</blockquote>
+<div class='highlight'><pre><code class='php'><span class='lineno'>1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'>2</span> <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>add</span><span class='p'>(</span> <span class='nv'>$dollar</span> <span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>3</span>     <span class='k'>return</span> <span class='k'>new</span> <span class='nx'>BadDollar</span><span class='p'>(</span> <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>amount</span> <span class='o'>+</span> <span class='nv'>$dollar</span><span class='o'>-&gt;</span><span class='na'>getAmount</span><span class='p'>()</span> <span class='p'>);</span>
+<span class='lineno'>4</span> <span class='p'>}</span>
+<span class='lineno'>5</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<blockquote>
+<p>修改测试用例中的<code>$p1-&gt;wallet-&gt;add($job-&gt;payDay());</code>为<code>$p1-&gt;wallet = $p1-&gt;wallet-&gt;add($job-&gt;payDay());</code>.</p>
+</blockquote>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#PHP-ref">
+    		PHP <span>24</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#PHP设计模式-ref">PHP设计模式 <span>7</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/算法/2013/09/05/shortestpath-dij" title="最短路径问题(迪杰斯特拉算法)">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/算法/2013/09/07/activity-on-edge" title="AOE网(关键路径)">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+

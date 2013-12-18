@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>观察者模式</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>观察者模式 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>02 October 2013</span>
+    </div>
+    <div class="content">
+      <p><em>学习自《PHP 精粹》</em></p>
+
+<p>对于javascript开发者来说,这是一个再熟悉不过的模式了,因为js通过事件驱动来执行,例如页面加载,单击,鼠标移动等.</p>
+
+<p>观察者模式的核心在于允许你的应用程序注册一个回调,当某个特定的事件发生时便会触发它.</p>
+
+<p>下面例子通过一个Event类实现观察者模式:</p>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 2</span> <span class='sd'>/**</span>
+<span class='lineno'> 3</span> <span class='sd'> * Event 类</span>
+<span class='lineno'> 4</span> <span class='sd'> * </span>
+<span class='lineno'> 5</span> <span class='sd'> * 使用Event类,你可以为某个事件注册回调函数</span>
+<span class='lineno'> 6</span> <span class='sd'> */</span>
+<span class='lineno'> 7</span> <span class='k'>class</span> <span class='nc'>Event</span> <span class='p'>{</span>
+<span class='lineno'> 8</span> 
+<span class='lineno'> 9</span>     <span class='sd'>/**</span>
+<span class='lineno'>10</span> <span class='sd'>     * @static</span>
+<span class='lineno'>11</span> <span class='sd'>     * @var array 键值对数组,键作为事件,值是存储事件的回调数组</span>
+<span class='lineno'>12</span> <span class='sd'>     */</span>
+<span class='lineno'>13</span>     <span class='k'>static</span> <span class='k'>protected</span> <span class='nv'>$callbacks</span> <span class='o'>=</span> <span class='k'>array</span><span class='p'>();</span>
+<span class='lineno'>14</span> 
+<span class='lineno'>15</span>     <span class='sd'>/**</span>
+<span class='lineno'>16</span> <span class='sd'>     * 注册一个回调</span>
+<span class='lineno'>17</span> <span class='sd'>     * </span>
+<span class='lineno'>18</span> <span class='sd'>     * @param string $eventName 事件的名字</span>
+<span class='lineno'>19</span> <span class='sd'>     * @param mixed $callback 回调</span>
+<span class='lineno'>20</span> <span class='sd'>     * @return NULL</span>
+<span class='lineno'>21</span> <span class='sd'>     * @throws  Exception</span>
+<span class='lineno'>22</span> <span class='sd'>     */</span>
+<span class='lineno'>23</span>     <span class='k'>static</span> <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>registerCallback</span><span class='p'>(</span><span class='nv'>$eventName</span><span class='p'>,</span> <span class='nv'>$callback</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>24</span>         <span class='k'>if</span> <span class='p'>(</span><span class='o'>!</span><span class='nb'>is_callable</span><span class='p'>(</span><span class='nv'>$callback</span><span class='p'>))</span> <span class='p'>{</span>
+<span class='lineno'>25</span>             <span class='k'>throw</span> <span class='k'>new</span> <span class='nx'>Exception</span><span class='p'>(</span><span class='s1'>&#39;Invalid callback&#39;</span><span class='p'>);</span>
+<span class='lineno'>26</span>         <span class='p'>}</span>
+<span class='lineno'>27</span>         <span class='nv'>$eventName</span> <span class='o'>=</span> <span class='nx'>strtolower</span><span class='p'>(</span><span class='nv'>$eventName</span><span class='p'>);</span>
+<span class='lineno'>28</span>         <span class='nx'>self</span><span class='o'>::</span><span class='nv'>$callbacks</span><span class='p'>[</span><span class='nv'>$eventName</span><span class='p'>][]</span> <span class='o'>=</span> <span class='nv'>$callback</span><span class='p'>;</span>
+<span class='lineno'>29</span>     <span class='p'>}</span>
+<span class='lineno'>30</span> 
+<span class='lineno'>31</span>     <span class='sd'>/**</span>
+<span class='lineno'>32</span> <span class='sd'>     * 触发一个事件</span>
+<span class='lineno'>33</span> <span class='sd'>     * </span>
+<span class='lineno'>34</span> <span class='sd'>     * @param string $eventName 事件名称</span>
+<span class='lineno'>35</span> <span class='sd'>     * @param mixed $data 传递给回调函数的数据</span>
+<span class='lineno'>36</span> <span class='sd'>     * @return NULL</span>
+<span class='lineno'>37</span> <span class='sd'>     * @throws  Exception</span>
+<span class='lineno'>38</span> <span class='sd'>     */</span>
+<span class='lineno'>39</span>     <span class='k'>static</span> <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>trigger</span><span class='p'>(</span><span class='nv'>$eventName</span><span class='p'>,</span> <span class='nv'>$data</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>40</span>         <span class='nv'>$eventName</span> <span class='o'>=</span> <span class='nx'>strtolower</span><span class='p'>(</span><span class='nv'>$eventName</span><span class='p'>);</span>
+<span class='lineno'>41</span>         <span class='k'>if</span> <span class='p'>(</span><span class='nb'>isset</span><span class='p'>(</span><span class='nx'>self</span><span class='o'>::</span><span class='nv'>$callbacks</span><span class='p'>[</span><span class='nv'>$eventName</span><span class='p'>]))</span> <span class='p'>{</span>
+<span class='lineno'>42</span>             <span class='k'>foreach</span> <span class='p'>(</span><span class='nx'>self</span><span class='o'>::</span><span class='nv'>$callbacks</span><span class='p'>[</span><span class='nv'>$eventName</span><span class='p'>]</span> <span class='k'>as</span> <span class='nv'>$key</span> <span class='o'>=&gt;</span> <span class='nv'>$callback</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>43</span>                 <span class='nv'>$callback</span><span class='p'>(</span><span class='nv'>$data</span><span class='p'>);</span>
+<span class='lineno'>44</span>             <span class='p'>}</span>
+<span class='lineno'>45</span>         <span class='p'>}</span> <span class='k'>else</span> <span class='p'>{</span>
+<span class='lineno'>46</span>             <span class='k'>throw</span> <span class='k'>new</span> <span class='nx'>Exception</span><span class='p'>(</span><span class='s1'>&#39;Invalid event&#39;</span><span class='p'>);</span>
+<span class='lineno'>47</span>         <span class='p'>}</span>
+<span class='lineno'>48</span>     <span class='p'>}</span>
+<span class='lineno'>49</span> <span class='p'>}</span>
+<span class='lineno'>50</span> 
+<span class='lineno'>51</span> <span class='sd'>/**</span>
+<span class='lineno'>52</span> <span class='sd'> * log回调</span>
+<span class='lineno'>53</span> <span class='sd'> */</span>
+<span class='lineno'>54</span> <span class='k'>class</span> <span class='nc'>LogCallback</span> <span class='p'>{</span>
+<span class='lineno'>55</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>__invoke</span><span class='p'>(</span><span class='nv'>$data</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>56</span>         <span class='k'>echo</span> <span class='s1'>&#39;Log data&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>57</span>         <span class='nb'>var_dump</span><span class='p'>(</span><span class='nv'>$data</span><span class='p'>);</span>
+<span class='lineno'>58</span>     <span class='p'>}</span>
+<span class='lineno'>59</span> <span class='p'>}</span>
+<span class='lineno'>60</span> 
+<span class='lineno'>61</span> <span class='c1'>//注册回调</span>
+<span class='lineno'>62</span> <span class='nx'>Event</span><span class='o'>::</span><span class='na'>registerCallback</span><span class='p'>(</span><span class='s1'>&#39;save&#39;</span><span class='p'>,</span> <span class='k'>new</span> <span class='nx'>LogCallback</span><span class='p'>());</span>
+<span class='lineno'>63</span> <span class='c1'>//注册一个闭包</span>
+<span class='lineno'>64</span> <span class='nx'>Event</span><span class='o'>::</span><span class='na'>registerCallback</span><span class='p'>(</span><span class='s1'>&#39;save&#39;</span><span class='p'>,</span> <span class='k'>function</span> <span class='p'>(</span><span class='nv'>$data</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>65</span>                                     <span class='k'>echo</span> <span class='s1'>&#39;Clear Cache&lt;br /&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>66</span>                                     <span class='nb'>var_dump</span><span class='p'>(</span><span class='nv'>$data</span><span class='p'>);</span>
+<span class='lineno'>67</span>                                 <span class='p'>});</span>
+<span class='lineno'>68</span> <span class='k'>class</span> <span class='nc'>DataRecord</span> <span class='p'>{</span>
+<span class='lineno'>69</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>save</span><span class='p'>()</span> <span class='p'>{</span><span class='c1'>//触发事件</span>
+<span class='lineno'>70</span>         <span class='nx'>Event</span><span class='o'>::</span><span class='na'>trigger</span><span class='p'>(</span><span class='s1'>&#39;save&#39;</span><span class='p'>,</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;Hello&#39;</span><span class='p'>,</span> <span class='s1'>&#39;world&#39;</span><span class='p'>));</span>
+<span class='lineno'>71</span>     <span class='p'>}</span>
+<span class='lineno'>72</span> <span class='p'>}</span>
+<span class='lineno'>73</span> 
+<span class='lineno'>74</span> <span class='nv'>$data</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>DataRecord</span><span class='p'>();</span>
+<span class='lineno'>75</span> <span class='nv'>$data</span><span class='o'>-&gt;</span><span class='na'>save</span><span class='p'>();</span>
+<span class='lineno'>76</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<p>GitHub上一个PHPDesignPattern的项目使用了SPL接口实现的观察者模式：</p>
+
+<p>目的：为了实现发布/订阅行为的对象，每当一个“目标”对象改变它的状态，附加的“观察员”将被通报。它是用来缩短耦合对象的量，并使用松散的耦合来代替。</p>
+
+<p>观察者：</p>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 2</span> 
+<span class='lineno'> 3</span> <span class='k'>namespace</span> <span class='nx'>DesignPatterns\Observer</span><span class='p'>;</span>
+<span class='lineno'> 4</span> 
+<span class='lineno'> 5</span> <span class='sd'>/**</span>
+<span class='lineno'> 6</span> <span class='sd'> * class UserObserver</span>
+<span class='lineno'> 7</span> <span class='sd'> */</span>
+<span class='lineno'> 8</span> <span class='k'>class</span> <span class='nc'>UserObserver</span> <span class='k'>implements</span> <span class='nx'>\SplObserver</span>
+<span class='lineno'> 9</span> <span class='p'>{</span>
+<span class='lineno'>10</span>     <span class='sd'>/**</span>
+<span class='lineno'>11</span> <span class='sd'>     * This is the only method to implement as an observer.</span>
+<span class='lineno'>12</span> <span class='sd'>     * It is called by the Subject (usually by SplSubject::notify() )</span>
+<span class='lineno'>13</span> <span class='sd'>     * </span>
+<span class='lineno'>14</span> <span class='sd'>     * @param \SplSubject $subject</span>
+<span class='lineno'>15</span> <span class='sd'>     */</span>
+<span class='lineno'>16</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>update</span><span class='p'>(</span><span class='nx'>\SplSubject</span> <span class='nv'>$subject</span><span class='p'>)</span>
+<span class='lineno'>17</span>     <span class='p'>{</span>
+<span class='lineno'>18</span>         <span class='k'>echo</span> <span class='nb'>get_class</span><span class='p'>(</span><span class='nv'>$subject</span><span class='p'>)</span> <span class='o'>.</span> <span class='s1'>&#39; has been updated&#39;</span><span class='p'>;</span>
+<span class='lineno'>19</span>     <span class='p'>}</span>
+<span class='lineno'>20</span> <span class='p'>}</span>
+<span class='lineno'>21</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+<p>“目标”对象：</p>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 2</span> 
+<span class='lineno'> 3</span> <span class='k'>namespace</span> <span class='nx'>DesignPatterns\Observer</span><span class='p'>;</span>
+<span class='lineno'> 4</span> 
+<span class='lineno'> 5</span> <span class='sd'>/**</span>
+<span class='lineno'> 6</span> <span class='sd'> * Observer pattern : The observed object (the subject)</span>
+<span class='lineno'> 7</span> <span class='sd'> * </span>
+<span class='lineno'> 8</span> <span class='sd'> * The subject maintains a list of Observers and sends notifications.</span>
+<span class='lineno'> 9</span> <span class='sd'> *</span>
+<span class='lineno'>10</span> <span class='sd'> */</span>
+<span class='lineno'>11</span> <span class='k'>class</span> <span class='nc'>User</span> <span class='k'>implements</span> <span class='nx'>\SplSubject</span>
+<span class='lineno'>12</span> <span class='p'>{</span>
+<span class='lineno'>13</span>     <span class='sd'>/**</span>
+<span class='lineno'>14</span> <span class='sd'>     * user data</span>
+<span class='lineno'>15</span> <span class='sd'>     *</span>
+<span class='lineno'>16</span> <span class='sd'>     * @var array</span>
+<span class='lineno'>17</span> <span class='sd'>     */</span>
+<span class='lineno'>18</span>     <span class='k'>protected</span> <span class='nv'>$data</span> <span class='o'>=</span> <span class='k'>array</span><span class='p'>();</span>
+<span class='lineno'>19</span> 
+<span class='lineno'>20</span>     <span class='sd'>/**</span>
+<span class='lineno'>21</span> <span class='sd'>     * observers</span>
+<span class='lineno'>22</span> <span class='sd'>     *</span>
+<span class='lineno'>23</span> <span class='sd'>     * @var array</span>
+<span class='lineno'>24</span> <span class='sd'>     */</span>
+<span class='lineno'>25</span>     <span class='k'>protected</span> <span class='nv'>$observers</span> <span class='o'>=</span> <span class='k'>array</span><span class='p'>();</span>
+<span class='lineno'>26</span> 
+<span class='lineno'>27</span>     <span class='sd'>/**</span>
+<span class='lineno'>28</span> <span class='sd'>     * attach a new observer</span>
+<span class='lineno'>29</span> <span class='sd'>     *</span>
+<span class='lineno'>30</span> <span class='sd'>     * @param \SplObserver $observer</span>
+<span class='lineno'>31</span> <span class='sd'>     *</span>
+<span class='lineno'>32</span> <span class='sd'>     * @return void</span>
+<span class='lineno'>33</span> <span class='sd'>     */</span>
+<span class='lineno'>34</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>attach</span><span class='p'>(</span><span class='nx'>\SplObserver</span> <span class='nv'>$observer</span><span class='p'>)</span>
+<span class='lineno'>35</span>     <span class='p'>{</span>
+<span class='lineno'>36</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>observers</span><span class='p'>[]</span> <span class='o'>=</span> <span class='nv'>$observer</span><span class='p'>;</span>
+<span class='lineno'>37</span>     <span class='p'>}</span>
+<span class='lineno'>38</span> 
+<span class='lineno'>39</span>     <span class='sd'>/**</span>
+<span class='lineno'>40</span> <span class='sd'>     * detach an observer</span>
+<span class='lineno'>41</span> <span class='sd'>     *</span>
+<span class='lineno'>42</span> <span class='sd'>     * @param \SplObserver $observer</span>
+<span class='lineno'>43</span> <span class='sd'>     *</span>
+<span class='lineno'>44</span> <span class='sd'>     * @return void</span>
+<span class='lineno'>45</span> <span class='sd'>     */</span>
+<span class='lineno'>46</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>detach</span><span class='p'>(</span><span class='nx'>\SplObserver</span> <span class='nv'>$observer</span><span class='p'>)</span>
+<span class='lineno'>47</span>     <span class='p'>{</span>
+<span class='lineno'>48</span>         <span class='nv'>$index</span> <span class='o'>=</span> <span class='nb'>array_search</span><span class='p'>(</span><span class='nv'>$observer</span><span class='p'>,</span> <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>observers</span><span class='p'>);</span>
+<span class='lineno'>49</span> 
+<span class='lineno'>50</span>         <span class='k'>if</span> <span class='p'>(</span><span class='k'>false</span> <span class='o'>!==</span> <span class='nv'>$index</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>51</span>             <span class='nb'>unset</span><span class='p'>(</span><span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>observers</span><span class='p'>[</span><span class='nv'>$index</span><span class='p'>]);</span>
+<span class='lineno'>52</span>         <span class='p'>}</span>
+<span class='lineno'>53</span>     <span class='p'>}</span>
+<span class='lineno'>54</span> 
+<span class='lineno'>55</span>     <span class='sd'>/**</span>
+<span class='lineno'>56</span> <span class='sd'>     * notify observers</span>
+<span class='lineno'>57</span> <span class='sd'>     *</span>
+<span class='lineno'>58</span> <span class='sd'>     * @return void</span>
+<span class='lineno'>59</span> <span class='sd'>     */</span>
+<span class='lineno'>60</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>notify</span><span class='p'>()</span>
+<span class='lineno'>61</span>     <span class='p'>{</span>
+<span class='lineno'>62</span>         <span class='sd'>/** @var SplObserver $observer */</span>
+<span class='lineno'>63</span>         <span class='k'>foreach</span> <span class='p'>(</span><span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>observers</span> <span class='k'>as</span> <span class='nv'>$observer</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>64</span>             <span class='nv'>$observer</span><span class='o'>-&gt;</span><span class='na'>update</span><span class='p'>(</span><span class='nv'>$this</span><span class='p'>);</span>
+<span class='lineno'>65</span>         <span class='p'>}</span>
+<span class='lineno'>66</span>     <span class='p'>}</span>
+<span class='lineno'>67</span> 
+<span class='lineno'>68</span>     <span class='sd'>/**</span>
+<span class='lineno'>69</span> <span class='sd'>     * Ideally one would better write setter/getter for all valid attributes and only call notify()</span>
+<span class='lineno'>70</span> <span class='sd'>     * on attributes that matter when changed</span>
+<span class='lineno'>71</span> <span class='sd'>     *</span>
+<span class='lineno'>72</span> <span class='sd'>     * @param string $name</span>
+<span class='lineno'>73</span> <span class='sd'>     * @param mixed  $value</span>
+<span class='lineno'>74</span> <span class='sd'>     *</span>
+<span class='lineno'>75</span> <span class='sd'>     * @return void</span>
+<span class='lineno'>76</span> <span class='sd'>     */</span>
+<span class='lineno'>77</span>     <span class='k'>public</span> <span class='k'>function</span> <span class='nf'>__set</span><span class='p'>(</span><span class='nv'>$name</span><span class='p'>,</span> <span class='nv'>$value</span><span class='p'>)</span>
+<span class='lineno'>78</span>     <span class='p'>{</span>
+<span class='lineno'>79</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>data</span><span class='p'>[</span><span class='nv'>$name</span><span class='p'>]</span> <span class='o'>=</span> <span class='nv'>$value</span><span class='p'>;</span>
+<span class='lineno'>80</span> 
+<span class='lineno'>81</span>         <span class='c1'>// notify the observers, that user has been updated</span>
+<span class='lineno'>82</span>         <span class='nv'>$this</span><span class='o'>-&gt;</span><span class='na'>notify</span><span class='p'>();</span>
+<span class='lineno'>83</span>     <span class='p'>}</span>
+<span class='lineno'>84</span> <span class='p'>}</span>
+<span class='lineno'>85</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#PHP-ref">
+    		PHP <span>24</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#PHP设计模式-ref">PHP设计模式 <span>7</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/10/02/iterator-pattern" title="迭代模式">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/10/03/regular-expressions" title="正则表达式小结">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,349 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>AOE网(关键路径)</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>AOE网(关键路径) </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>07 September 2013</span>
+    </div>
+    <div class="content">
+      <h3 id='id36'>描述</h3>
+
+<blockquote>
+<p>AOE网是一个带权的有向无环图,其中,顶点表示事件,弧表示活动,权表示活动持续的时间.通常,AOE网可用来估算工程的完成时间.</p>
+</blockquote>
+
+<blockquote>
+<p>网中只有一个入度为零的顶点(源点)和一个出度为零的顶点(汇点).</p>
+</blockquote>
+
+<p><img alt='AOE' src='/assets/img/201309070101.jpg' /></p>
+
+<h3 id='id37'>问题</h3>
+
+<blockquote>
+<p>1.完成整项工程至少需要多少时间? 2.哪些活动是影响工程进度的关键?</p>
+</blockquote>
+
+<h3 id='id38'>思想</h3>
+
+<blockquote>
+<ol>
+<li>AOE网中有些活动是可以并行地运行,所以完成工程的最短时间是从开始点到完成点的最长路径的长度. 2.路径长度最长的路径叫做关键路径.</li>
+
+<li>假设开始点是v1,从v1到vi的最长路径叫做事件vi的最早发生时间(因为vi事件要等到所有以vi为头的弧(活动)完成才能发生).这个时间决定了所有以vi为尾的弧所表示的活动的最早发生时间.</li>
+
+<li>用e(i)表示活动ai的最早开始时间,用l(i)表示活动的最迟开始时间(在不推迟整个工程的前提下,活动ai的最迟开始时间),两者之差l(i)-e(i)意味着完成活动ai的时间剩余量.我们把l(i)=e(i)的活动叫做关键活动. 5.关键路径上的所有活动都是关键活动,因此提前完成非关键活动并不能加快工程进度.</li>
+</ol>
+</blockquote>
+
+<h3 id='id39'>求解分析</h3>
+
+<blockquote>
+<p>辨别关键活动就是要找e(i)=l(i)的活动.设AOE网中活动的最早开始时间为e(i)和最迟开始时间为l(i),事件的最早发生时间为ve(j)和最迟发生时间为vl(j).如果活动ai由弧<code>j,k</code>表示,其持续时间记为dut(<code>j,k</code>),则有如下关系:</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>e(i)=ve(j)</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<p>l(i)=vl(k)-dut(<code>j,k</code>)</p>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<p>求解ve(j)和vl(j)如下:</p>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<ol>
+<li>从ve(0)=0开始向前递推:ve(j)=Max{ve(i)+dut(<code>i,j</code>)} <code>i,j</code>属于T,T是所有以第j个顶点为头的弧的集合</li>
+</ol>
+</blockquote>
+</blockquote>
+
+<blockquote>
+<blockquote>
+<ol>
+<li>从vl(n-1)=ve(n-1)起向后递推:vl(i)=Min{vl(j)-dut(<code>i,j</code>)} <code>i,j</code>属于S,S是所有以第i个顶点为尾的弧的集合</li>
+</ol>
+</blockquote>
+</blockquote>
+
+<h3 id='id40'>算法流程</h3>
+
+<blockquote>
+<ol>
+<li>输入e条弧,建立AOE网为邻接表存储结构</li>
+
+<li>从源点出发,令ve<span>0</span>=0,按拓扑有序求其余各顶点的最早发生时间</li>
+
+<li>从汇点出发,令vl<span>n-1</span>=ve<span>n-1</span>,按逆拓扑有序求其余顶点的最迟开始时间</li>
+
+<li>根据各顶点的ve和vl,求每条弧s的最早开始时间e(s)和最迟开始时间l(s),若某条弧满足e(s)=l(s),则为关键活动</li>
+</ol>
+</blockquote>
+
+<h3 id='id41'>辅助</h3>
+
+<blockquote>
+<p>栈T用于存储拓扑序列 ve数组记录事件最早开始时间,vl数组记录事件最迟开始时间</p>
+</blockquote>
+
+<h3 id='id42'>代码</h3>
+<div class='highlight'><pre><code class='cpp'><span class='lineno'> 1</span> <span class='n'>Status</span> <span class='nf'>TopologicalSort</span><span class='p'>(</span><span class='n'>ALGraph</span> <span class='n'>G</span><span class='p'>,</span> <span class='n'>Stack</span> <span class='o'>&amp;</span><span class='n'>T</span><span class='p'>){</span>
+<span class='lineno'> 2</span>     <span class='c1'>//有向图G采用邻接表存储结构</span>
+<span class='lineno'> 3</span>     <span class='c1'>//若G无回路,则输出G的顶点的一个拓扑序列并返回OK,否则ERROR.</span>
+<span class='lineno'> 4</span>     <span class='n'>FindInDegree</span><span class='p'>(</span> <span class='n'>G</span><span class='p'>,</span> <span class='n'>indegree</span> <span class='p'>);</span>    <span class='c1'>//对各顶点求入度indegree[0...vernum-1]</span>
+<span class='lineno'> 5</span>     <span class='n'>InitStack</span><span class='p'>(</span> <span class='n'>S</span> <span class='p'>);</span>
+<span class='lineno'> 6</span>     <span class='n'>InitStack</span><span class='p'>(</span> <span class='n'>T</span> <span class='p'>);</span>
+<span class='lineno'> 7</span>     <span class='n'>ve</span><span class='p'>[</span><span class='mf'>0.</span><span class='p'>.</span><span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>]</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'> 8</span>     <span class='k'>for</span><span class='p'>(</span> <span class='n'>i</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>&lt;</span><span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span><span class='p'>;</span> <span class='o'>++</span><span class='n'>i</span> <span class='p'>)</span> <span class='c1'>//建零入度顶点栈S</span>
+<span class='lineno'> 9</span>         <span class='k'>if</span><span class='p'>(</span> <span class='o'>!</span><span class='n'>indegree</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span> <span class='p'>)</span> <span class='n'>StackPush</span><span class='p'>(</span> <span class='n'>S</span><span class='p'>,</span> <span class='n'>i</span> <span class='p'>);</span> <span class='c1'>//入度为0者进栈</span>
+<span class='lineno'>10</span>     <span class='cm'>/*上面步骤可以在FindInDegree()函数中完成*/</span>
+<span class='lineno'>11</span>     <span class='n'>count</span> <span class='o'>=</span> <span class='mi'>0</span> <span class='p'>;</span> <span class='c1'>//对输出顶点计数</span>
+<span class='lineno'>12</span>     <span class='k'>while</span><span class='p'>(</span> <span class='o'>!</span><span class='n'>StackEmpty</span><span class='p'>(</span> <span class='n'>S</span> <span class='p'>)</span> <span class='p'>){</span>
+<span class='lineno'>13</span>         <span class='n'>StackPop</span><span class='p'>(</span> <span class='n'>S</span><span class='p'>,</span> <span class='n'>i</span> <span class='p'>);</span><span class='n'>StackPush</span><span class='p'>(</span> <span class='n'>T</span><span class='p'>,</span> <span class='n'>i</span> <span class='p'>);</span><span class='o'>++</span><span class='n'>count</span><span class='p'>;</span>   <span class='c1'>//i号顶点入栈T并计数</span>
+<span class='lineno'>14</span>         <span class='k'>for</span><span class='p'>(</span> <span class='n'>p</span> <span class='o'>=</span> <span class='n'>G</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>i</span><span class='p'>].</span><span class='n'>firstarc</span><span class='p'>;</span> <span class='n'>p</span><span class='p'>;</span> <span class='n'>p</span> <span class='o'>=</span> <span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>nextarc</span> <span class='p'>){</span><span class='c1'>//对i号顶点的每个邻接点的入度减1</span>
+<span class='lineno'>15</span>             <span class='k'>if</span><span class='p'>(</span> <span class='o'>!</span><span class='p'>(</span> <span class='o'>--</span><span class='n'>indegree</span><span class='p'>[</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>adjvex</span><span class='p'>]</span> <span class='p'>)</span> <span class='p'>)</span> <span class='n'>StackPush</span><span class='p'>(</span> <span class='n'>S</span><span class='p'>,</span> <span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>adjvex</span> <span class='p'>);</span><span class='c1'>//若入度为零,则入栈</span>
+<span class='lineno'>16</span>             <span class='k'>if</span><span class='p'>(</span> <span class='n'>ve</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>+*</span><span class='p'>(</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>info</span><span class='p'>)</span> <span class='o'>&gt;</span> <span class='n'>ve</span><span class='p'>[</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>adjvex</span><span class='p'>]</span> <span class='p'>)</span> <span class='n'>ve</span><span class='p'>[</span><span class='n'>k</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>ve</span><span class='p'>[</span><span class='n'>i</span><span class='p'>]</span><span class='o'>+*</span><span class='p'>(</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>info</span><span class='p'>);</span><span class='c1'>//相当于ve(j)=Max{ve(i)+dut(&lt;i,j&gt;)}</span>
+<span class='lineno'>17</span>         <span class='p'>}</span><span class='c1'>//for</span>
+<span class='lineno'>18</span>     <span class='p'>}</span><span class='c1'>//while</span>
+<span class='lineno'>19</span>     <span class='k'>if</span><span class='p'>(</span> <span class='n'>count</span> <span class='o'>&lt;</span> <span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span> <span class='p'>)</span> <span class='k'>return</span> <span class='n'>ERROR</span><span class='p'>;</span>    <span class='c1'>//该有向图有回路</span>
+<span class='lineno'>20</span>     <span class='k'>else</span> <span class='k'>return</span> <span class='n'>OK</span><span class='p'>;</span>
+<span class='lineno'>21</span> <span class='p'>}</span><span class='c1'>//TopologicalSort</span>
+<span class='lineno'>22</span> 
+<span class='lineno'>23</span> <span class='n'>Status</span> <span class='nf'>CriticalPath</span><span class='p'>(</span><span class='n'>ALGraph</span> <span class='n'>G</span><span class='p'>){</span>
+<span class='lineno'>24</span>     <span class='c1'>//G为有向网,输出G的各项关键活动</span>
+<span class='lineno'>25</span>     <span class='k'>if</span><span class='p'>(</span> <span class='o'>!</span><span class='n'>TopologicalOrder</span><span class='p'>(</span><span class='n'>G</span><span class='p'>,</span> <span class='n'>T</span><span class='p'>)</span> <span class='p'>)</span> <span class='k'>return</span> <span class='n'>ERROR</span><span class='p'>;</span>
+<span class='lineno'>26</span>     <span class='n'>vl</span><span class='p'>[</span><span class='mf'>0.</span><span class='p'>.</span><span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>ve</span><span class='p'>[</span><span class='mf'>0.</span><span class='p'>.</span><span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span><span class='o'>-</span><span class='mi'>1</span><span class='p'>];</span><span class='c1'>//初始化顶点事件的最迟发生时间</span>
+<span class='lineno'>27</span>     <span class='k'>while</span><span class='p'>(</span> <span class='o'>!</span><span class='n'>StackEmpty</span><span class='p'>(</span><span class='n'>T</span><span class='p'>)</span> <span class='p'>)</span> <span class='c1'>//按逆拓扑序列求各顶点的vl值</span>
+<span class='lineno'>28</span>         <span class='k'>for</span><span class='p'>(</span> <span class='n'>StackPop</span><span class='p'>(</span> <span class='n'>T</span><span class='p'>,</span> <span class='n'>j</span> <span class='p'>),</span> <span class='n'>p</span> <span class='o'>=</span> <span class='n'>G</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>firstarc</span><span class='p'>;</span> <span class='n'>p</span><span class='p'>;</span> <span class='n'>p</span> <span class='o'>=</span> <span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>nextarc</span> <span class='p'>){</span>
+<span class='lineno'>29</span>             <span class='n'>k</span> <span class='o'>=</span> <span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>adjvex</span><span class='p'>;</span> <span class='n'>dut</span> <span class='o'>=</span> <span class='o'>*</span><span class='p'>(</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>info</span><span class='p'>);</span>
+<span class='lineno'>30</span>             <span class='k'>if</span><span class='p'>(</span> <span class='n'>vl</span><span class='p'>[</span><span class='n'>k</span><span class='p'>]</span><span class='o'>-</span><span class='n'>dut</span> <span class='o'>&lt;</span> <span class='n'>vl</span><span class='p'>[</span><span class='n'>j</span><span class='p'>]</span> <span class='p'>)</span> <span class='n'>vl</span><span class='p'>[</span><span class='n'>j</span><span class='p'>]</span> <span class='o'>=</span> <span class='n'>vl</span><span class='p'>[</span><span class='n'>k</span><span class='p'>]</span><span class='o'>-</span><span class='n'>dut</span><span class='p'>;</span>
+<span class='lineno'>31</span>         <span class='p'>}</span><span class='c1'>//for</span>
+<span class='lineno'>32</span>     <span class='k'>for</span><span class='p'>(</span> <span class='n'>j</span><span class='o'>=</span><span class='mi'>0</span><span class='p'>;</span> <span class='n'>j</span><span class='o'>&lt;</span><span class='n'>G</span><span class='p'>.</span><span class='n'>vexnum</span><span class='p'>;</span> <span class='o'>++</span><span class='n'>j</span> <span class='p'>)</span><span class='c1'>//求每条边的最早开始时间和最迟开始时间</span>
+<span class='lineno'>33</span>         <span class='k'>for</span><span class='p'>(</span> <span class='n'>p</span> <span class='o'>=</span> <span class='n'>G</span><span class='p'>.</span><span class='n'>vertices</span><span class='p'>[</span><span class='n'>j</span><span class='p'>].</span><span class='n'>firstarc</span><span class='p'>;</span> <span class='n'>p</span><span class='p'>;</span> <span class='n'>p</span> <span class='o'>=</span> <span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>nextarc</span> <span class='p'>){</span>
+<span class='lineno'>34</span>             <span class='n'>k</span> <span class='o'>=</span> <span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>adjvex</span><span class='p'>;</span> <span class='n'>dut</span> <span class='o'>=</span> <span class='o'>*</span><span class='p'>(</span><span class='n'>p</span><span class='o'>-&gt;</span><span class='n'>info</span><span class='p'>);</span>
+<span class='lineno'>35</span>             <span class='n'>ee</span> <span class='o'>=</span> <span class='n'>ve</span><span class='p'>[</span><span class='n'>j</span><span class='p'>];</span> <span class='n'>el</span> <span class='o'>=</span> <span class='n'>vl</span><span class='p'>[</span><span class='n'>k</span><span class='p'>]</span><span class='o'>-</span><span class='n'>dut</span><span class='p'>;</span>
+<span class='lineno'>36</span>             <span class='n'>tag</span> <span class='o'>=</span> <span class='p'>(</span><span class='n'>ee</span> <span class='o'>==</span> <span class='n'>el</span><span class='p'>)</span> <span class='o'>?</span> <span class='mi'>1</span> <span class='o'>:</span> <span class='mi'>0</span><span class='p'>;</span>
+<span class='lineno'>37</span>             <span class='n'>printf</span><span class='p'>(</span> <span class='n'>j</span><span class='p'>,</span> <span class='n'>k</span><span class='p'>,</span> <span class='n'>dut</span><span class='p'>,</span> <span class='n'>ee</span><span class='p'>,</span> <span class='n'>el</span><span class='p'>,</span> <span class='n'>tag</span><span class='p'>);</span><span class='c1'>//输出关键活动</span>
+<span class='lineno'>38</span>         <span class='p'>}</span><span class='c1'>//for p</span>
+<span class='lineno'>39</span> <span class='p'>}</span><span class='c1'>//CriticalPath</span>
+</code></pre>
+</div>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#算法-ref">
+    		算法 <span>17</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#数据结构-ref">数据结构 <span>7</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/PHP/2013/09/06/value-object-pattern" title="值对象模式">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/09/13/factory-pattern" title="工厂模式">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+

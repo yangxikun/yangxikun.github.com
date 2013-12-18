@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="en"  xmlns:wb="http://open.weibo.com/wb">
+  <head>
+    <meta charset="utf-8">
+    <title>无限分类数据的树形格式化</title>
+    <meta name="description" content="">
+    <meta name="author" content="Rokety Yang">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/twitter/css/pygments.css?body=1" rel="stylesheet" type="text/css" media="all">
+
+    <!-- Le fav and touch icons -->
+  <!-- Update these with your own images
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container-narrow">
+          <a class="brand" href="/">Kun Blog</a>
+          <ul class="nav">
+            
+            
+            
+
+
+  
+    
+      
+      	
+      	<li><a href="/aboutMe.html">AboutMe</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages.html">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        
+<div class="page-header">
+  <h1>无限分类数据的树形格式化 </h1>
+</div>
+
+<div class="row-fluid post-full">
+  <div class="span12">
+    <div class="date">
+      <span>22 September 2013</span>
+    </div>
+    <div class="content">
+      <p><em>转载自:<a href='http://www.oschina.net/code/snippet_173183_11767'>9行代码太浪费了，5行代码足矣，不用递归实现无限分类数据的树形格式化</a></em></p>
+<div class='highlight'><pre><code class='php'><span class='lineno'> 1</span> <span class='x'>&lt;meta charset=&quot;utf-8&quot;&gt;</span>
+<span class='lineno'> 2</span> <span class='cp'>&lt;?php</span>
+<span class='lineno'> 3</span> 
+<span class='lineno'> 4</span> <span class='sd'>/**</span>
+<span class='lineno'> 5</span> <span class='sd'> * 此方法由@Tonton 提供</span>
+<span class='lineno'> 6</span> <span class='sd'> * http://my.oschina.net/u/918697</span>
+<span class='lineno'> 7</span> <span class='sd'> * @date 2012-12-12 </span>
+<span class='lineno'> 8</span> <span class='sd'> */</span>
+<span class='lineno'> 9</span> <span class='k'>function</span> <span class='nf'>genTree5</span><span class='p'>(</span><span class='nv'>$items</span><span class='p'>)</span> <span class='p'>{</span> 
+<span class='lineno'>10</span>     <span class='k'>foreach</span> <span class='p'>(</span><span class='nv'>$items</span> <span class='k'>as</span> <span class='nv'>$item</span><span class='p'>)</span> 
+<span class='lineno'>11</span>         <span class='nv'>$items</span><span class='p'>[</span><span class='nv'>$item</span><span class='p'>[</span><span class='s1'>&#39;pid&#39;</span><span class='p'>]][</span><span class='s1'>&#39;son&#39;</span><span class='p'>][</span><span class='nv'>$item</span><span class='p'>[</span><span class='s1'>&#39;id&#39;</span><span class='p'>]]</span> <span class='o'>=</span> <span class='o'>&amp;</span><span class='nv'>$items</span><span class='p'>[</span><span class='nv'>$item</span><span class='p'>[</span><span class='s1'>&#39;id&#39;</span><span class='p'>]];</span> 
+<span class='lineno'>12</span>     <span class='k'>return</span> <span class='nb'>isset</span><span class='p'>(</span><span class='nv'>$items</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>][</span><span class='s1'>&#39;son&#39;</span><span class='p'>])</span> <span class='o'>?</span> <span class='nv'>$items</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>][</span><span class='s1'>&#39;son&#39;</span><span class='p'>]</span> <span class='o'>:</span> <span class='k'>array</span><span class='p'>();</span> 
+<span class='lineno'>13</span> <span class='p'>}</span> 
+<span class='lineno'>14</span> 
+<span class='lineno'>15</span> <span class='sd'>/**</span>
+<span class='lineno'>16</span> <span class='sd'> * 将数据格式化成树形结构</span>
+<span class='lineno'>17</span> <span class='sd'> * @author Xuefen.Tong</span>
+<span class='lineno'>18</span> <span class='sd'> * @param array $items</span>
+<span class='lineno'>19</span> <span class='sd'> * @return array </span>
+<span class='lineno'>20</span> <span class='sd'> */</span>
+<span class='lineno'>21</span> <span class='k'>function</span> <span class='nf'>genTree9</span><span class='p'>(</span><span class='nv'>$items</span><span class='p'>)</span> <span class='p'>{</span>
+<span class='lineno'>22</span>     <span class='nv'>$tree</span> <span class='o'>=</span> <span class='k'>array</span><span class='p'>();</span> <span class='c1'>//格式化好的树</span>
+<span class='lineno'>23</span>     <span class='k'>foreach</span> <span class='p'>(</span><span class='nv'>$items</span> <span class='k'>as</span> <span class='nv'>$item</span><span class='p'>)</span>
+<span class='lineno'>24</span>         <span class='k'>if</span> <span class='p'>(</span><span class='nb'>isset</span><span class='p'>(</span><span class='nv'>$items</span><span class='p'>[</span><span class='nv'>$item</span><span class='p'>[</span><span class='s1'>&#39;pid&#39;</span><span class='p'>]]))</span>
+<span class='lineno'>25</span>             <span class='nv'>$items</span><span class='p'>[</span><span class='nv'>$item</span><span class='p'>[</span><span class='s1'>&#39;pid&#39;</span><span class='p'>]][</span><span class='s1'>&#39;son&#39;</span><span class='p'>][]</span> <span class='o'>=</span> <span class='o'>&amp;</span><span class='nv'>$items</span><span class='p'>[</span><span class='nv'>$item</span><span class='p'>[</span><span class='s1'>&#39;id&#39;</span><span class='p'>]];</span>
+<span class='lineno'>26</span>         <span class='k'>else</span>
+<span class='lineno'>27</span>             <span class='nv'>$tree</span><span class='p'>[]</span> <span class='o'>=</span> <span class='o'>&amp;</span><span class='nv'>$items</span><span class='p'>[</span><span class='nv'>$item</span><span class='p'>[</span><span class='s1'>&#39;id&#39;</span><span class='p'>]];</span>
+<span class='lineno'>28</span>     <span class='k'>return</span> <span class='nv'>$tree</span><span class='p'>;</span>
+<span class='lineno'>29</span> <span class='p'>}</span>
+<span class='lineno'>30</span> 
+<span class='lineno'>31</span> <span class='nv'>$items</span> <span class='o'>=</span> <span class='k'>array</span><span class='p'>(</span>
+<span class='lineno'>32</span>     <span class='mi'>1</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>1</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>0</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;江西省&#39;</span><span class='p'>),</span>
+<span class='lineno'>33</span>     <span class='mi'>2</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>2</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>0</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;黑龙江省&#39;</span><span class='p'>),</span>
+<span class='lineno'>34</span>     <span class='mi'>3</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>3</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>1</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;南昌市&#39;</span><span class='p'>),</span>
+<span class='lineno'>35</span>     <span class='mi'>4</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>4</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>2</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;哈尔滨市&#39;</span><span class='p'>),</span>
+<span class='lineno'>36</span>     <span class='mi'>5</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>5</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>2</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;鸡西市&#39;</span><span class='p'>),</span>
+<span class='lineno'>37</span>     <span class='mi'>6</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>6</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>4</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;香坊区&#39;</span><span class='p'>),</span>
+<span class='lineno'>38</span>     <span class='mi'>7</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>7</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>4</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;南岗区&#39;</span><span class='p'>),</span>
+<span class='lineno'>39</span>     <span class='mi'>8</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>8</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>6</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;和兴路&#39;</span><span class='p'>),</span>
+<span class='lineno'>40</span>     <span class='mi'>9</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>9</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>7</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;西大直街&#39;</span><span class='p'>),</span>
+<span class='lineno'>41</span>     <span class='mi'>10</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>10</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>8</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;东北林业大学&#39;</span><span class='p'>),</span>
+<span class='lineno'>42</span>     <span class='mi'>11</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>11</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>9</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;哈尔滨工业大学&#39;</span><span class='p'>),</span>
+<span class='lineno'>43</span>     <span class='mi'>12</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>12</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>8</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;哈尔滨师范大学&#39;</span><span class='p'>),</span>
+<span class='lineno'>44</span>     <span class='mi'>13</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>13</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>1</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;赣州市&#39;</span><span class='p'>),</span>
+<span class='lineno'>45</span>     <span class='mi'>14</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>14</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>13</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;赣县&#39;</span><span class='p'>),</span>
+<span class='lineno'>46</span>     <span class='mi'>15</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>15</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>13</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;于都县&#39;</span><span class='p'>),</span>
+<span class='lineno'>47</span>     <span class='mi'>16</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>16</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>14</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;茅店镇&#39;</span><span class='p'>),</span>
+<span class='lineno'>48</span>     <span class='mi'>17</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>17</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>14</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;大田乡&#39;</span><span class='p'>),</span>
+<span class='lineno'>49</span>     <span class='mi'>18</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>18</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>16</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;义源村&#39;</span><span class='p'>),</span>
+<span class='lineno'>50</span>     <span class='mi'>19</span> <span class='o'>=&gt;</span> <span class='k'>array</span><span class='p'>(</span><span class='s1'>&#39;id&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>19</span><span class='p'>,</span> <span class='s1'>&#39;pid&#39;</span> <span class='o'>=&gt;</span> <span class='mi'>16</span><span class='p'>,</span> <span class='s1'>&#39;name&#39;</span> <span class='o'>=&gt;</span> <span class='s1'>&#39;上坝村&#39;</span><span class='p'>),</span>
+<span class='lineno'>51</span> <span class='p'>);</span>
+<span class='lineno'>52</span> <span class='k'>echo</span> <span class='s1'>&#39;&lt;pre&gt;&#39;</span><span class='p'>;</span>
+<span class='lineno'>53</span> <span class='nb'>print_r</span><span class='p'>(</span><span class='nx'>genTree5</span><span class='p'>(</span><span class='nv'>$items</span><span class='p'>));</span>
+<span class='lineno'>54</span> <span class='nb'>print_r</span><span class='p'>(</span><span class='nx'>genTree9</span><span class='p'>(</span><span class='nv'>$items</span><span class='p'>));</span>
+<span class='lineno'>55</span> <span class='k'>echo</span> <span class='s1'>&#39;&lt;/pre&gt;&#39;</span>
+<span class='lineno'>56</span> <span class='cp'>?&gt;</span><span class='x' />
+</code></pre>
+</div>
+    </div>
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-folder-open"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/categories.html#PHP-ref">
+    		PHP <span>24</span>
+    	</a></li>
+    
+  
+
+
+    </ul>
+    
+
+  
+    <ul class="tag_box inline">
+      <li><i class="icon-tags"></i></li>
+      
+      
+
+
+  
+     
+    	<li><a href="/tags.html#PHP练手-ref">PHP练手 <span>6</span></a></li>
+    
+  
+
+
+
+    </ul>
+    
+
+    <hr>
+    <div class="pagination">
+      <ul>
+      
+        <li class="prev"><a href="/算法/2013/09/22/heap-sort" title="堆排序">&larr; Previous</a></li>
+      
+        <li><a href="/archive.html">Archive</a></li>
+      
+        <li class="next"><a href="/PHP/2013/09/22/recursive-traverse-dir" title="递归遍历目录">Next &rarr;</a></li>
+      
+      </ul>
+    </div>
+    <hr>
+    
+
+
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<div id="disqus_container">
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+    <div id="disqus_thread"></div>
+</div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'kunblog'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    $('#disqus_container .comment').on('click',function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        $('#disqus_container .comment').hide();
+    });
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+      <hr>
+      <footer class="footer">
+        <p>&copy; 2013 Rokety Yang
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
+          Powered By <a href="https://github.com/">GitHub!</a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+
