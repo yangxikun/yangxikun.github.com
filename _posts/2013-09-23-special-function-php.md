@@ -25,6 +25,7 @@ funtest( 'hello', 'world', 'next' );
 ?>
 {% endhighlight %}
 
+<!--more-->
 ###使用glob\(\)查找文件
 
 {% highlight php linenos %}

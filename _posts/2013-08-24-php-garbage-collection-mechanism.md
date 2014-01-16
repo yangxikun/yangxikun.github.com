@@ -19,6 +19,7 @@ tags: [PHP底层]
 
 >>示例:当我们添加一个数组本身作为这个数组的元素时,代码如下:
 
+<!--more-->
 {% highlight php linenos %}
 <?php
 $a = array( 'one' );

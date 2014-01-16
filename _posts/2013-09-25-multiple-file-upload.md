@@ -25,6 +25,7 @@ tags: [PHP练手]
 </html>
 {% endhighlight %}
 
+<!--more-->
 >php代码如下:
 
 {% highlight php linenos %}

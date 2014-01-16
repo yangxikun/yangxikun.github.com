@@ -13,6 +13,7 @@ tags: [PHP设计模式]
 
 >例如,当你需要对一个变量进行赋值一个实例化对象时,例如有productA和productB两个类,变量需要根据条件赋值相应的类实例,那么也许代码会是这样子:
 
+<!--more-->
 {% highlight php linenos %}
 <?php
 if( condition ){

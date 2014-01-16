@@ -14,6 +14,7 @@ tags: [数据结构]
 4.U不为空转步骤2,为空继续.
 5.结束.
 
+<!--more-->
 ###辅助
 
 1. closedge\[\]数组记录了相应顶点到V的最短距离`struct{ VertexType adjvex; VRType lowcost;}closedge[MAX]`.

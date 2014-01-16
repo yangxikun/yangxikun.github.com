@@ -13,6 +13,7 @@ tags: [算法]
 
 >递归的归并排序
 
+<!--more-->
 {% highlight cpp linenos %}
 void MergeSort(Type a[], int left, int right){
     if (left < right ) {//至少要有2个元素

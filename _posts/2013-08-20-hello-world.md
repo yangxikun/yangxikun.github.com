@@ -6,6 +6,8 @@ tags: [beginner]
 ---
 {% include JB/setup %}
 ###这是我在GitHub上的第一篇博文,向世界说声:你好!
+
+<!--more-->
 {% highlight php linenos %}
 <?php
     echo 'Hello World!';

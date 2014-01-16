@@ -13,6 +13,7 @@ tags: [PHP设计模式]
 
 >[What is Dependency Injection?](http://fabien.potencier.org/article/11/what-is-dependency-injection#)这篇文章讲得很好。
 
+<!--more-->
 >在此对上面那篇文章进行翻译和整理。
 
 >为了克服HTTP协议的无状态性，web应用程序需要一种方法在请求之间存储用户信息。使用cookie来完成确实简单。这里使用PHP内建的session机制。

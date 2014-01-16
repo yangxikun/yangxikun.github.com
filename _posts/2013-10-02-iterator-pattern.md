@@ -11,6 +11,7 @@ tags: [PHP设计模式]
 
 >在PHP的SPL中,有iterator这个类库,它的主要用途在于为一组数据集(可以是数组或对象)提供各种遍历的方法.
 
+<!--more-->
 ###一个简单的迭代
 
 {% highlight php linenos %}

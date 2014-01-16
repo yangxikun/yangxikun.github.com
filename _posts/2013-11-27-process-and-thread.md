@@ -17,6 +17,7 @@ tags: [线程]
 
 > Linux的进程，线程实现是在核外进行的，核内提供的是创建进程的接口`do_fork()`。内核提供了 三个系统调用`__clone()`和`fork()`以及`vfort()`，最终都用不同的参数调用`do_fork()`核内API。 `do_fork()` 提供了很多参数，包括`CLONE_VM`（共享内存空间）、`CLONE_FS`（共享文件系统信息）、`CLONE_FILES`（共享文件描述符表）、 `CLONE_SIGHAND`（共享信号句柄表）和`CLONE_PID`（共享进程ID，仅对核内进程，即0号进程有效）等。
 
+<!--more-->
 > Linux下不管是多线程编程还是多进程编程，linux通过`clone()`系统调用实现产生进程或者线程。无论是`fork()`，还是`vfork()`、`__clone()`最后都根据各自需要的参数标志去调用`clone()`，然后有`clone()`去调用`do_fork()`。这样一说，最终都是用`do_fork()`实现的多进程编程，只是进程创建时的参数不同，从而导致有不同的共享环境。
 
 > 当使用`pthread_create()`来创建线程时,则最终通过设置参数来调用`__clone()`，而这些参数又全部传给核内的`do_fork()`，从而创建的"进程"拥有共享的运行环境，只有栈是独立的，由 `__clone()`传入。我们说在linux中，线程仅仅是一个使用共享资源的轻量级进程。调用`clone()`时候`flag`指定为`CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND`。

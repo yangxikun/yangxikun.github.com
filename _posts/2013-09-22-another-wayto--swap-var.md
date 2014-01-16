@@ -9,6 +9,7 @@ tags: [PHP练手]
 
 *核心是使用异或操作,将两个变量的值都看成二进制就一目了然了.*
 
+<!--more-->
 {% highlight php linenos %}
 <meta charset="utf-8">
 <?php 

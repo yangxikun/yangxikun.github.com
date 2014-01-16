@@ -29,7 +29,7 @@ var_dump( showDir( '.' ) );
 ?>
 {% endhighlight %}
 
-
+<!--more-->
 ###方法二
 
 {% highlight php linenos %}

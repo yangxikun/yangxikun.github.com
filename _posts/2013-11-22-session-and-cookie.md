@@ -13,6 +13,7 @@ tags: [PHP应用]
 
 Cookie的属性：name(名字)；value(值)；expire(过期时间)；path(路径)；domain(域)；secure(安全)；httponly(仅http)
 
+<!--more-->
 domain(域)：低级的域可以获取到高级的域的cookie，但需要注意，例如`t.domaina.com`可以获得`.domaina.com`的cookie，而无法获得`domaina.com`的cookie。也就是说一个诸如这样的域名`domaina.com`，它可以设置域为`domain.com`和`.domain.com`的cookie，且只有`.domain.com`的cookie在子域名下可见。需要注意的是在PHP中，当你使用`setcookie('ck', 'testSetdomainacookie', 0, '/', 'domaina.com');`和` setcookie('ck', 'testSetdomainacookie', 0, '/', '.domaina.com');`效果是一样的，设置的cookie域都是`.domaina.com`。而使用`setcookie('ck', 'testSetdomainacookie', 0, '/')`设置的cookie域为`domaina.com`。对于子域名t.domaina.com还可以设置域为`.domain.com`的cookie，也即子域名下可以设置父域名可见的cookie。
 
 path(路径)：同domain一样,子目录可以访问上级目录的cookie,但是使用setcookie函数时,这个path必须是在你所访问的目录下,例如直接在web服务器根目录执行`setcookie('localhost',520,3600+time(),'/pathcookie')`是无法设置cookie的,但php不会报错，而如果在web服务器根目录下新建一个名为pathcookie的目录，

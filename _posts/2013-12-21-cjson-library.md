@@ -9,6 +9,7 @@ tags: [C库]
 
 学习了点socket编程，发现通过TCP/UDP进行通信接收到的是连续的字节内容，于是想要传输有结构的数据，就想到了JSON，上网查了下，找到了从[cJSON库](http://sourceforge.net/projects/cjson/)，这个库简单易用，很不错。
 
+<!--more-->
 结构体：
 {% highlight cpp linenos %}
 typedef struct cJSON {

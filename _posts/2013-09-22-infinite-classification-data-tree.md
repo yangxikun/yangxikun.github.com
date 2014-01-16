@@ -9,6 +9,7 @@ tags: [PHP练手]
 
 *转载自:[9行代码太浪费了，5行代码足矣，不用递归实现无限分类数据的树形格式化](http://www.oschina.net/code/snippet_173183_11767)*
 
+<!--more-->
 {% highlight php linenos %}
 <meta charset="utf-8">
 <?php

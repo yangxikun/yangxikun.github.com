@@ -1,0 +1,34 @@
+---
+layout: page
+title: 
+tagline: 记录学习的点点滴滴
+---
+{% include JB/setup %}
+<div class="row-fluid">
+    <div class="span12" display="none"></div>
+  {% for post in paginator.posts %}
+        {% capture summary %}{{post.content | split:'<!--more-->' |first }}{% endcapture%}
+    <div class="span12 row">
+        <h2><a class="title" href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h2>
+        <div class="post_at_index">
+            {{summary}} 
+        {% if summary != post.content %}<br /><a href="{{ BASE_PATH }}{{ post.url }}" rel="nofollow">Read more...</a>{% endif %}
+        </div>
+        <br/>
+        <div>
+          <cite>{{ post.date | date: "%Y-%m-%d" }}</cite> <i class="icon-tag"></i>  {% for tag in post.tags %}<a href="{{ BASE_PATH }}{{ site.JB.tags_path }}#{{ tag }}-ref">{{ tag }}</a>{% if forloop.last %}{% else %}, {% endif %}{% endfor %}
+       </div> 
+        <div style="clear: both;"></div>
+        <hr/>
+    </div> 
+ {% endfor %}
+</div>
+{% include ever/pagination %}
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript">
+(function(a){a.fn.backToTop=function(e){e=a.extend({time:8,alignTop:"60%",alignRight:"8%"},e);var h=this;a(window).bind("scroll",c);h.hover(function(){a(this).css({"background-position":"-147px 0px"})},function(){a(this).css({"background-position":"0px 0px"})});h.bind("click",g);var f=0,b=["-296px 0px","-444px 0px","-594px 0px","-742px 0px"],d=false;function g(){d=true;h.get(0).style.backgroundPosition=b[f];f++;if(f==4){f=0}var j=a(window),i=a(window).scrollTop();i-=Math.ceil(i*15/100);if(i<0){i=0}j.scrollTop(i);if(a(window).scrollTop()==0){d=false;h.animate({top:"-20%"},"fast");return}setTimeout(arguments.callee,e.time)}function c(){if(d){return}var i=a(window).scrollTop();if(i>15){h.css({top:e.alignTop,right:e.alignRight,"background-position":"0px 0px"}).fadeIn("slow")}else{if(i<15){h.fadeOut("slow")}}}}})(jQuery);
+    $(function(){
+        $("#backToTop").backToTop();
+    });
+</script>
+<div id="backToTop" style="height: 164px; width: 37px; position: fixed; background: url(/assets/img/rocket_up.png); display: hidden; cursor: pointer; color: red; z-index: 310;" ></div>

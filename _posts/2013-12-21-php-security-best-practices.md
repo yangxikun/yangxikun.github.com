@@ -19,6 +19,7 @@ If possible always use the latest stable release of PHP because it contains some
 
 如果可能，使用最新发布的稳定版PHP。因为它包含了一些安全的更新和BUG的修复。这能够让PHP应用更加安全。
 
+<!--more-->
 #### Secure Configuration
 #### 安全配置
 

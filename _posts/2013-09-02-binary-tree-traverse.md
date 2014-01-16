@@ -18,6 +18,7 @@ typedef struct BiTNode{
 }BiTNode,*BiTree;
 {% endhighlight %}
 
+<!--more-->
 ###先序遍历(根左右)
 
 {% highlight cpp linenos %}

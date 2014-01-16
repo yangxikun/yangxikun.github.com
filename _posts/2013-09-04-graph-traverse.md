@@ -30,6 +30,7 @@ void DFS( Graph G, int v ){
 }
 {% endhighlight %}
 
+<!--more-->
 ###广度优先搜索
 
 {% highlight cpp linenos %}

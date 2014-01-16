@@ -15,6 +15,7 @@ tags: [PHP练手]
 
 >html代码:
 
+<!--more-->
 {% highlight html linenos %}
 <html>
     <head>
