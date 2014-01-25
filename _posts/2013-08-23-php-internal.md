@@ -82,7 +82,7 @@ _小部分内容有修改，关键字使用粗体标出，斜体字为自己添�
 >>* ub_write：指定数据输出方式,比如apache2handler方式，由于php作为apache的一个so存在，因此其输出也就是调用apache的ap_write函数，而在cgi模式下，会系统调用write。
 >>* sapi_error：错误处理函数
 >>* read_post：读取post数据
->>* register_server_variables：往$_SERVER中注册环境变量,这个一般根据不同协议标准注册注册的变量。
+>>* register_server_variables：往$_SERVER中注册环境变量,这个一般是根据不同协议标准注册的变量。
 
 ###6.Php的执行流程&opcode
 
@@ -114,7 +114,7 @@ _小部分内容有修改，关键字使用粗体标出，斜体字为自己添�
 >>* 支持典型的key->value查询
 >>* 可以当做数组使用
 >>* 添加、删除节点是O（1）复杂度
->>* key支持混合类型：同时存在关联数组合索引数组
+>>* key支持混合类型：同时存在关联数组和索引数组
 >>* Value支持混合类型：array\(“string”,2332\)
 >>* 支持线性遍历：如foreach
 
@@ -299,4 +299,4 @@ RETURN FALTURE;
 
 >>获取变量值：php的符号表是通过hash_table实现的，对于每个变量都分配唯一标识，获取的时候根据标识从表中找到相应zval返回。
 
->>函数中使用全局变量：在函数中，我们可以通过显式申明global来使用全局变量。在active_symbol_table中创建symbol_table中同名变量的引用，如果symbol_table中没有同名变量则会先创建。*我的理解：变量是存在symbol_table中的\(如果存在的话,不存在则自动创建\)，如果使用global声明,则会在active_symbol_table创建这个变量的引用)*
+>>函数中使用全局变量：在函数中，我们可以通过显式申明global来使用全局变量。在active_symbol_table中创建symbol_table中同名变量的引用，如果symbol_table中没有同名变量则会先创建。*我的理解：全局变量是存在symbol_table中的，用global声明变量是在active_symbol_table创建这个变量的引用)*

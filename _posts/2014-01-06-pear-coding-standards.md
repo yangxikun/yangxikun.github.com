@@ -231,6 +231,7 @@ function fooFunction($arg1, $arg2 = '')
 {% endhighlight %}
 有默认值的参数应该位于参数列表的后面。尽量让函数返回一个有意义的值。下面是一个稍长的例子：
 {% highlight php linenos %}
+<?php
 function connect(&$dsn, $persistent = false)
 {
     if (is_array($dsn)) {
@@ -245,6 +246,7 @@ function connect(&$dsn, $persistent = false)
 
     return true;
 }
+?>
 {% endhighlight %}
 
 #### 将过长的函数定义分隔为多行
