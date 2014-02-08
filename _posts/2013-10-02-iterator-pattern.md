@@ -9,11 +9,11 @@ tags: [PHP设计模式]
 
 *学习自《Guide to PHP Design Patterns》*
 
->在PHP的SPL中,有iterator这个类库,它的主要用途在于为一组数据集(可以是数组或对象)提供各种遍历的方法.
+#### 内容
+在PHP的SPL中,有iterator这个类库,它的主要用途在于为一组数据集(可以是数组或对象)提供各种遍历的方法.
 
 <!--more-->
-###一个简单的迭代
-
+示例代码:
 {% highlight php linenos %}
 <?php 
 class testIterator implements iterator {
@@ -51,4 +51,4 @@ foreach ($arr as $key => $value) {
 ?>
 {% endhighlight %}
 
->迭代的类库有各种迭代的接口,这也是为了规范开发者编写的代码吧,具体请看PHP手册[iterator](http://cn2.php.net/manual/en/class.iterator.php).
+迭代的类库有各种迭代的接口,这也是为了规范开发者编写的代码吧,具体请看PHP手册[iterator](http://cn2.php.net/manual/en/class.iterator.php).

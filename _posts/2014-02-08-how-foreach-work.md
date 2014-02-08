@@ -2,8 +2,8 @@
 layout: post
 title: "PHP foreach 是如何遍历数组的？"
 description: ""
-category: 
-tags: []
+category: PHP
+tags: [PHP底层]
 ---
 {% include JB/setup %}
 *参考资料：[How foreach actually works](http://stackoverflow.com/questions/10057671/how-foreach-actually-works/14854568#14854568)和[PHP的哈希表实现](http://www.php-internals.com/book/?p=chapt03/03-01-02-hashtable-in-php)*
@@ -180,3 +180,26 @@ foreach ($ref as $val) {
 2. 数组的`refcount__gc`>1，`is_ref__gc`为0，那么`foreach`将会复制zval；
 3. 数组的`is_ref__gc`为1，那么`foreach`并不会复制zval；
 4. 注意在遍历的时候也会发生数组zval的复制，如TC6。
+
+#### 附加的一个问题
+- - -
+有人问道当foreach发生zval复制时，从上面的例子可以得出这样的结论：`(zval).value->ht`会被复制一份，那么`(zval).value->ht->arBuckets`即该二级指针存储的`Bucket`是否也会被复制？
+
+看这段示例代码：
+{% highlight php linenos %}
+<?php
+$arr = [1, 2, 3, 4, 5];
+
+$ref = $arr;
+foreach ($arr as $val) {
+    echo "$val\n";
+    $arr[] = $val + 1;
+}
+var_dump($arr);
+?>
+{% endhighlight %}
+
+如果`(zval).value->ht->arBuckets`没有被复制，那么`foreach`的输出就不止1、2、3、4、5了，可结果如下：
+![test8](/assets/img/201402080107.png)
+
+从输出结果可以看出，`(zval).value->ht->arBuckets`也是会被复制的。
