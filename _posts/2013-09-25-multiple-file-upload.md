@@ -7,7 +7,7 @@ tags: [PHP练手]
 ---
 {% include JB/setup %}
 
->html代码如下,有两点需要注意的:一是设置form的enctype属性,二是使用post方法
+html代码如下,有两点需要注意的:一是设置form的enctype属性,二是使用post方法
 
 {% highlight html linenos %}
 <html>
@@ -56,11 +56,11 @@ tags: [PHP练手]
  *    其值为 7，文件写入失败。PHP 5.1.0 引进。
  *
  */
-if ( !empty( $_FILES ) ) {
-    foreach ( $_FILES as $key => $value ) {
-        if ( $value['error'] === 0 ) {//上传过程中未出错
-            if ( is_uploaded_file( $value['tmp_name'] ) ) {
-                if ( move_uploaded_file( $value['tmp_name'], /*...目的位置*/ ) ) {
+if (!empty($_FILES)) {
+    foreach ($_FILES as $key => $value) {
+        if ($value['error'] === 0) {//上传过程中未出错
+            if (is_uploaded_file($value['tmp_name'])) {
+                if (move_uploaded_file($value['tmp_name'], /*...目的位置*/)) {
                     echo 'file '.$value['name'].' has been uploaded.<br />';
                 } else {
                     echo 'Cann\'t upload file!Maybe permission deny!';

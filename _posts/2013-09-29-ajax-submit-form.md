@@ -7,13 +7,13 @@ tags: [PHP练手]
 ---
 {% include JB/setup %}
 
->主要使用了`jQuery ajax - serialize()` 方法.
+主要使用了`jQuery ajax - serialize()` 方法.
 
->The .serialize() method creates a text string in standard URL-encoded notation.
+The .serialize() method creates a text string in standard URL-encoded notation.
 
->It can act on a jQuery object that has selected individual form controls, such as `<input>`, `<textarea>`, and `<select>`: `$( "input, textarea, select" ).serialize();`
+It can act on a jQuery object that has selected individual form controls, such as `<input>`, `<textarea>`, and `<select>`: `$( "input, textarea, select" ).serialize();`
 
->html代码:
+html代码:
 
 <!--more-->
 {% highlight html linenos %}
@@ -47,7 +47,7 @@ tags: [PHP练手]
 </html>
 {% endhighlight %}
 
->php代码:
+php代码:
 
 {% highlight php linenos %}
 <?php
