@@ -9,6 +9,7 @@ tags: [PHP应用]
 
 `urlencode()`：用于编码URL中的参数部分。
 `rawurlencode()`：用于编码URL路径部分。
+<!--more-->
 
 示例代码：
 {% highlight php linenos %}

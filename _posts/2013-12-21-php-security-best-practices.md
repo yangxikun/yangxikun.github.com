@@ -168,7 +168,7 @@ if($email && $age && ($age >= 14 && $age <= 30)){
 
 * __is\_float__ – checks if a variable contains a floating point number.
 
-* __is\_integer__|__is\_long__|__is\_int__ – checks if value is a valid integer. Note that this doesn’t check for the data type since all user input is always in string so either the value `'1'` or simply `1` will pass.
+* __is\_integer__ | __is\_long__ | __is\_int__ – checks if value is a valid integer. Note that this doesn’t check for the data type since all user input is always in string so either the value `'1'` or simply `1` will pass.
 is_null – checks if a variable is NULL
 
 * __is\_numeric__ – checks if a value is a valid number, the main difference of this function with is_int is that it also checks for the data type so string numbers such as `'1'`, `'23'`, or `'14'` will return false.
