@@ -7,6 +7,9 @@ tags: [PHP扩展]
 ---
 {% include JB/setup %}
 
+#### 关于本函数列表
+为了帮助php开发者更方便的开发扩展，这里整理了一份ZEND API的函数列表，由于本人能力有限，这些并不是全部，我打算在git上开个项目，来撰写这些API的使用范例，如果你对这个项目感兴趣，并向贡献一份力量，请发email给我**yangrokety@gmail.com**
+
 #### 输出相关
 - - -
 1. `php_printf(format, var)`
