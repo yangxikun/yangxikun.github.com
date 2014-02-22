@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "PHP Ext API整理"
+title: "PHP Ext API"
 description: ""
 category: PHP
 tags: [PHP扩展]
@@ -9,9 +9,9 @@ tags: [PHP扩展]
 
 #### 关于本函数列表
 - - -
-为了帮助php开发者更方便的开发扩展，这里整理了一份ZEND API的函数列表，由于本人能力有限，这些并不是全部，我打算在git上开个项目，来撰写这些API的使用范例，如果你对这个项目感兴趣，并向贡献一份力量，请发email给我**yangrokety@gmail.com**
+为了帮助php开发者更方便的开发扩展，这里整理了一份ZEND API的函数列表，由于本人能力有限，这些并不是全部，我打算在git上开个项目，来撰写这些API的使用范例，如果你对这个项目感兴趣，并想贡献一份力量，请发email给我**yangrokety@gmail.com**
 
-#### 输出相关
+#### 输出相关 About Output
 - - -
 1. `php_printf(format, var)`
 2. `PHPWRITE(string, strlen(string))`
@@ -21,7 +21,7 @@ tags: [PHP扩展]
 上述3、4函数详细讨论：[Difference between sprintf, snprintf and spprintf](http://osdir.com/ml/php.devel/2002-06/msg00840.html)
 
 <!--more-->
-#### 参数相关
+#### 参数相关 About Parameters
 - - -
 1. `int zend_parse_parameters(int num_args TSRMLS_DC, char *type_spec, ...)`
 
@@ -35,7 +35,7 @@ tags: [PHP扩展]
 `!`：在该字符之后的变量可以为特定的类型或者NULL（对于上图中的说明符，除了'b'，'l'，'d'都适用），如果传递了NULL，那么指针将会指向NULL
 具体参数解析例子，可以查看PHP源代码`phpsrc/README.PARAMETER_PARSING_API`
 
-#### 返回值相关
+#### 返回值相关 About Return Values
 - - -
 1. `RETURN_NULL()`
 2. `RETUTN_BOOL(b)` b: 0 => FALSE, non-0 => TRUE
@@ -47,9 +47,9 @@ tags: [PHP扩展]
 8. `RETURN_STRINGL(str, len, dup)` len: Predetermined string length
 9. `RETURN_EMPTY_STRING()`
 
-#### 数组相关
+#### 数组相关 Aobut Array
 - - -
-关联数组：
+关联数组 Associate Array：
 1. `int add_assoc_long(zval *arg, char *key, long n)`
 2. `add_assoc_null(zval *arg, char *key)`
 3. `add_assoc_bool(zval *arg, char *key, int b)`
@@ -59,7 +59,7 @@ tags: [PHP扩展]
 7. `int add_assoc_stringl(zval *arg, char *key, char *str, uint len, int dup);`
 8. `int add_assoc_zval(zval *arg, char *key, zval *value)`
 
-索引数组：
+索引数组 Index Array：
 1. `int add_index_long(zval *arg, ulong idx, long n)`
 2. `int add_index_null(zval *arg, ulong idx)`
 3. `int add_index_bool(zval *arg, ulong idx, int b)`
@@ -77,7 +77,7 @@ tags: [PHP扩展]
 15. `int add_next_index_stringl(zval *arg, const char *str, uint length, int duplicate)`
 16. `int add_next_index_zval(zval *arg, zval *value)`
 
-#### Hash Table相关
+#### Hash Table
 - - -
 startup/shutdown：
 1. `int zend_hash_init(HashTable *ht,uint nSize, hash_func_t pHashFunction, dtor_func_t pDestructor, zend_bool persistent);`
@@ -140,7 +140,7 @@ debug：
 1. `void zend_hash_display_pListTail(const HashTable *ht)`
 2. `void zend_hash_display(const HashTable *ht)`
 
-#### zval相关
+#### About Zval
 - - -
 accessing a zval：
 1. `(zval).value.lval Z_LVAL(zval)`
@@ -202,7 +202,7 @@ allocate and initialize a zval：
 15. `SEPARATE_ARG_IF_REF(varptr)`
 16. `READY_TO_DESTROY(zv)`
 
-#### 内存分配相关
+#### 内存分配相关 About Memory Allocation
 - - -
 1. `viod* emalloc(size_t size)`
 2. `void* ecalloc(size_t nmemb, size_t size)`
@@ -219,7 +219,7 @@ allocate and initialize a zval：
 13. `void pefree(void *ptr, int persist)`
 14. `void* safe_pemalloc(size_t nmemb, size_t size, size_t addtl, int persist)`
 
-#### 常量相关
+#### 常量相关 About Constants
 - - -
 flags：
 1. `#define CONST_CS             (1<<0)              /* Case Sensitive */`
@@ -250,7 +250,7 @@ copy：
 1. `void zend_copy_constants(HashTable *target, HashTable *sourc)`
 2. `void copy_zend_constant(zend_constant *c)`
 
-#### 对象相关
+#### 对象相关 About Object
 - - -
 init：
 1. `INIT_CLASS_ENTRY(class_container, class_name, functions)`
