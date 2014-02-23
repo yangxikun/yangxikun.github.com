@@ -18,3 +18,5 @@ tags: [PHP应用]
 DOM是PHP的C扩展，速度上会快很多，但HTML标签位置的变动会导致有时抓取不到数据，所以适合那些页面结构基本不变的网页。
 
 php-simple-html-dom是使用PHP写的一个类库，速度上比较慢，主要是load的时候，对HTML进行解析的时候很慢，但HTML标签位置的变动对其基本没影响，因为它可以根据标签的属性值进行筛选。对于load速度慢的问题，可以将HTML适当的截短到某个标签范围内，来提高速度。
+
+自己实现了个轻量级的类似`simple_html_dom`的类[TagDomRoot](https://github.com/yangxikun/tag-parse)，它的搜索速度会相对快许多，且平均内存占用量较低。

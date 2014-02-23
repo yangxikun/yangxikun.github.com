@@ -11,12 +11,14 @@ tags: [PHP扩展]
 - - -
 为了帮助php开发者更方便的开发扩展，这里整理了一份ZEND API的函数列表，由于本人能力有限，这些并不是全部，我打算在git上开个项目，来撰写这些API的使用范例，如果你对这个项目感兴趣，并想贡献一份力量，请发email给我**yangrokety@gmail.com**
 
+**已在git上立项：[PHP ZEND API](https://github.com/yangxikun/php-zend-api)**
+
 #### 输出相关 About Output
 - - -
 1. `php_printf(format, var)`
 2. `PHPWRITE(string, strlen(string))`
-3. `spprintf(char *, length, format, char *)`：使用该函数前必须先分配好第一个参数的内存空间
-4. `snprintf(char **, length, char *)`：会动态地为第一个参数分配内存
+3. `spprintf(char **, max, format, var...)`：使用该函数前必须先分配好第一个参数的内存空间
+4. `snprintf(char *, length, format, var...)`：会动态地为第一个参数分配内存
 
 上述3、4函数详细讨论：[Difference between sprintf, snprintf and spprintf](http://osdir.com/ml/php.devel/2002-06/msg00840.html)
 
@@ -30,8 +32,8 @@ tags: [PHP扩展]
 
 类型说明符和变量存储结构：
 ![type](/assets/img/201402190101.png)
-`|`：在该符号之后的参数都是可选的
-`/`：在该字符之后的变量如果不是通过引用传递，那么对其进行ZVAL分离，即执行`SEPARATE_ZVAL_IF_NOT_REF()`
+`|`：在该符号之前的参数都是可选的
+`/`：在该字符之前的变量如果不是通过引用传递，那么对其进行ZVAL分离，即执行`SEPARATE_ZVAL_IF_NOT_REF()`
 `!`：在该字符之后的变量可以为特定的类型或者NULL（对于上图中的说明符，除了'b'，'l'，'d'都适用），如果传递了NULL，那么指针将会指向NULL
 具体参数解析例子，可以查看PHP源代码`phpsrc/README.PARAMETER_PARSING_API`
 
