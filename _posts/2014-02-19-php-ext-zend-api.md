@@ -40,11 +40,11 @@ tags: [PHP扩展]
 #### 返回值相关 About Return Values
 - - -
 1. `RETURN_NULL()`
-2. `RETUTN_BOOL(b)` b: 0 => FALSE, non-0 => TRUE
-3. `RETUTN_TRUE`
-4. `RETUTN_FALSE`
-5. `RETUTN_LONG(l)` l: Integer value
-6. `RETUTN_DOUBLE(d)` d: Floating point value
+2. `RETURN_BOOL(b)` b: 0 => FALSE, non-0 => TRUE
+3. `RETURN_TRUE`
+4. `RETURN_FALSE`
+5. `RETURN_LONG(l)` l: Integer value
+6. `RETURN_DOUBLE(d)` d: Floating point value
 7. `RETURN_STRING(str, dup)` str: char* string value dup: 0/1 flag, duplicate string?
 8. `RETURN_STRINGL(str, len, dup)` len: Predetermined string length
 9. `RETURN_EMPTY_STRING()`
