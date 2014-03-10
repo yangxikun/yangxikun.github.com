@@ -9,6 +9,10 @@ tags: [WEB智能算法]
 
 *参考自网上许多资料，维基百科，[IBM Developer三篇文章](http://www.ibm.com/developerworks/cn/web/1103_zhaoct_recommstudy1/index.html)，《WEB智能算法》*
 
+#### 基础数学知识
+- - -
+* [加权平均数](http://zh.wikipedia.org/wiki/%E5%8A%A0%E6%AC%8A%E5%B9%B3%E5%9D%87%E6%95%B8)：![\overline{x} = \frac{\sum_{i=1}^{n}w_ix_i}{\sum_{i=1}^{n}w_i}](/assets/img/201403060116.png)
+
 #### 数据归一化
 - - -
 * [常用的归一化方法](http://in.sdo.com/?p=1889)
@@ -47,6 +51,8 @@ n维空间两点之间的距离，设![M_1(x_1,x_2,...,x_n)](/assets/img/2014030
 
 #### 皮尔逊相关系数
 - - -
+应用于线性相关的数据，对于非线性相关的数据：[斯皮尔曼等级相关系数](http://zh.wikipedia.org/wiki/%E6%96%AF%E7%9A%AE%E5%B0%94%E6%9B%BC%E7%AD%89%E7%BA%A7%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0)和[肯得尔系数](http://en.wikipedia.org/wiki/Kendall_tau_rank_correlation_coefficient)
+
 将两组数据首先做Z分数处理之后，然后两组数据的乘积和除以样本数。
 
 Z分数一般代表正态分布中，数据偏离中心点的距离，等于变量减掉平均数再除以标准差。
@@ -55,7 +61,7 @@ Z分数一般代表正态分布中，数据偏离中心点的距离，等于变�
 
 ![r_{M_1M_2} = \frac{\sum z(x_i)z(y_i)}{n} = \frac{\sum (x_i-\overline{M_1})(y_i-\overline{M_2})}{n\cdot s(M_1)s(M_2)}](/assets/img/201403060109.png)
 
-![r_{M_1M_2} = \frac{\sum (x_i-\overline{M_1})(y_i-\overline{M_2})}{n\cdot \sqrt {\frac{1}{n}\sum (x_i-\overline{M_1})}\sqrt {\frac{1}{n}\sum {(y_i-\overline{M_2})}}}](/assets/img/201403060110.png)
+![r_{M_1M_2} = \frac{\sum (x_i-\overline{M_1})(y_i-\overline{M_2})}{n\cdot \sqrt {\frac{1}{n}\sum (x_i-\overline{M_1})^2}\sqrt {\frac{1}{n}\sum {(y_i-\overline{M_2})^2}}}](/assets/img/201403060110.png)
 
 #### Jaccard index
 - - -
