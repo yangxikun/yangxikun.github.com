@@ -12,6 +12,8 @@ tags: [WEB智能算法]
 #### 基础数学知识
 - - -
 * [加权平均数](http://zh.wikipedia.org/wiki/%E5%8A%A0%E6%AC%8A%E5%B9%B3%E5%9D%87%E6%95%B8)：![\overline{x} = \frac{\sum_{i=1}^{n}w_ix_i}{\sum_{i=1}^{n}w_i}](/assets/img/201403060116.png)
+* [方差](http://zh.wikipedia.org/wiki/%E6%96%B9%E5%B7%AE)：在概率论和统计学中，一个随机变量的方差描述的是它的离散程度，也就是该变量离其期望值的距离。![s^2 = \sum_{i=1}^{n}p_i \cdot (x_i-\bar{x})](/assets/img/201403060117.png)
+* [标准差](http://zh.wikipedia.org/wiki/%E6%A0%87%E5%87%86%E5%B7%AE)：又常称均方差，反映组内个体间的离散程度。![s = \sqrt{\sum_{i=1}^{n}p_i \cdot (x_i-\bar{x})}](/assets/img/201403060118.png)
 
 #### 数据归一化
 - - -
