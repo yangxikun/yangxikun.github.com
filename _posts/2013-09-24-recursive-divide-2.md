@@ -18,6 +18,7 @@ tags: [算法]
 当n>1时,首先将n-1个较小的圆盘借助b移到c上，再将a剩下的最大圆盘移到b上，接着将c中n-1个圆盘借助a移动到b。
 
 <!--more-->
+
 #### 算法代码
 {% highlight cpp linenos %}
 void hanoi(int n, int a, int b, int c)

@@ -13,6 +13,7 @@ tags: [PHP应用]
 2. 将请求到的html（所获取的html是未经过js处理的）加载为[DOM](http://www.php.net/manual/zh/book.dom.php)后，使用DOM库提供的方法从网页获取数据，同时也可以结合DOMXPath（获取网页数据XPath的路径可以使用chrome的控制台，在标签上右击鼠标，选择copy xpath，但注意这个xpath可能与你实际想要的有时会不同，注意禁止掉浏览器js运行）。另外一种方法就是使用[php-simple-html-dom](http://www.ecartchina.com/php-simple-html-dom/manual.htm)，这个库提供面向对象的方法像jquery那样从网页获取数据。
 
 <!--more-->
+
 #### 两种获取数据方法比较
 
 DOM是PHP的C扩展，速度上会快很多，但HTML标签位置的变动会导致有时抓取不到数据，所以适合那些页面结构基本不变的网页。

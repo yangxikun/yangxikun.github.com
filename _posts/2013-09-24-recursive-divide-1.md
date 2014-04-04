@@ -16,6 +16,7 @@ tags: [算法]
 当n>1时，Perm\(R\)由\(r1\)Perm\(R1\)，\(r2\)Perm\(R2\)，...，\(rn\)Perm\(Rn\)构成，如此，Perm\(R1\)，...，Perm\(Rn\)也可以递归分解下去。
 
 <!--more-->
+
 #### 算法代码
 {% highlight cpp linenos %}
 void Perm(Type list[], int k, int m)

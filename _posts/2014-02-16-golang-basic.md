@@ -14,6 +14,7 @@ tags: [GoLang基础]
 3. 可进行切片操作，例如：`str[startIndex:endIndex+1]`。
 
 <!--more-->
+
 #### slice
 
 1. 引用类型；

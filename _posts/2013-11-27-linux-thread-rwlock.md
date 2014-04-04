@@ -36,10 +36,15 @@ tags: [线程]
 
 {% highlight cpp linenos %}
 #include<pthread.h>
+
 #include<stdio.h>
+
 #include<unistd.h>
+
 #include<errno.h>
+
 #include<stdlib.h>
+
 #include<string.h>
 
 /* 读写锁对象 */

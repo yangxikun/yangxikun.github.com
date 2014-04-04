@@ -13,6 +13,7 @@ tags: [PHP编码规范]
 使用4个空格的缩进，且不含制表符。这有助于避免差别、补丁、SVN历史和注释带来的问题。为了增强代码的可读性，特别推荐每一行大约占75-85个字符长。 Paul M. Jones有关于这个限制的一些[想法](http://paul-m-jones.com/archives/category/programming/php)。
 
 <!--more-->
+
 #### 控制结构
 - - -
 包括if、for、while、switch等。这里有一个例子：

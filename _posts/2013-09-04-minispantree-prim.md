@@ -16,6 +16,7 @@ tags: [数据结构]
 5. 结束。
 
 <!--more-->
+
 #### 辅助
 
 1. closedge\[\]数组记录了相应顶点到V的最短距离`struct{ VertexType adjvex; VRType lowcost;}closedge[MAX]`；

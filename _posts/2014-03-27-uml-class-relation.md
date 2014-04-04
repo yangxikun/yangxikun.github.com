@@ -22,6 +22,7 @@ ClassA <|-- ClassB
 {% endhighlight %}
 
 <!--more-->
+
 ##### 实现
 
 一个类实现了一个或多个接口。

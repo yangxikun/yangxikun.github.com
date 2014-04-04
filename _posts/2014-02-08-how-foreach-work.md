@@ -34,6 +34,7 @@ typedef struct _hashtable {
 `Bucket *pInternalPointer;`就是`foreach`用于遍历`Bucket`的指针，数组的每一个元素都存储在`Bucket`，它比`for`快，因为`for`需要对`key`进行哈希后，才能找到相应节点。
 
 <!--more-->
+
 #### 请看下面的示例代码以了解foreach对数组的遍历
 - - -
 Test Case 1:

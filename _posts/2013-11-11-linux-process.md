@@ -14,6 +14,7 @@ tags: [进程]
 > 为使程序能并发执行，且为了对并发（并发指两个或多个事件在同一时间间隔内发生）执行的程序加以描述和控制，于是引入了“进程”的概念。
 
 <!--more-->
+
 ### 守护进程
 
 > 守护进程，也就是通常说的Daemon进程，是Linux中的后台服务进程。它是一个生存期较长的进程，通常独立于控制终端并且周期性地执行某种任务或等待处理某些发生的事件。守护进程是脱离于终端并且在后台运行的进程。守护进程脱离于终端是为了避免进程在执行过程中的信息在任何终端上显示并且进程也不会被任何终端所产生的终端信息所打断。
@@ -63,9 +64,13 @@ tags: [进程]
 先来看看上面第1步是为何，编译执行下面代码：
 {% highlight cpp linenos %}
 #include<sys/types.h>
+
 #include<unistd.h>
+
 #include<stdio.h>
+
 #include<stdlib.h>
+
 #include<errno.h>
 
 int main() {
@@ -97,13 +102,21 @@ int main() {
 
 {% highlight cpp linenos %}
 #include<sys/types.h>
+
 #include<sys/param.h>
+
 #include<sys/stat.h>
+
 #include<fcntl.h>
+
 #include<unistd.h>
+
 #include<stdio.h>
+
 #include<stdlib.h>
+
 #include<errno.h>
+
 #include<time.h>
 
 void init_daemon() {

@@ -23,6 +23,7 @@ tags: [PHP扩展]
 上述3、4函数详细讨论：[Difference between sprintf, snprintf and spprintf](http://osdir.com/ml/php.devel/2002-06/msg00840.html)
 
 <!--more-->
+
 #### 参数相关 About Parameters
 - - -
 1. `int zend_parse_parameters(int num_args TSRMLS_DC, char *type_spec, ...)`

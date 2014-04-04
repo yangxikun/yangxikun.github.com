@@ -22,6 +22,7 @@ tags: [PHP应用]
 >现在需要的实现是:ACode在得到need的时候,BCode就能很快开始执行,而ACode剩下的代码可以和BCode并行执行.
 
 <!--more-->
+
 ###如何实现?
 
 >模拟操作系统进程同步的实现,这里将ACode比喻为ACode进程,BCode比喻为BCode进程.
