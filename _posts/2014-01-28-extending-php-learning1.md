@@ -154,7 +154,7 @@ function &definition()
     return $def;
 }
 
-$def &definition();
+$def = &definition();
 ?>
 {% endhighlight %}
 如果对引用计数，写时复制有了充分了解，那么应该能看出上面的代码实际执行时和不使用引用返回是一样的效果，并不会多消耗ZVAL。<br>
