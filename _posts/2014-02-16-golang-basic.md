@@ -9,6 +9,7 @@ tags: [GoLang基础]
 
 #### 字符串
 
+
 1. 使用"和\`定义，类型：string；
 2. 无法修改（类似C语言中的字符串常量`char *str="Hello"`）；
 3. 可进行切片操作，例如：`str[startIndex:endIndex+1]`。
@@ -16,6 +17,7 @@ tags: [GoLang基础]
 <!--more-->
 
 #### slice
+
 
 1. 引用类型；
 2. 可进行切片操作，例如：`aSlice[startIndex:endIndex+1]`。
@@ -26,10 +28,12 @@ tags: [GoLang基础]
 
 ### map
 
+
 1. 引用类型
 2. 元素无序性，每次打印出来看到的顺序可能互不相同；
 
 ### 类型转换
+
 
 1. `[]byte`和`string`可相互转换；
 2. `interface{}`可以使用.(type)进行类型转换。

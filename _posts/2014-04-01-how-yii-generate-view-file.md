@@ -44,6 +44,7 @@ public function renderInternal($_viewFile_,$_data_=null,$_return_=false)
 
 与输出缓冲相关的`php.ini`配置：
 
+
 1. `output_buffering`   值可以为on、off、整数，默认为4096。
 2. `output_handler`  默认为 null，其值只能设置为一个内置的函数名，作用就是将脚本的所有输出，用所定义的函数进行处理。他的用法和`ob_start('function_name')`较类似，配置文件中建议使用`zlib.output_handler`代替该指令。
 3. `implicit_flush` 默认为off，当设置为on时，PHP将在输出后，自动送出缓冲区内容，即自动执行`flush()`。

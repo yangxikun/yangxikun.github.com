@@ -9,6 +9,7 @@ tags: [数据结构]
 
 #### 思想
 
+
 1. 假设最小生成树点集为V,图的所有点集为U,初始化V含有U中任意一个顶点；
 2. 从U-V中选出一个离V最近的一个顶点加入V中；
 3. 更新U-V中顶点到V的最短路径；
@@ -18,6 +19,7 @@ tags: [数据结构]
 <!--more-->
 
 #### 辅助
+
 
 1. closedge\[\]数组记录了相应顶点到V的最短距离`struct{ VertexType adjvex; VRType lowcost;}closedge[MAX]`；
 2. 图的存储结构为邻接矩阵。

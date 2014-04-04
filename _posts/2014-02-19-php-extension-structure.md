@@ -9,12 +9,14 @@ tags: [PHP扩展]
 
 #### 必要的文件
 
+
 1. extname.c
 2. php_extname.h
 3. config.m4
 4. config.w32
 
 #### php_extname.h
+
 
 1. 一些必要的宏定义
 2. 函数声明，注意自己写的提供给脚本使用的函数也应该在这里进行声明
@@ -23,6 +25,7 @@ tags: [PHP扩展]
 <!--more-->
 
 #### extname.c文件结构
+
 
 1. 文件头：许可声明、作者……
 2. include包含一些必要文件

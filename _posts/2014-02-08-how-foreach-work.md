@@ -177,6 +177,7 @@ foreach ($ref as $val) {
 #### 总结
 - - -
 如果`foreach`要遍历一个数组：
+
 1. 数组的`refcount__gc`为1，`is_ref__gc`为0，那么`foreach`并不会复制zval；
 2. 数组的`refcount__gc`>1，`is_ref__gc`为0，那么`foreach`将会复制zval；
 3. 数组的`is_ref__gc`为1，那么`foreach`并不会复制zval；
