@@ -59,7 +59,7 @@ $a = "this is";
 $b = &$a;
 $c = &$a;
 $b = 42;
-unset($b);
+unset($c);
 unset($a);
 ?>
 {% endhighlight %}
