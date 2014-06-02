@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 {% endhighlight %}
 
 编译后的结果：
+
 ![largearray](/assets/img/201405230102.png)
 
 #### 一些来自库函数的编程准则
