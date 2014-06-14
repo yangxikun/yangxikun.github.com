@@ -21,6 +21,7 @@ SELECT 标识，是执行 SELECT 的顺序。该值可以为 NULL ，如果是�
 
 #### select_type
 - - -
+
 |值  |意义 |
 |----|----|
 |SIMPLE|简单的 SELECT，没有使用 UNION 或者 子查询|
