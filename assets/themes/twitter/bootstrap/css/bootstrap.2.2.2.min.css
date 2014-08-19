@@ -625,7 +625,7 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini{*padding-top:1px;*padding-
 .tabs-right>.nav-tabs .active>a,.tabs-right>.nav-tabs .active>a:hover{border-color:#ddd #ddd #ddd transparent;*border-left-color:#ffffff;}
 .nav>.disabled>a{color:#999999;}
 .nav>.disabled>a:hover{text-decoration:none;background-color:transparent;cursor:default;}
-.navbar{background-repeat: no-repeat;background-size: 100% 100%;background-image: url(/assets/blogImg/header.png);height:250px;overflow:visible;margin-bottom:20px;*position:relative;*z-index:2;}
+.navbar{background-repeat: no-repeat;background-size: 100% 100%;background-image: url(/assets/blogImg/header.png);height:350px;overflow:visible;margin-bottom:20px;*position:relative;*z-index:2;}
 .navbar-inner{min-height:40px;padding-left:20px;padding-right:20px;background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);*zoom:1;}.navbar-inner:before,.navbar-inner:after{display:table;content:"";line-height:0;}
 .navbar-inner:after{clear:both;}
 .navbar .container{width:auto;}
