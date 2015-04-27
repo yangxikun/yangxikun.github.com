@@ -53,7 +53,7 @@ soft interrupt: 由程序产生，即信号。
 * TASK_RUNNING: 正在运行或者在运行等待队列中。
 * TASK_STOPPED: 接收到了信号（例如SIGINT、SIGSTOP）使进程挂起，等待SIGCONT信号恢复运行。
 * TASK_INTERRUPTIBLE: 进程被挂起，并等待特定的条件发生。
-* TASK_UNINTERRUPTIBLE: 信号对于处于该状态的进程无作用。
+* TASK_UNINTERRUPTIBLE: 信号对于处于该状态的进程无作用，例如一个在等待磁盘I/O操作de进程。
 * TASK_ZOMIBE: 进程调用exit()后，等待父进程获取其退出状态信息。
 
 ![process state](/assets/img/201504200104.png)
