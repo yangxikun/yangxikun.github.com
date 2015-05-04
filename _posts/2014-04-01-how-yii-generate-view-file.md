@@ -10,7 +10,7 @@ tags: [PHP应用]
 
 在经过一系列预处理后，会调用`CBaseController`的方法：
 
-{% highlight c linenos %}
+{% highlight php linenos %}
 public function renderInternal($_viewFile_,$_data_=null,$_return_=false)
 {
     // we use special variable names here to avoid conflict when extracting data
