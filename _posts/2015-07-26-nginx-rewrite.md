@@ -60,3 +60,27 @@ location匹配顺序：
     }
 }
 {% endhighlight %}
+
+URL中用于匹配和替换的部分是红色字部分：http://rewrite.com`/index/c/i`?hello=world。
+
+rewrite会从配置文件中解析出两个规则集（?代表0或1；+代表1到n）：
+
+1. server->if?->rewrite；
+2. server->location+->一堆重写规则集。
+
+{% highlight php linenos %}
+{
+    server {
+        rewriteA
+        locationA {
+            一堆重写规则集
+        }
+        if {
+            rewriteC
+        }
+        locationB {
+            一堆重写规则集
+        }
+    }
+}
+{% endhighlight %}
