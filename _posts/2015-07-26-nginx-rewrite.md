@@ -61,7 +61,7 @@ location匹配顺序：
 }
 {% endhighlight %}
 
-URL中用于匹配和替换的部分是红色字部分：http://rewrite.com`/index/c/i`?hello=world。
+URL中用于匹配和替换的部分是`http://rewrite.com/index/c/i?hello=world`中的`/index/c/i`。
 
 rewrite会从配置文件中解析出两个规则集（?代表0或1；+代表1到n）：
 
