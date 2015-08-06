@@ -84,3 +84,27 @@ rewrite会从配置文件中解析出两个规则集（?代表0或1；+代表1�
     }
 }
 {% endhighlight %}
+
+以上配置构成了如下两个规则集：
+
+规则集1：
+
+* server->rewriteA
+* server->if->rewriteC
+
+规则集2：
+
+* server->locationA->一堆重写规则集
+* server->locationB->一堆重写规则集
+
+rewrite重写步骤：
+
+1、根据规则集1中的规则先后顺序重写，如果遇到（break/last）则进入步骤2
+
+2、根据规则集2中的location先后顺序匹配URL：
+
+> 如果无任何匹配，则进入3，如果匹配到某个location，则根据location中的location或规则，进行匹配或重写URL
+
+>> location中发生重写时，如果遇到last或者执行到所在location的结尾（发生过重写），则进入步骤2，如果遇到break或者没有发生重写，则进入步骤3
+
+3、结束rewrite。
