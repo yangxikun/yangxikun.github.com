@@ -28,3 +28,35 @@ location匹配顺序：
 2. 检查正则匹配，第一个匹配到正则后停止搜索，如果没有任何正则匹配，那么将使用步骤1中记录的最长前缀。
 
 <!--more-->
+
+那么rewrite规则的路径有如下两种（->代表嵌套、*代表0到n）：
+
+1. server->location*->rewrite；
+2. server->location*->if->rewrite。
+
+即：
+
+{% highlight php linenos %}
+{
+#第一种
+    server {
+        location {
+            location {
+                ……
+                rewrite规则
+            }
+        }
+    }
+#第二种
+    server {
+        location {
+            location {
+                ……
+                if {
+                    rewrite规则
+                }
+            }
+        }
+    }
+}
+{% endhighlight %}
