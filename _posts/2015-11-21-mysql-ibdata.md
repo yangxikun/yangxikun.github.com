@@ -6,6 +6,7 @@ category: MySQL
 tags: [InnoDB]
 ---
 {% include JB/setup %}
+
 ### 前言
 - - -
 在MySQL <= 5.6.5，[innodb\_file\_per\_table](http://dev.mysql.com/doc/refman/5.6/en/innodb-parameters.html#sysvar_innodb_file_per_table)默认为0，即InnoDB表的数据都会存储在共享表空间ibdata中，除此之外ibdata还存储着数据字典、双写缓冲区、undo log等。
