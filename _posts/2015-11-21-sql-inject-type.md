@@ -15,6 +15,8 @@ SQL的注入类型有以下5种：
 1. Stacked queries SQL injection（可多语句查询注入）
 1. Time-based blind SQL injection（基于时间延迟注入）
 
+<!--more-->
+
 > 下文都是基于PHP、MySQL测试得到的结果。
 
 #### Boolean-based blind SQL injection（布尔型注入）
@@ -101,12 +103,12 @@ sqlmap -u http://host/id\=1\* --dbms=mysql --dbs -v 3 --level=5 --risk=3
 
 查看执行结果：
 
-![](http://km.oa.com/files/photos/pictures/201511/1447939944_3_w1639_h611.png)
+![mysql](/assets/img/201511210201.png)
 从输出结果可以看出支持所有类型的SQL注入。
 
 获取到的数据库名：
 
-![](http://km.oa.com/files/photos/pictures/201511/1447940213_68_w248_h85.png)
+![mysql](/assets/img/201511210202.png)
 
 服务端代码去掉SQL报错信息：
 
@@ -121,7 +123,7 @@ var_dump($res->fetchAll());
 
 重新执行sqlmap，查看执行结果：
 
-![](http://km.oa.com/files/photos/pictures/201511/1447940179_69_w1638_h471.png)
+![mysql](/assets/img/201511210203.png)
 
 从输出结果可以看出无法使用error-based注入了。
 
@@ -135,11 +137,11 @@ $res = $pdo->query('select * from t1 where id = ' . $_GET['id']);
 ?>                         
 {% endhighlight %}
 
-![](http://km.oa.com/files/photos/pictures/201511/1447941164_24_w943_h268.png)
+![mysql](/assets/img/201511210204.png)
 
 从输出结果可以看出只支持stacked注入和time-based注入，但要获得数据库信息只能使用time-based注入获得，且会做非常多次的注入尝试，如下图：
 
-![](http://km.oa.com/files/photos/pictures/201511/1447941432_35_w1635_h617.png)
+![mysql](/assets/img/201511210205.png)
 
 #### 如何防止SQL注入？
 - - -
@@ -157,4 +159,4 @@ var_dump($res->fetchAll());
 
 sqlmap执行结果：
 
-![](http://km.oa.com/files/photos/pictures/201511/1447941755_78_w646_h102.png)
+![mysql](/assets/img/201511210206.png)
