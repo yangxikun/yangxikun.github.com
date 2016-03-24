@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "PHP 协程"
-description: ""
+description: "PHP 协程"
 category: PHP
 tags: []
 ---
