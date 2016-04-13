@@ -79,6 +79,7 @@ typedef struct _zend_generator {
 在初始化gen函数调用时（即上图中的DO\_FCALL），发现gen函数的op_array->fn\_flags有ZEND\_ACC\_GENERATOR标识，说明需要生成一个Generator对象返回。
 
 在Zend/zend_vm_execute.h中：
+
 {% highlight c linenos %}
 {% raw %}
             ……
@@ -93,6 +94,7 @@ typedef struct _zend_generator {
 {% endhighlight %}
 
 在Zend/zend_generators.c中，zend_generator_create_zval函数主要做的事情就是备份当前EG中的一些与执行上下文相关的信息，然后创建新的execute_data，同时也分配新的一份\_zend\_vm\_stack，注意该堆栈与原本的EG(argument_stack)是分开的，也即每个Generator对象都会拥有自己的\_zend\_vm\_stack：
+
 {% highlight c linenos %}
 {% raw %}
 ZEND_API zval *zend_generator_create_zval(zend_op_array *op_array TSRMLS_DC) /* {{{ */
@@ -106,6 +108,7 @@ ZEND_API zval *zend_generator_create_zval(zend_op_array *op_array TSRMLS_DC) /* 
 {% endhighlight %}
 
 在zend_create_execute_data_from_op_array中实际调用的是Zend/zend_execute.c中的：
+
 {% highlight c linenos %}
 {% raw %}
 static zend_always_inline zend_execute_data *i_create_execute_data_from_op_array(zend_op_array *op_array, zend_bool nested TSRMLS_DC) /* {{{ */
@@ -167,6 +170,7 @@ static void zend_generator_ensure_initialized(zend_generator *generator TSRMLS_D
 {% endhighlight %}
 
 在Zend/zend_generators.c中，以send方法为例：
+
 {% highlight c linenos %}
 {% raw %}
 /* {{{ proto mixed Generator::send(mixed $value)
@@ -207,6 +211,7 @@ ZEND_METHOD(Generator, send)
 {% endhighlight %}
 
 Generator的执行关键在zend_generator_resume函数中：
+
 {% highlight c linenos %}
 {% raw %}
 ZEND_API void zend_generator_resume(zend_generator *generator TSRMLS_DC) /* {{{ */
@@ -276,6 +281,7 @@ ZEND_API void zend_generator_resume(zend_generator *generator TSRMLS_DC) /* {{{ 
 #### Generator的结束
 - - -
 每个Generator的op_array中都会有GENERATOR_RETURN opcode，不是普通函数的RETURN，看看其handler：
+
 {% highlight c linenos %}
 {% raw %}
 static int ZEND_FASTCALL  ZEND_GENERATOR_RETURN_SPEC_HANDLER(ZEND_OPCODE_HANDLER_ARGS)
@@ -297,6 +303,7 @@ static int ZEND_FASTCALL  ZEND_GENERATOR_RETURN_SPEC_HANDLER(ZEND_OPCODE_HANDLER
 带有参数的函数，其op\_array中存在一个RECV opcode。因为函数的参数值是存在于其调用域的execute_data中的，在函数对应的execute_data中其实没有。
 
 查看RECV的handler函数：
+
 {% highlight c linenos %}
 {% raw %}
 static int ZEND_FASTCALL  ZEND_RECV_INIT_SPEC_CONST_HANDLER(ZEND_OPCODE_HANDLER_ARGS)
