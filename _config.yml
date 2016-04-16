@@ -4,7 +4,7 @@ markdown: kramdown
 permalink: /:categories/:year/:month/:day/:title.html
 
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-highlighter: pygments
+highlighter: rouge
 paginate: 7
 description_length: 150
 
