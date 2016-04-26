@@ -111,16 +111,18 @@ relay sql执行了`CREATE DATABASE mysql`，当前slave已经有mysql数据库�
 先看看当前的gtids_executed：
 
 ![](/assets/img/201601300105.png)
+
 其实gtids_executed与`SHOW SLAVE STATUS\G`中的Executed_Gtid_Set是同一个值：
 
-![](/assets/img/201601300106.png)
+![](/assets/img/201601300107.png)
+
 从Retrieved_Gtid_Set可看到接收到的GTID Sets，master的server_uuid为`46cda27d-c601-11e5-9f9b-0242ac110002`，而通过`SHOW global variables LIKE 'server_uuid'`可查到slave的server_uuid为`da4fa606-c602-11e5-adb1-0242ac110003`。
 
 说明当前slave所执行过的事务都是slave上产生的，relay sql出错是在执行master传输过来的binlog产生的，我猜测是master在接收到slave请求参数中的gtid_executed发现自己的二进制文件中并不存在gtid为`da4fa606-c602-11e5-adb1-0242ac110003:x`的事务就从二进制日志中存在的第一条事务开始发送回给slave。
 
 查看下master上第一条事务的binlog（查看第一个binlog文件的开头）：
 
-![](/assets/img/201601300107.png)
+![](/assets/img/201601300108.png)
 
 要解决relay sql的错误，应该是让slave从master获取合适的binlog，所以需要设置好slave合适的gtid_executed，让master发送合适的binlog给slave。因为master是一台全新的服务器，没有任何“用户”数据，所以把slave上的gtid_executed设置为`46cda27d-c601-11e5-9f9b-0242ac110002:1-140`就可以同步master接下来执行的事务了。
 
@@ -132,7 +134,8 @@ relay sql执行了`CREATE DATABASE mysql`，当前slave已经有mysql数据库�
 
 通过`RESET MASTER`能够更新gtid_executed的值为空，再设置gtid_purged的值看看：
 
-![](/assets/img/201601300108.png)
+![](/assets/img/201601300110.png)
+
 如果想重新初始化relay log的话，可以在上图中执行`RESET SLAVE`，这样的话需要重新执行`CHANGE MASTER TO`。
 
 gtid_executed的值同样被更新为`46cda27d-c601-11e5-9f9b-0242ac110002:1-140`了，重新执行`START SLAVE`，查看slave状态：
@@ -248,7 +251,8 @@ Time: 0.007s
 {% endhighlight %}
 5、在新的master（slave1）上插入数据，查看slave1的状态：
 
-![](/assets/img/201601300110.png)
+![](/assets/img/201601300106.png)
+
 6、查看此时slave2的状态：
 
 {% highlight c linenos %}
