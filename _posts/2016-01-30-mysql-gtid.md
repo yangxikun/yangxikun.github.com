@@ -79,7 +79,7 @@ slave请求master时发送的请求：`Request = { server_id, binlog_name, binlo
 数据库版本：MySQL 5.7.10
 
 mater配置如下：
-{% highlight php linenos %}
+{% highlight c linenos %}
 log-bin=master  //主从同步需要开启binlog
 server-id=1     //虽然mysql会自动产生server_uuid，但还是需要配置它= =
 
@@ -87,7 +87,7 @@ gtid-mode=ON    //开启GTID模式
 enforce-gtid-consistency=ON //开启GTID的限制，防止出现数据不一致
 {% endhighlight %}
 slave配置如下：
-{% highlight php linenos %}
+{% highlight c linenos %}
 log-bin=slave
 relay_log=slave-2
 server-id=2
@@ -136,7 +136,7 @@ relay sql执行了`CREATE DATABASE mysql`，当前slave已经有mysql数据库�
 
 gtid_executed的值同样被更新为`46cda27d-c601-11e5-9f9b-0242ac110002:1-140`了，重新执行`START SLAVE`，查看slave状态：
 
-{% highlight php linenos %}
+{% highlight c linenos %}
 Slave_IO_Running              | Yes
 Slave_SQL_Running             | Yes
 Slave_SQL_Running_State       | Slave has read all relay log; waiting for more updates
@@ -145,7 +145,7 @@ Executed_Gtid_Set             | 46cda27d-c601-11e5-9f9b-0242ac110002:1-140
 {% endhighlight %}
 一切正常，现在在master执行一些语句（创建了一个数据库、一张表），查看slave状态：
 
-{% highlight php linenos %}
+{% highlight c linenos %}
 Slave_IO_Running              | Yes
 Slave_SQL_Running             | Yes
 Slave_SQL_Running_State       | Slave has read all relay log; waiting for more updates
@@ -166,7 +166,7 @@ Executed_Gtid_Set             | 46cda27d-c601-11e5-9f9b-0242ac110002:1-142
 
 查看两台slave状态，同步正常：
 
-{% highlight php linenos %}
+{% highlight c linenos %}
 slave1:
 Slave_IO_Running              | Yes
 Slave_SQL_Running             | Yes
@@ -206,7 +206,7 @@ mysql root@172.17.0.4:(none)> SELECT * FROM test_repl.users;
 
 现在slave1的状态：
 
-{% highlight php linenos %}
+{% highlight c linenos %}
 Slave_IO_Running              | No
 Slave_SQL_Running             | No
 Last_IO_Error                 | error reconnecting to master 'repl@172.17.0.2:3306' - retry-time: 60  retries: 1
@@ -228,7 +228,7 @@ Time: 0.010s
 4、在slave2上执行CHANGE MASTER TO切换到新的master（slave1）上，重新启动复制
 现在slave2的状态：
 
-{% highlight php linenos %}
+{% highlight c linenos %}
 Slave_IO_Running              | Yes
 Slave_SQL_Running             | Yes
 Slave_SQL_Running_State       | Slave has read all relay log; waiting for more updates
@@ -250,7 +250,7 @@ Time: 0.007s
 ![](/assets/img/201601300110.png)
 6、查看此时slave2的状态：
 
-{% highlight php linenos %}
+{% highlight c linenos %}
 Retrieved_Gtid_Set            | a7f0745e-c764-11e5-b21d-0242ac110002:144,
 b17fbdfc-c764-11e5-b238-0242ac110003:1
 Executed_Gtid_Set             | a7f0745e-c764-11e5-b21d-0242ac110002:1-144,
