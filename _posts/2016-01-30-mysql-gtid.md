@@ -35,7 +35,7 @@ GTID的限制：
 - - -
 GTID表现形式：`source_id:transaction_id`，其中source_id为一个全局的系统变量[server_uuid](https://dev.mysql.com/doc/refman/5.7/en/replication-options.html#sysvar_server_uuid)，transaction_id为一个从1开始自增的数值。
 
-GTID Sets：一种聚合GTID的数据结构，表现形式：`array[sidno => link_list[Interval]]`，如下图：
+GTID Sets：一种聚合GTID的数据结构，表现形式：`array[sidno => link_list[Interval]]`，如下图(图是用了别人文章的= =)：
 
 ![](/assets/img/201601300101.gif)
 
@@ -66,6 +66,7 @@ MySQL启动时对gtid_executed和gtid_purged的初始化（见[binlog_gtid_simpl
 Previous_gtids_log_event的样子如下：
 
 ![](/assets/img/201601300102.png)
+
 Gtid_log_event的样子如下：
 
 ![](/assets/img/201601300103.png)
