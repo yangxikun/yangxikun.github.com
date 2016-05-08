@@ -15,6 +15,7 @@ xhprof主要只使用了如下两个数据结构：
 ![](/assets/img/201605020201.png)
 
 <!--more-->
+
 #### xhprof的两种分析模式
 - - -
 1、XHPROF_MODE_HIERARCHICAL模式，该模式是详细分析整个PHP代码的执行情况，其输出的分析数据如下：
