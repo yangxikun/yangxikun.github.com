@@ -298,4 +298,4 @@ PHP扩展的加载（php_load_php_extension_cb->php_load_extension）：
 - - -
 图片来自参考文档
 
-![]()
+![](/assets/img/201607100101.png)
