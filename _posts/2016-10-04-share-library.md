@@ -86,6 +86,8 @@ libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fd3f5a76000)
 /lib64/ld-linux-x86-64.so.2 (0x00007fd3f6022000)
 ```
 
+当静态库和动态库同时存在时，编译main.c的时候会优先选择静态库，如果要使用动态库的话需要显示指定：(how to force linker to use shared library instead of static library?)[http://stackoverflow.com/questions/4422493/how-to-force-linker-to-use-shared-library-instead-of-static-library]
+
 ### Linux下库的路径与库的版本
 - - -
 
