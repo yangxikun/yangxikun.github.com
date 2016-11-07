@@ -16,6 +16,8 @@ MySQL的同步模式有三种，从官方文档可知[Replication](http://dev.my
 
 在asynchronous和Semisynchronous模式下，主库与从库之间必然存在一定延迟，当延迟大的话，从库的查询就可能查询到旧的数据，或者查询不到数据（比如主库插入的数据尚未同步到从库）。
 
+<!--more-->
+
 那么如何判断主库与从库之间是否存在延迟呢？延迟又是多少？当我们在从库执行`show slave status\G`查看复制状态时，其中有一个字段是Seconds_Behind_Master，从字面上理解其意思是当前从库落后主库的秒数。
 
 上Google搜索下关键词`MySQL Seconds_Behind_Master`，可以看到很多博文不推荐通过`Seconds_Behind_Master`去监控数据库是否存在延迟。先看下MySQL官方文档关于`Seconds_Behind_Master`的解释：
