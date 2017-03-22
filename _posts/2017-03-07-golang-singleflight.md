@@ -2,7 +2,7 @@
 layout: post
 title: "golang singleflight 用武之地"
 description: "golang singleflight 用武之地"
-category: GoLang
+category:
 tags: []
 ---
 {% include JB/setup %}
