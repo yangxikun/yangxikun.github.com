@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "golang singleflight 用武之地"
-description: ""
-category: 
+description: "golang singleflight 用武之地"
+category: GoLang
 tags: []
 ---
 {% include JB/setup %}
@@ -15,7 +15,7 @@ tags: []
 
 1. 业务代码中，根据key从缓存拿不到数据，访问存储层获取数据后更新缓存
 1. 由专门的定时脚本在缓存失效前对其进行更新
-1. 通过分布式key，实现只有一个请求负责缓存更新，其他请求等待：[一种基于哨兵的缓存访问策略](http://yangxikun.github.io/%E7%BC%93%E5%AD%98/2015/07/02/cache-access.html)
+1. 通过分布式锁，实现只有一个请求负责缓存更新，其他请求等待：[一种基于哨兵的缓存访问策略](http://yangxikun.github.io/%E7%BC%93%E5%AD%98/2015/07/02/cache-access.html)
 
 #### 服务中某个接口请求量暴增问题
 - - -
