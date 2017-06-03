@@ -341,3 +341,7 @@ openssl ciphers -v 'ECDHE+ECDSA ECDHE AESGCM AES HIGH MEDIUM !kDH !kECDH !aNULL 
 ```
 
 其他额外的密码套件，比如需要支持IE6，可以放在密码套件列表末尾。
+
+自己写了个go程序用于检测密码套件列表支持/不支持的客户端：[sslciphersuitescheck](https://github.com/yangxikun/sslciphersuitescheck)
+
+![](/assets/img/201705130120.png)
