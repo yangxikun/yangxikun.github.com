@@ -49,14 +49,24 @@ TLS中可被配置的算法分类：
 ```plaintext
 ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2 Kx=ECDH     Au=RSA  Enc=AESGCM(128) Mac=AEAD
 ```
-表明该算法是在TLS 1.2中支持的，密钥交换采用ECDH（EC是指采用椭圆曲线的DH）,数字签名采用RSA，加密采用128位密钥长度的AESGCM，消息认证码采用AEAD（AEAD是一种新的加密形式，把加密和消息认证码结合到一起，而不是某个算法，例如使用AES并采用GCM模式加密，就能够为数据提供保密性、完整性的保障）。
+表明该算法是在TLS 1.2中支持的，密钥交换采用ECDH（EC是指采用椭圆曲线的DH）,数字签名采用RSA，加密采用128位密钥长度的AESGCM，消息认证码采用AEAD（AEAD是一种新的加密形式，把加密和消息认证码结合到一起，而不是某个算法，例如使用AES并采用GCM模式加密，就能够为数据提供保密性、完整性和真实性的保障）。
 
-> 如何理解完整性？
+> 保密性：信息不会被泄漏给非授权的用户、实体或过程，来自[百度百科](http://baike.baidu.com/link?url=bsdfMsb1FsCHwhlq_6Qq-5Ym_iWoiIaveeDvEehudB5kHPC32eMxJmpoxuXlSQ4KdQX0BAkBO0XVUa3-awZYP-B5ubcejgcHjgA397sN_eMvkF6y9lPmjiHxDJB7Ysgo)。
+
+> 完整性：信息没有被修改过。
+
+> 真实性：确定信息是来自发送方的。
+
+> 如何理解完整性和真实性？
 >> A 将明文M加密后为MC，发给B，B解密，得到明文。
->> 如果此时有中间人C，将MC替换为CMC（虽然C不知道A怎么加密的，但这没关系），B将CMC解密，得到明文（那么B拿到的其实是错误的明文）。
->> 所以需要引入消息认证码，B才能够判断收到的密文是否被篡改过。
+>> 如果此时有中间人C，将MC替换为CMC（虽然C不知道A怎么加密的，但有可能伪造出合法的密文，可以看下知乎这个关于密码攻击的问题：[请解释一下什么是选择明文攻击及选择密文攻击？](https://www.zhihu.com/question/34624915)和[CBC比特反转攻击](http://sec.chinabyte.com/228/13511728.shtml)），B将CMC解密，得到明文（那么B拿到的其实是错误的明文）。
+>> 所以需要引入消息认证码，B才能够判断收到的密文是否被篡改过，且是否来自A。
 >> 这里你可能会问：那如果C同时伪造消息认证码呢？
->> 这个就得看MAC和加密是如何配合的了，详情可以查看[认证加密](https://en.wikipedia.org/wiki/Authenticated_encryption)中的Approaches to Authenticated Encryption章节。
+>> 消息认证码需要用到一个key，这个key只有A、B知道，C在不知道key的情况下无法伪造消息认证码。
+
+> 不可否认性：消息认证码提供了消息完整性和真实性的保障，但不能提供**不可否认性**的保障，因为消息认证码的key双方都有，A可以对其产生的消息认证码进行否认，说是由B产生的。所以就出现了数字签名，数字签名的key是私有的，A产生的签名就没法否认了（当然也可以说是自己的key泄漏了，这里不可否认性是对于密码学的意义而言的）
+
+> 可以看下stackexchange的这个问题：[What are the differences between a digital signature, a MAC and a hash?](https://crypto.stackexchange.com/questions/5646/what-are-the-differences-between-a-digital-signature-a-mac-and-a-hash)
 
 在TLS握手和数据传输的不同阶段会采用相应的算法：
 
