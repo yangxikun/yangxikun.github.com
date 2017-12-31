@@ -11,6 +11,8 @@ tags: []
 
 > In object-oriented programming, a protocol or interface is a common means for unrelated objects to communicate with each other.
 
+<!--more-->
+
 #### concrete types
 * 描述了内存布局
 
