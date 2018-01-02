@@ -21,6 +21,8 @@ Golang的runtime内建了强大的分析工具pprof，能帮助我们对程序�
 * `/simple`的请求则是简单的输出`Hello world!`
 * 实践目的：通过pprof分析优化`/hello`接口的性能，使其与`/simple`接口的性能差距尽量小。
 
+<!--more-->
+
 先来看看未优化前`/hello`和`/simple`的性能对比：
 
 ![](/assets/img/201712250101.png)
