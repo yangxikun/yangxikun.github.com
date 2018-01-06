@@ -98,7 +98,9 @@ public class SplitSentence extends BaseRichBolt {
 #### 有且仅有一次的语义
 - - -
 参考资料：[Trident State](http://ifeve.com/storm-trident-state/#header)
+
 Trident中的三种Spout，根据Spout代码情况可判断属于哪个：
+
 事务型Spout的特点：
 
 * 每个 batch 的 txid 永远不会改变。对于某个特定的 txid，batch 在执行重新处理操作时所处理的 tuple 集和它的第一次处理操作完全相同。
@@ -117,7 +119,9 @@ Trident中的三种Spout，根据Spout代码情况可判断属于哪个：
 * 也有可能提供一种“至少一次”的处理模型，在这种情况下可能会有多个 batch 分别处理某个 tuple。
 
 假如你的拓扑需要计算单词数，而且你准备将计数结果存入一个 K-V 型存储系统中。这里的 key 就是单词，value 对应于单词数。如果仅仅存储计数结果是无法确定某个batch中的tuple是否已经被处理过的，例如一个batch已经处理到最后一步并成功写入到了存储系统中，正准备Ack时挂了，那么重新发射这个batch后，被完整地处理了，batch中的tuple就被处理了多次，为了解决这个问题需要State的帮助，即存储的时候做一些处理。
+
 Trident中的三种State，Storm已经提供了多中存储系统State的实现，如MemoryMapState、MemcachedState：
+
 事务型State
 
 * 特点：对于特定的 txid 永远只与同一组 tuple 相关联。
