@@ -653,6 +653,12 @@ func evacuate_faststr(t *maptype, h *hmap, oldbucket uintptr) {
 
 关于这个问题在 Go 的代码仓库有个 issue：[proposal: spec: cannot assign to a field of a map element directly: m\["foo"\].f = x #3117](https://github.com/golang/go/issues/3117)
 
+#### 如果 key 的类型是 struct 或 指针
+
+对于不同类型的 key 会调用相应的`runtime.mapassign*`和`runtime.mapaccess*`函数，计算 key 的哈希算法也不一样。
+
+比如`type Key struct{a int}`会使用与 key 类型为 int 相同的`runtime.mapassign_fast64`和`runtime.mapaccess1_fast64`函数，`type Key struct{a string}`会使用与 key 类型为 string 相同的`runtime.mapassign_faststr`和`runtime.mapaccess1_faststr`函数。但是`type Key struct{a int; b string}`则使用的是`runtime.mapassign`和`runtime.mapaccess1`。
+
 #### 遗留问题
 
 1. map 并发写的检测是通过判断 h.flags 是否有标记位 hashWriting 这种方式是否不够严谨？
