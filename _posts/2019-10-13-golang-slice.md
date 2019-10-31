@@ -58,8 +58,12 @@ func makeslice(et *_type, len, cap int) unsafe.Pointer {
 
 如果 cap 不足，则会调用`runtime.growslice`进行扩容：
 
-* 当 slice.cap < 1024 时，扩容一倍
-* 当 slice.cap > 1024 时，扩容1/4倍
+* 先按 doublecap = 2 * oldSlice.cap 扩容一倍
+    *如果大于等于 newSlice.cap，则
+        * 当 oldSlice.len < 1024 时，按 doublecap 扩容
+        * 当 oldSlice.len > 1024 时，每次扩容1/4倍的 oldSlice.cap，直到满足 newSlice.cap
+            * 如果出现溢出，则按 newSlice.cap 扩容
+    * 如果小于 newSlice.cap，则按 newSlice.cap 扩容
 * 如果确定slice大小应该预先申请好，因为扩容的时候是需要复制整个数组内存的
 
 ```go
@@ -82,6 +86,7 @@ func growslice(et *_type, old slice, cap int) slice {
 		return slice{unsafe.Pointer(&zerobase), old.len, cap}
 	}
 
+    // 先按旧的slice容量翻倍，如果还不满足实际需要的容量，则按照实际需要的容量扩容
 	newcap := old.cap
 	doublecap := newcap + newcap
 	if cap > doublecap {
@@ -188,3 +193,29 @@ func growslice(et *_type, old slice, cap int) slice {
 }
 ```
 
+#### 有趣的关于 slice 的题目
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := make([]int, 0, 3)
+	b := append(a, 1)
+	_ = append(a, 2)
+	fmt.Println(b[0])
+
+	c := make([]int, 3, 3)
+	fmt.Println(cap(c[1:]))
+	fmt.Println(cap(c[:1]))
+}
+```
+
+上面这段代码的输出是：
+
+```text
+2 // 因为 a 的长度是 0，所以每次 append 修改的是底层数组的第一个元素
+2 // 进行切片操作，新的 slice.cap = oldSlice.cap - 切片开始索引
+3
+```
