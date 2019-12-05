@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "golang grpc 客户端负载均衡、重试、健康检查"
-description: "golang grpc 客户端负载均衡"
+description: "golang grpc 客户端负载均衡、重试、健康检查"
 category: GoLang
 tags: []
 ---

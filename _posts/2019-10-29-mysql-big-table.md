@@ -42,7 +42,12 @@ for row in chunk:
 笔者采用的命令参数如下：
 
 ```shell script
-pt-archiver --charset utf8 --source h=${MYSQL_HOST},D=${MYSQL_DB},t=${MYSQL_TABLE},i=created_at_idx --user ${MYSQL_USER} --ask-pass --file '%Y-%m-%d-%D.%t' --progress 100 --where 'created_at < "2019-10-26"' --txn-size 100 --limit 1000
+# 先导出数据，不删除表里的数据
+pt-archiver --charset utf8 --source h=${MYSQL_HOST},D=${MYSQL_DB},t=${MYSQL_TABLE} --user ${MYSQL_USER} --ask-pass --file '%Y-%m-%d-%D.%t' --progress 1000 --where 'created_at < "2019-01-01 00:00:00"' --txn-size 100 --limit 1000 --no-delete
+# 确认导出的数据没有问题，删除表中的数据
+pt-archiver --charset utf8 --source h=${MYSQL_HOST},D=${MYSQL_DB},t=${MYSQL_TABLE} --user ${MYSQL_USER} --ask-pass --progress 1000 --where 'created_at < "2019-01-01 00:00:00"' --txn-size 100 --limit 1000 --nosafe-auto-increment --purge
 ```
 
-归档完数据后，还需要执行下`OPTIMIZE TABLE ${MYSQL_TABLE}`，以回收空间，详细原因可参考文章：[MySQL ibdata 存储空间的回收](http://yangxikun.com/mysql/2015/11/21/mysql-ibdata.html)
+* 默认情况下，pt-archiver的查找会强制使用主键索引，虽然 match_logs 表上有 created_at 字段的索引，但是我们不能使用该索引，因为它不是唯一索引，如果使用 created_at 字段的索引会导致导出来的数据少了，这跟 pt-archiver 如何获取下一页数据有关
+* 当pt-archiver适合使用主键索引时，默认情况下，不会归档最后一条记录（即自增主键最大的记录，这是出于安全考虑，因为MySQL自增列的最大值在5.7中是存储在内存中的，没有持久化到磁盘，重启后会通过 SELECT MAX(ai_col) FROM table_name FOR UPDATE; 将获取到的值+1作为下一个可用的自增值），如果归档最后一条记录没有影响，可以添加--nosafe-auto-increment参数
+* 归档完数据后，还需要执行下`OPTIMIZE TABLE ${MYSQL_TABLE}`，以回收空间，详细原因可参考文章：[MySQL ibdata 存储空间的回收](http://yangxikun.com/mysql/2015/11/21/mysql-ibdata.html)
