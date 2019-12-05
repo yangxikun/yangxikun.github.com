@@ -41,7 +41,7 @@ for row in chunk:
 
 笔者采用的命令参数如下：
 
-```shell script
+```text
 # 先导出数据，不删除表里的数据
 pt-archiver --charset utf8 --source h=${MYSQL_HOST},D=${MYSQL_DB},t=${MYSQL_TABLE} --user ${MYSQL_USER} --ask-pass --file '%Y-%m-%d-%D.%t' --progress 1000 --where 'created_at < "2019-01-01 00:00:00"' --txn-size 100 --limit 1000 --no-delete
 # 确认导出的数据没有问题，删除表中的数据
