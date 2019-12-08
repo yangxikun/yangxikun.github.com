@@ -59,7 +59,7 @@ func makeslice(et *_type, len, cap int) unsafe.Pointer {
 如果 cap 不足，则会调用`runtime.growslice`进行扩容：
 
 * 先按 doublecap = 2 * oldSlice.cap 扩容一倍
-    *如果大于等于 newSlice.cap，则
+    * 如果大于等于 newSlice.cap，则
         * 当 oldSlice.len < 1024 时，按 doublecap 扩容
         * 当 oldSlice.len > 1024 时，每次扩容1/4倍的 oldSlice.cap，直到满足 newSlice.cap
             * 如果出现溢出，则按 newSlice.cap 扩容
