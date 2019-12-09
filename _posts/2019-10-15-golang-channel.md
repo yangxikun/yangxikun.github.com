@@ -137,7 +137,7 @@ func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
         if !block {
             return false
         }
-        // 从 nil 值的 channel 变量接收数据会永远阻塞
+        // 往 nil 值的 channel 变量发送数据会永远阻塞
         gopark(nil, nil, waitReasonChanSendNilChan, traceEvGoStop, 2)
         throw("unreachable")
     }
