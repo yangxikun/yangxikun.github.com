@@ -161,6 +161,8 @@ func stackalloc(n uint32) stack {
 
 Linux 进程的内存布局：
 
+参考文章：[Understanding the Memory Layout of Linux Executables](https://gist.github.com/CMCDragonkai/10ab53654b2aa6ce55c11cfc5b2432a4)
+
 ```text
 High Address   +------------------------------------------------------------+
                |                                                            |
