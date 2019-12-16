@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "go goroutine 的创建、调度和释放"
-description: "go goroutine 的创建、调度和释放"
+title: "golang goroutine 的创建、调度和释放"
+description: "golang goroutine 的创建、调度和释放"
 category: GoLang
 tags: []
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "go goroutine 堆栈"
-description: "go goroutine 堆栈"
+title: "golang goroutine 堆栈"
+description: "golang goroutine 堆栈"
 category: GoLang
 tags: []
 ---
@@ -157,6 +157,69 @@ func stackalloc(n uint32) stack {
     }
     return stack{uintptr(v), uintptr(v) + uintptr(n)}
 }
+```
+
+Linux 进程的内存布局：
+
+```text
+High Address   +------------------------------------------------------------+
+               |                                                            |
+      ^        | Kernel Space                                               |
+      |        |                                                            |
+      |        +------------------------------------------------------------+
+      |        |                              |                             |
+      |        |                              |                             |
+      |        | User Stack                   |                             |
+      |        |                              |                             |
+      |        |                              v                             |
+      |        +------------------------------------------------------------+
+      |        |                                                            |
+      |        | Memory Mapped Region for Shared Libraries or Anything Else |
+      |        |                                                            |
+      |        +------------------------------------------------------------+
+      |        |                              ^                             |
+      |        | Heap                         |                             |
+      |        |                              |                             |
+      |        +------------------------------------------------------------+
+      |        |                                                            |
+      |        | Uninitialised Data (.bss)                                  |
+      |        |                                                            |
+      |        +------------------------------------------------------------+
+      |        |                                                            |
+      |        | Initialised Data (.data)                                   |
+      |        |                                                            |
+      |        +------------------------------------------------------------+
+      |        |                                                            |
+      |        | Program Text (.text)                                       |
+      |        |                                                            |
+      |        +------------------------------------------------------------+
+      |        |                                                            |
+               |                                                            |
+ Low Address   +------------------------------------------------------------+
+```
+
+栈结构在内存上的图示：
+
+```text
+         High Address  +---------------+ stack.hi                    
+                       |               |                             
+              |        |               |                             
+              |        |               |                             
+              |        |               |                             
+              |        |               |                             
+              |        |               |                             
+              |        |               |                             
+ stack grow direction  |               |                             
+              |        |               | g.stackguard0               
+              |        |               |     ^      ^                
+              |        |               |     |      |                
+              |        |               |     v      |                
+              |        |               | StackSmall | StackGuard     
+              |        |               |            |                
+              |        |               |            |                
+              v        |               |            |                
+                       |               |            v                
+         Low Address   +---------------+ stack.lo
 ```
 
 #### 栈的扩容
