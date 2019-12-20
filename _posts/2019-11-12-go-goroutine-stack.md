@@ -518,31 +518,31 @@ func newstack() {
 // 如果 sync 参数为 false（当执行栈缩容的时候），就需要防止并发的 channel 操作了
 func copystack(gp *g, newsize uintptr, sync bool) {
     if gp.syscasllsp != 0 {
-                throw("stack growth not allowed in system call")
-            }
-            old := gp.stack
-            if old.lo == 0 {
-                throw("nil stackbase")
-            }
-            used := old.hi - gp.sched.sp // 当前已使用的栈空间大小
-        
-            // allocate new stack
-            new := stackalloc(uint32(newsize)) // 分配栈空间，上文中已分析过
-            if stackPoisonCopy != 0 {
-                fillstack(new, 0xfd)
-            }
-            if stackDebug >= 1 {
-                print("copystack gp=", gp, " [", hex(old.lo), " ", hex(old.hi-used), " ", hex(old.hi), "]", " -> [", hex(new.lo), " ", hex(new.hi-used), " ", hex(new.hi), "]/", newsize, "\n")
-            }
-        
-            // Compute adjustment.
-            var adjinfo adjustinfo
-            adjinfo.old = old
-            adjinfo.delta = new.hi - old.hi
-        
-            // Adjust sudogs, synchronizing with channel ops if necessary.
-            ncopy := used
-            if ync {
+        throw("stack growth not allowed in system call")
+    }
+    old := gp.stack
+    if old.lo == 0 {
+        throw("nil stackbase")
+    }
+    used := old.hi - gp.sched.sp // 当前已使用的栈空间大小
+
+    // allocate new stack
+    new := stackalloc(uint32(newsize)) // 分配栈空间，上文中已分析过
+    if stackPoisonCopy != 0 {
+        fillstack(new, 0xfd)
+    }
+    if stackDebug >= 1 {
+        print("copystack gp=", gp, " [", hex(old.lo), " ", hex(old.hi-used), " ", hex(old.hi), "]", " -> [", hex(new.lo), " ", hex(new.hi-used), " ", hex(new.hi), "]/", newsize, "\n")
+    }
+
+    // Compute adjustment.
+    var adjinfo adjustinfo
+    adjinfo.old = old
+    adjinfo.delta = new.hi - old.hi
+
+    // Adjust sudogs, synchronizing with channel ops if necessary.
+    ncopy := used
+    if ync {
         adjustsudogs(gp, &adjinfo) // 调整 sudog 中的指针
     } else {
         // sudogs can point in to the stack. During concurrent
@@ -686,77 +686,77 @@ func shrinkstack(gp *g) {
 //
 //go:systemstack
 func stackfree(stk stack) {
-	gp := getg()
-	v := unsafe.Pointer(stk.lo)
-	n := stk.hi - stk.lo
-	if n&(n-1) != 0 {
-		throw("stack not a power of 2")
-	}
-	if stk.lo+n < stk.hi {
-		throw("bad stack size")
-	}
-	if stackDebug >= 1 {
-		println("stackfree", v, n)
-		memclrNoHeapPointers(v, n) // for testing, clobber stack data
-	}
-	if debug.efence != 0 || stackFromSystem != 0 {
-		if debug.efence != 0 || stackFaultOnFree != 0 {
-			sysFault(v, n)
-		} else {
-			sysFree(v, n, &memstats.stacks_sys)
-		}
-		return
-	}
-	if msanenabled {
-		msanfree(v, n)
-	}
+    gp := getg()
+    v := unsafe.Pointer(stk.lo)
+    n := stk.hi - stk.lo
+    if n&(n-1) != 0 {
+        throw("stack not a power of 2")
+    }
+    if stk.lo+n < stk.hi {
+        throw("bad stack size")
+    }
+    if stackDebug >= 1 {
+        println("stackfree", v, n)
+        memclrNoHeapPointers(v, n) // for testing, clobber stack data
+    }
+    if debug.efence != 0 || stackFromSystem != 0 {
+        if debug.efence != 0 || stackFaultOnFree != 0 {
+            sysFault(v, n)
+        } else {
+            sysFree(v, n, &memstats.stacks_sys)
+        }
+        return
+    }
+    if msanenabled {
+        msanfree(v, n)
+    }
     // 栈空间比较小，放回本地缓存中，或者全局的栈空间池子中
-	if n < _FixedStack<<_NumStackOrders && n < _StackCacheSize {
-		order := uint8(0)
-		n2 := n
-		for n2 > _FixedStack {
-			order++
-			n2 >>= 1
-		}
-		x := gclinkptr(v)
-		c := gp.m.mcache
-		if stackNoCache != 0 || c == nil || gp.m.preemptoff != "" {
-			lock(&stackpoolmu)
-			stackpoolfree(x, order)
-			unlock(&stackpoolmu)
-		} else {
-			if c.stackcache[order].size >= _StackCacheSize {
-				stackcacherelease(c, order)
-			}
-			x.ptr().next = c.stackcache[order].list
-			c.stackcache[order].list = x
-			c.stackcache[order].size += n
-		}
-	} else {
+    if n < _FixedStack<<_NumStackOrders && n < _StackCacheSize {
+        order := uint8(0)
+        n2 := n
+        for n2 > _FixedStack {
+            order++
+            n2 >>= 1
+        }
+        x := gclinkptr(v)
+        c := gp.m.mcache
+        if stackNoCache != 0 || c == nil || gp.m.preemptoff != "" {
+            lock(&stackpoolmu)
+            stackpoolfree(x, order)
+            unlock(&stackpoolmu)
+        } else {
+            if c.stackcache[order].size >= _StackCacheSize {
+                stackcacherelease(c, order)
+            }
+            x.ptr().next = c.stackcache[order].list
+            c.stackcache[order].list = x
+            c.stackcache[order].size += n
+        }
+    } else {
         // 大栈空间
         // 如果正在进行 GC，放回全局的大栈空间池子中
         // 否则，由 mheap 回收
-		s := spanOfUnchecked(uintptr(v))
-		if s.state != mSpanManual {
-			println(hex(s.base()), v)
-			throw("bad span state")
-		}
-		if gcphase == _GCoff {
-			// Free the stack immediately if we're
-			// sweeping.
-			osStackFree(s)
-			mheap_.freeManual(s, &memstats.stacks_inuse)
-		} else {
-			// If the GC is running, we can't return a
-			// stack span to the heap because it could be
-			// reused as a heap span, and this state
-			// change would race with GC. Add it to the
-			// large stack cache instead.
-			log2npage := stacklog2(s.npages)
-			lock(&stackLarge.lock)
-			stackLarge.free[log2npage].insert(s)
-			unlock(&stackLarge.lock)
-		}
-	}
+        s := spanOfUnchecked(uintptr(v))
+        if s.state != mSpanManual {
+            println(hex(s.base()), v)
+            throw("bad span state")
+        }
+        if gcphase == _GCoff {
+            // Free the stack immediately if we're
+            // sweeping.
+            osStackFree(s)
+            mheap_.freeManual(s, &memstats.stacks_inuse)
+        } else {
+            // If the GC is running, we can't return a
+            // stack span to the heap because it could be
+            // reused as a heap span, and this state
+            // change would race with GC. Add it to the
+            // large stack cache instead.
+            log2npage := stacklog2(s.npages)
+            lock(&stackLarge.lock)
+            stackLarge.free[log2npage].insert(s)
+            unlock(&stackLarge.lock)
+        }
+    }
 }
 ```
