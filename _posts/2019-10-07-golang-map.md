@@ -357,7 +357,7 @@ dohash:
         }
     }
     top := tophash(hash)
-    // 在b已经b的overflow bucket中查找
+    // 在b，以及b的overflow bucket中查找
     for ; b != nil; b = b.overflow(t) {
         for i, kptr := uintptr(0), b.keys(); i < bucketCnt; i, kptr = i+1, add(kptr, 2*sys.PtrSize) {
             k := (*stringStruct)(kptr)
