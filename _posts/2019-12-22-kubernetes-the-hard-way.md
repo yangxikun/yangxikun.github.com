@@ -957,6 +957,8 @@ EOF
 
 #### 安装 Calico
 
+修改 /etc/sysctl.conf，将`#net.ipv4.ip_forward = 1`的注释去掉，开启网卡的数据包转发功能，否则tunl0会丢弃收到的数据包。
+
 下载 YAML 文件
 
 ```text
