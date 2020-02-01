@@ -521,9 +521,10 @@ func (s *store) GuaranteedUpdate(
 
 ##### 并发更新是如何确保更新不丢失的？
 
-在将更新后的对象持久化到 Etcd 中时，通过事务保证的，事务的伪代码逻辑如下：
+在将更新后的对象持久化到 Etcd 中时，通过事务保证的，当事务执行失败时会不断重试，事务的伪代码逻辑如下：
 
 ```text
+// oldObj = FromMemCache(key) or EtcdGet(key)
 if inEtcd(key).rev == inMemory(oldObj).rev:
     EtcdSet(key) = newObj
     transaction = success
