@@ -50,7 +50,7 @@ f303e8705113        yangxikun/docker-test:exec    "sleep 1000"             17 se
 
 在ubuntu下：`/bin/sh -> dash`，在centos下：`/bin/sh -> bash`。
 
-在ubuntu下执行`bash -c "sleep 1000"`，确实没有fork子进程。
+在centos:latest容器中执行`sh -c "sleep 1000"`，确实没有fork子进程。
 
 为啥`ctrl+c`无效呢，进入到容器里，直接`kill -9 1`也无效。Google一番，找到了答案：[https://www.quora.com/Is-it-possible-to-kill-the-init-process-in-Linux-by-the-kill-9-command](https://www.quora.com/Is-it-possible-to-kill-the-init-process-in-Linux-by-the-kill-9-command)。
 
