@@ -995,14 +995,7 @@ sudo calicoctl node status
 curl -O https://storage.googleapis.com/kubernetes-the-hard-way/coredns.yaml
 vim coredns.yaml
 // 修改 replicas: 1
-// 添加配置 forward . /etc/resolv.conf
-```
-
-解决外部域名解析问题
-
-```text
-sudo rm /etc/resolv.conf
-sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+// 添加配置，解决外部域名解析问题 forward . /etc/resolv.conf
 ```
 
 安装
