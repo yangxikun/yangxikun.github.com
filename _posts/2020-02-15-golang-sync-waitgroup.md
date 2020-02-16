@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "golang sync.WaitGroup 底层实现"
-description: ""
-category: 
+description: "golang sync.WaitGroup 底层实现"
+category: GoLang
 tags: []
 ---
 {% include JB/setup %}
