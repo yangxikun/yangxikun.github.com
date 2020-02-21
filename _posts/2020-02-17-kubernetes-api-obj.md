@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "kubernetes API 资源对象的版本控制"
-description: "kubernetes API 资源对象的版本控制"
+title: "Kubernetes API 资源对象的版本控制"
+description: "Kubernetes API 资源对象的版本控制"
 category: Kubernetes
 tags: []
 ---
