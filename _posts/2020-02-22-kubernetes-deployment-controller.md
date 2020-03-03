@@ -13,7 +13,7 @@ tags: []
 
 ```go
 func startDeploymentController(ctx ControllerContext) (http.Handler, bool, error) {
-    if !ctx.AvailableResources[schema.GroupVeRSionResource{Group: "apps", VeRSion: "v1", Resource: "deployments"}] {
+    if !ctx.AvailableResources[schema.GroupVersionResource{Group: "apps", Version: "v1", Resource: "deployments"}] {
         return nil, false, nil
     }
     // 创建控制器
@@ -37,15 +37,15 @@ func startDeploymentController(ctx ControllerContext) (http.Handler, bool, error
 ##### 创建
 
 * dInformer：client-go/informers/apps/v1.deploymentInformer
-* RSInformer：client-go/informers/apps/v1.replicaSetInformer
+* rsInformer：client-go/informers/apps/v1.replicaSetInformer
 * podInformer：client-go/informers/core/v1.podInformer
 * client：client-go/kubernetes.Clientset
 * eventBroadcaster：记录 Deployment 处理时发生的一些事件，在 kubectl get events 和 kubectl describe 中可以看到
-* dc.RSControl：用于接管/释放 rs
+* dc.rsControl：用于接管/释放 rs
 
 ```go
 // NewDeploymentController creates a new DeploymentController.
-func NewDeploymentController(dInformer appsinformers.DeploymentInformer, RSInformer appsinformers.ReplicaSetInformer, podInformer coreinformers.PodInformer, client clientset.Interface) (*DeploymentController, error) {
+func NewDeploymentController(dInformer appsinformers.DeploymentInformer, rsInformer appsinformers.ReplicaSetInformer, podInformer coreinformers.PodInformer, client clientset.Interface) (*DeploymentController, error) {
     eventBroadcaster := record.NewBroadcaster()
     eventBroadcaster.StartLogging(klog.Infof)
     eventBroadcaster.StartRecordingToSink(&v1core.EventSinkImpl{Interface: client.CoreV1().Events("")})
@@ -63,7 +63,7 @@ func NewDeploymentController(dInformer appsinformers.DeploymentInformer, RSInfor
         eventRecorder: eventBroadcaster.NewRecorder(scheme.Scheme, v1.EventSource{Component: "deployment-controller"}),
         queue:         workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "deployment"),
     }
-    dc.RSControl = controller.RealRSControl{
+    dc.rsControl = controller.RealRSControl{
         KubeClient: client,
         Recorder:   dc.eventRecorder,
     }
@@ -75,7 +75,7 @@ func NewDeploymentController(dInformer appsinformers.DeploymentInformer, RSInfor
         // This will enter the sync loop and no-op, because the deployment has been deleted from the store.
         DeleteFunc: dc.deleteDeployment,
     })
-    RSInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
+    rsInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
         AddFunc:    dc.addReplicaSet,
         UpdateFunc: dc.updateReplicaSet,
         DeleteFunc: dc.deleteReplicaSet,
@@ -90,10 +90,10 @@ func NewDeploymentController(dInformer appsinformers.DeploymentInformer, RSInfor
 
     // Lister 用于从缓存中获取资源对象
     dc.dLister = dInformer.Lister()
-    dc.RSLister = RSInformer.Lister()
+    dc.rsLister = rsInformer.Lister()
     dc.podLister = podInformer.Lister()
     dc.dListerSynced = dInformer.Informer().HasSynced
-    dc.RSListerSynced = RSInformer.Informer().HasSynced
+    dc.rsListerSynced = rsInformer.Informer().HasSynced
     dc.podListerSynced = podInformer.Informer().HasSynced
     return dc, nil
 }
@@ -106,7 +106,7 @@ func NewDeploymentController(dInformer appsinformers.DeploymentInformer, RSInfor
 
 ```go
 // Run begins watching and syncing.
-func (dc *DeploymentController) Run(workeRS int, stopCh <-chan struct{}) {
+func (dc *DeploymentController) Run(workers int, stopCh <-chan struct{}) {
     // recover
     defer utilruntime.HandleCrash()
     // 关闭工作队列，停止所有 worker
@@ -116,12 +116,12 @@ func (dc *DeploymentController) Run(workeRS int, stopCh <-chan struct{}) {
     defer klog.Infof("Shutting down deployment controller")
 
     // 等待 Lister 完成一遍同步
-    if !controller.WaitForCacheSync("deployment", stopCh, dc.dListerSynced, dc.RSListerSynced, dc.podListerSynced) {
+    if !controller.WaitForCacheSync("deployment", stopCh, dc.dListerSynced, dc.rsListerSynced, dc.podListerSynced) {
         return
     }
 
     // 启动指定数量的 worker 来处理资源对象变更
-    for i := 0; i < workeRS; i++ {
+    for i := 0; i < workers; i++ {
         go wait.Until(dc.worker, time.Second, stopCh)
     }
 
@@ -295,7 +295,7 @@ func (dc *DeploymentController) syncDeployment(key string) error {
 
     // List ReplicaSets owned by this Deployment, while reconciling ControllerRef
     // through adoption/orphaning.
-    RSList, err := dc.getReplicaSetsForDeployment(d)
+    rsList, err := dc.getReplicaSetsForDeployment(d)
     if err != nil {
         return err
     }
@@ -304,14 +304,14 @@ func (dc *DeploymentController) syncDeployment(key string) error {
     //
     // * check if a Pod is labeled correctly with the pod-template-hash label.
     // * check that no old Pods are running in the middle of Recreate Deployments.
-    podMap, err := dc.getPodMapForDeployment(d, RSList)
+    podMap, err := dc.getPodMapForDeployment(d, rsList)
     if err != nil {
         return err
     }
 
     // d 正在删除，同步状态
     if d.DeletionTimestamp != nil {
-        return dc.syncStatusOnly(d, RSList)
+        return dc.syncStatusOnly(d, rsList)
     }
 
     // Update deployment conditions with an Unknown condition when pausing/resuming
@@ -322,30 +322,30 @@ func (dc *DeploymentController) syncDeployment(key string) error {
     }
 
     if d.Spec.Paused {
-        return dc.sync(d, RSList)
+        return dc.sync(d, rsList)
     }
 
     // rollback is not re-entrant in case the underlying replica sets are updated with a new
     // revision so we should ensure that we won't proceed to update replica sets until we
     // make sure that the deployment has cleaned up its rollback spec in subsequent enqueues.
     if getRollbackTo(d) != nil {
-        return dc.rollback(d, RSList)
+        return dc.rollback(d, rsList)
     }
 
-    scalingEvent, err := dc.isScalingEvent(d, RSList)
+    scalingEvent, err := dc.isScalingEvent(d, rsList)
     if err != nil {
         return err
     }
     if scalingEvent {
-        return dc.sync(d, RSList)
+        return dc.sync(d, rsList)
     }
 
     // 更新
     switch d.Spec.Strategy.Type {
     case apps.RecreateDeploymentStrategyType:
-        return dc.rolloutRecreate(d, RSList, podMap)
+        return dc.rolloutRecreate(d, rsList, podMap)
     case apps.RollingUpdateDeploymentStrategyType:
-        return dc.rolloutRolling(d, RSList)
+        return dc.rolloutRolling(d, rsList)
     }
     return fmt.Errorf("unexpected deployment strategy type: %s", d.Spec.Strategy.Type)
 }
