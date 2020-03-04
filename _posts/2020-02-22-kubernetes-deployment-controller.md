@@ -144,6 +144,7 @@ func (dc *DeploymentController) processNextWorkItem() bool {
     defer dc.queue.Done(key)
 
     err := dc.syncHandler(key.(string))
+    // 如果 err != nil，会尝试重新入队
     dc.handleErr(err, key)
 
     return true
