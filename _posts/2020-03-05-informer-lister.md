@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Informer 与 Lister 详解"
-description: "Informer 与 Lister 详解"
+title: "Kubernetes Informer 与 Lister 详解"
+description: "Kubernetes Informer 与 Lister 详解"
 category: Kubernetes
 tags: []
 ---
@@ -162,7 +162,7 @@ func NewFilteredDeploymentInformer(client kubernetes.Interface, namespace string
 
 Lister 的创建：
 
-* k8s.io/client-go/listers/apps/v1.NewDeploymentLister：返回 deploymentLister
+* k8s.io/client-go/listers/apps/v1.NewDeploymentLister：返回 deploymentLister，从 deploymentLister 从获取 API 资源对象会转换为对 sharedIndexInformer.indexer 的调用
     * deploymentLister.indexer：赋值为 sharedIndexInformer.indexer，实现类型为 k8s.io/client-go/tools/cache.cache
 
 ```go
