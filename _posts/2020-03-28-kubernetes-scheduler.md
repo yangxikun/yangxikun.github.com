@@ -51,6 +51,8 @@ Pod 的调度状态变化：UnScheduled Pod -> (assume) -> Assumed Pod -> (bind)
 
 ![](/assets/img/kubernetes-scheduler-pod.png)
 
+<!--more-->
+
 #### PriorityQueue：调度队列
 
 ```go
