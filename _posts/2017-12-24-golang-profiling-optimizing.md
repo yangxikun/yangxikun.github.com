@@ -322,10 +322,45 @@ func addTagsToName(name string, tags map[string]string) string {
 
 1、进行5秒钟的CPU性能采样并打开一个交互界面：`go tool pprof -seconds 5 http://localhost:9090/debug/pprof/profile`
 
+> 下载 CPU 性能采样文件：curl http://localhost:9090/debug/pprof/profile?seconds=5 -o profile.prof
+
 * topN：显示N个占用CPU时间最多的函数
 * topN -cum：显示N个占用CPU时间（包括其调用的子函数）最多的函数
 * list regex：显示与正则regex匹配的函数的代码
 * disasm regex：显示与正则regex匹配的函数的汇编代码
+
+```text
+Type: cpu
+Time: Feb 21, 2021 at 11:02pm (CST)
+Duration: 10.10s, Total samples = 28.41s (281.20%)
+Entering interactive mode (type "help" for commands, "o" for options)
+(pprof) top
+Showing nodes accounting for 25200ms, 88.70% of 28410ms total
+Dropped 266 nodes (cum <= 142.05ms)
+Showing top 10 nodes out of 67
+      flat  flat%   sum%        cum   cum%
+   12490ms 43.96% 43.96%    12570ms 44.24%  syscall.syscall
+    3990ms 14.04% 58.01%     4000ms 14.08%  runtime.kevent
+    1980ms  6.97% 64.98%     1990ms  7.00%  runtime.nanotime1
+    1820ms  6.41% 71.38%     1820ms  6.41%  runtime.pthread_cond_wait
+    1650ms  5.81% 77.19%     1650ms  5.81%  runtime.pthread_cond_signal
+    1190ms  4.19% 81.38%     1190ms  4.19%  runtime.usleep
+     770ms  2.71% 84.09%     4790ms 16.86%  runtime.netpoll
+     500ms  1.76% 85.85%      500ms  1.76%  indexbytebody
+     440ms  1.55% 87.40%     5760ms 20.27%  internal/poll.(*FD).Read
+     370ms  1.30% 88.70%      890ms  3.13%  net/http.(*connReader).backgroundRead
+```
+
+* Type: 文件类型
+* TIME: 采样时间点
+* Duration: 采样持续时间
+* Total samples: 所有函数执行时间之和
+* flat: 函数自己执行了多少时间
+* flat%: flat/Total samples
+* sum%: 第 n 行的值等于第 1~n 行的 flat% 之和
+* cum: 函数自己，以及调用的子函数执行时间之和
+* cum%: cum/Total samples
+* 采样粒度，通过 option.granularity 调整
 
 2、进行压力测试并产生CPU和内存分析文件：`go test -bench . -benchmem -cpuprofile prof.cpu -memprofile prof.mem`
 
@@ -338,6 +373,17 @@ func addTagsToName(name string, tags map[string]string) string {
 6、从CPU分析文件中生成火焰图：`go-torch --binaryname stats.test -b prof.cpu`
 
 7、显示内联函数，逃逸分析情况：`go build -gcflags=-m .`
+
+8、获取内存使用信息：`go tool pprof http://127.0.0.1:6060/debug/pprof/heap`
+
+> 下载内存使用信息：curl '127.0.0.1:6060/debug/pprof/heap' -o mem.prof
+> options.sample_index 可以切换查看采样类型，执行 options 可以查看当前的选项值
+
+9、获取跟踪文件：`curl http://127.0.0.1:6060/debug/pprof/trace?seconds=10 > trace.out`，打开 `go tool trace trace.out`
+
+10、其他 pprof 数据下载：`curl '127.0.0.1:6060/debug/pprof/[goroutine|block|mutex]' -o xxx.prof`
+
+11、以 web 交互式打开 `go tool pprof -http 127.0.0.1:6661 cpu.prof`
 
 #### 性能分析总结
 - - -
